@@ -14,9 +14,12 @@ return new class extends Migration {
     {
         Schema::create('users', function (Blueprint $table) {
             $table->smallIncrements("id")->primary();
-            $table->string("code")->unique();
             $table->string('name');
             $table->string('password')->nullable();
+            $table->string("email")->unique();
+            $table->string("username")->unique();
+            $table->boolean("is_admin")->default(false);
+            $table->boolean("is_active")->default(true);
             $table->rememberToken();
             $table->timestamps();
         });
