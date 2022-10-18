@@ -1,7 +1,7 @@
 <template>
     <div :class="width">
         <label v-if="label" :for="id" class="block text-sm font-medium text-gray-700">
-            {{ label }} <span v-if="required" class="text-red-600">*</span>
+            {{ label }} <span v-if="false && required" class="text-red-600">*</span>
         </label>
         <div class="mt-1 relative rounded-md shadow-sm">
             <input
@@ -15,7 +15,7 @@
                 :class="[
                     errors.length
                         ? 'border-red-300 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500'
-                        : 'border-gray-300 focus:ring-primary focus:border-primary',
+                        : 'border-gray-300 focus:ring-green-600 focus:border-green-600',
                     dir === 'ltr' ? 'pr-10' : 'pl-10',
                 ]"
                 class="block w-full focus:outline-none rounded-lg"

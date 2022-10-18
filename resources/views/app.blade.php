@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html class="h-full">
+<html lang="ar" dir="rtl" class="h-full">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport"

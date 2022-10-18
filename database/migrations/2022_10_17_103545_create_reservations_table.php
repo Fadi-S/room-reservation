@@ -18,6 +18,7 @@ return new class extends Migration
             $table->unsignedSmallInteger("service_id");
             $table->unsignedSmallInteger("room_id");
             $table->unsignedSmallInteger("user_id");
+            $table->string("description")->nullable();
             $table->unsignedSmallInteger("approved_by_id")->nullable();
             $table->time("start");
             $table->time("end");

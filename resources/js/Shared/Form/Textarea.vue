@@ -41,7 +41,7 @@
 import { ExclamationCircleIcon } from "@heroicons/vue/24/solid";
 
 export default {
-    name: "Input",
+    name: "Textarea",
     inheritAttrs: false,
     components: {
         ExclamationCircleIcon,

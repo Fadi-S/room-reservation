@@ -13,7 +13,7 @@ class HandleInertiaRequests extends Middleware
      * @see https://inertiajs.com/server-side-setup#root-template
      * @var string
      */
-    protected $rootView = 'app';
+    protected $rootView = "app";
 
     /**
      * Determines the current asset version.
@@ -37,10 +37,11 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request): array
     {
         $user = auth()->user();
-        if($user) {
+        if ($user) {
             $user = [
                 "name" => $user->name,
                 "username" => $user->username,
+                "imageUrl" => asset("/images/defaultPicture.png"),
                 "isAdmin" => $user->isAdmin(),
             ];
         }

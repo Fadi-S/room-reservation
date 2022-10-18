@@ -7,7 +7,9 @@
         :class="finalColor + ' ' + padding + ' ' + width"
     >
         <div v-if="form">
-            <PencilIcon v-show="!form.processing" class="w-5 h-5 mr-2" />
+            <template v-show="!form.processing">
+                <slot name="icon" class="w-5 h-5 mr-2" />
+            </template>
             <Spinner v-show="form.processing" class="w-6 h-6 mr-2" />
         </div>
 
@@ -19,7 +21,6 @@
 
 <script setup>
 import Spinner from "@/Shared/Spinner.vue";
-import { PencilIcon } from "@heroicons/vue/24/solid";
 import { colors } from "@/stores/buttonColors.js";
 
 const props = defineProps({
