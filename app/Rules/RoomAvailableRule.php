@@ -8,7 +8,7 @@ use Illuminate\Contracts\Validation\Rule;
 
 class RoomAvailableRule implements Rule
 {
-    protected Reservation $reservation;
+    protected ?Reservation $reservation;
 
     /**
      * Create a new rule instance.
