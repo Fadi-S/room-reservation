@@ -6,10 +6,12 @@ module.exports = {
         "./resources/**/*.ts",
         "./resources/**/*.vue",
     ],
-  theme: {
-    extend: {},
-  },
-  plugins: [
-      require('@tailwindcss/forms'),
-  ],
-}
+    theme: {
+        extend: {
+            fontFamily: {
+                vazirmatn: ["Vazirmatn", "sans-serif"],
+            },
+        },
+    },
+    plugins: [require("@tailwindcss/forms")],
+};
