@@ -36,13 +36,15 @@
                             required
                         />
 
-                        <Button
-                            :form="form"
-                            :auto-disable="false"
-                            type="submit"
-                            color="green"
-                        >
-                            تسجيل دخول
+                        <Button type="submit" color="green">
+                            <div class="flex items-center">
+                                <Spinner
+                                    v-if="form.processing"
+                                    class="w-5 h-5 ml-2"
+                                />
+                                <LockClosedIcon v-else class="w-5 h-5 ml-2" />
+                                <span>تسجيل دخول</span>
+                            </div>
                         </Button>
                     </form>
                 </div>
@@ -57,10 +59,12 @@ import Logo from "@/Pages/Auth/Logo.vue";
 import Input from "@/Shared/Form/Input.vue";
 import Button from "@/Shared/Form/Button.vue";
 import { useForm } from "@inertiajs/inertia-vue3";
+import { LockClosedIcon } from "@heroicons/vue/24/solid";
+import Spinner from "@/Shared/Spinner.vue";
 
 export default {
     layout: AuthLayout,
-    components: { Logo, Input, Button },
+    components: { Spinner, Logo, Input, Button, LockClosedIcon },
     setup() {
         let form = useForm("LoginForm", {
             email: "",
@@ -68,10 +72,7 @@ export default {
             remember: true,
         });
 
-        const submit = () =>
-            form.post("/login", {
-                preserveScroll: false,
-            });
+        const submit = () => form.post("/login");
 
         return {
             form,

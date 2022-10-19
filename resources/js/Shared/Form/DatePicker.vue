@@ -13,6 +13,7 @@
                 :id="id"
                 v-bind="$attrs"
                 :config="config"
+                :placeholder="placeholder"
                 :required="required"
                 dir="ltr"
                 :class="[
@@ -74,6 +75,7 @@ const props = defineProps({
         type: Boolean,
         default: false,
     },
+    placeholder: String,
     id: {
         type: String,
         default: "",

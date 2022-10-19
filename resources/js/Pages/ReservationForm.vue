@@ -1,12 +1,15 @@
 <template>
     <Head title="Make Reservation" />
 
-    <div class="bg-white md:rounded-lg shadow p-2 max-w-4xl mx-auto">
+    <div
+        class="bg-white md:rounded-lg shadow px-3 md:px-6 py-4 max-w-xl mx-auto"
+    >
         <form @submit.prevent="submit" action="/reserve" method="POST">
-            <div class="grid gap-4 md:grid-cols-2">
+            <div class="grid gap-8 grid-cols-2 md:gap-6">
                 <Select
                     id="service"
-                    label="الخدمة"
+                    class="col-span-2"
+                    placeholder="-- الخدمة --"
                     :options="services"
                     v-model="form.service"
                     :errors="form.errors.service"
@@ -16,70 +19,101 @@
                 <Input
                     dir="rtl"
                     type="text"
-                    label="اسم الاجتماع"
+                    width="w-full col-span-2"
+                    placeholder="اسم الاجتماع"
                     v-model="form.description"
                     :errors="form.errors.description"
                     id="description"
+                    name="reservation-description"
+                    autocomplete="reservation-description"
                     required
                 />
 
                 <Select
-                    label="المكان"
+                    class="col-span-2"
+                    placeholder="-- اختار المكان --"
                     :options="locationsForSelect"
                     v-model="locationID"
                 />
 
                 <Select
+                    class="col-span-2"
                     v-show="location?.rooms.length > 1"
-                    label="الغرفة"
+                    placeholder="-- الغرفة --"
                     :options="rooms"
                     v-model="form.room"
                 />
 
-                <div class="w-full flex items-start justify-between">
+                <div class="contents">
                     <Input
                         type="time"
                         label="وقت البداية"
                         v-model="form.start"
                         :errors="form.errors.start"
                         id="start"
+                        class="col-span-1"
                         required
                     />
-                    <ArrowLeftIcon class="w-5 h-5" />
+
                     <Input
                         type="time"
                         label="وقت النهاية"
                         v-model="form.end"
                         :errors="form.errors.end"
                         id="end"
+                        class="col-span-1"
                         required
                     />
                 </div>
 
-                <div class="flex items-center">
-                    <Checkbox
-                        class="w-full"
-                        :label="form.isRepeating ? 'كل أسبوع' : 'مرة واحدة'"
-                        id="repeating"
-                        v-model="form.isRepeating"
-                    />
+                <div class="flex col-span-2">
+                    <RadioGroup v-model="form.isRepeating">
+                        <RadioGroupLabel
+                            class="text-lg font-medium text-gray-900"
+                        >
+                            نوع الحجز
+                        </RadioGroupLabel>
+
+                        <div
+                            class="mt-1 w-full space-x-6 rtl:space-x-reverse flex items-center justify-between"
+                        >
+                            <MyRadioOption
+                                label="مرة واحدة"
+                                id="one-time"
+                                :value="false"
+                            />
+
+                            <MyRadioOption
+                                label="كل أسبوع"
+                                id="repeating"
+                                :value="true"
+                            />
+                        </div>
+                    </RadioGroup>
                 </div>
 
                 <template v-if="form.isRepeating">
                     <Select
+                        class="col-span-2"
                         id="dayOfWeek"
                         :options="days"
                         v-model="form.dayOfWeek"
                         :errors="form.errors.dayOfWeek"
-                        label="يوم الحجز"
+                        placeholder="-- يوم الحجز --"
                     />
                 </template>
 
                 <template v-else>
                     <DatePicker
+                        class="col-span-2"
                         v-model="form.date"
-                        label="تاريخ الحجز"
+                        placeholder="تاريخ الحجز"
                         id="date-picker"
+                        :config="{
+                            altInput: true,
+                            altFormat: 'l, j F Y',
+                            disableMobile: true,
+                        }"
                         :errors="form.errors.date"
                         required
                     />
@@ -110,6 +144,13 @@ import Select from "@/Shared/Form/Select.vue";
 import Checkbox from "@/Shared/Form/Checkbox.vue";
 import DatePicker from "@/Shared/Form/DatePicker.vue";
 import { computed, ref, watch } from "vue";
+import {
+    RadioGroup,
+    RadioGroupDescription,
+    RadioGroupLabel,
+    RadioGroupOption,
+} from "@headlessui/vue";
+import MyRadioOption from "@/Pages/MyRadioOption.vue";
 
 const props = defineProps({
     locations: Array,
