@@ -8,6 +8,8 @@ use Illuminate\Contracts\Validation\Rule;
 
 class RoomAvailableRule implements Rule
 {
+    protected Reservation $reservation;
+
     /**
      * Create a new rule instance.
      *
@@ -32,12 +34,15 @@ class RoomAvailableRule implements Rule
      */
     public function passes($attribute, $value)
     {
-        return Reservation::query()
+        $this->reservation = Reservation::query()
             ->valid($this->date)
             ->forRoom($this->roomId)
-            ->where("day_of_week", "=", $this->dayOfWeek)
+            ->forDay($this->dayOfWeek)
             ->overlapping($this->start, $this->end)
-            ->doesntExist();
+            ->with("service:id,name")
+            ->first();
+
+        return $this->reservation?->doesntExist();
     }
 
     /**
@@ -47,6 +52,6 @@ class RoomAvailableRule implements Rule
      */
     public function message()
     {
-        return "Time overlap";
+        return "يوجد {$this->reservation->description} {$this->reservation->service->name} في نفس المكان";
     }
 }

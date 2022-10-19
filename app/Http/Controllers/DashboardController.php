@@ -13,6 +13,7 @@ class DashboardController extends Controller
     public function __invoke()
     {
         $reservations = Reservation::query()
+            ->orderBy("start")
             ->validBetween(
                 now()
                     ->previous(1)
@@ -25,18 +26,18 @@ class DashboardController extends Controller
             ->with(["room.location", "service:id,name,color"])
             ->get();
 
-        $locations = LocationResource::collection(
-            Location::with("rooms")->get(),
-        );
-
         return inertia("Home", [
             "reservations" => collect(
                 ReservationForTableResource::collection(
                     $reservations,
                 )->resolve(),
-            )->groupBy("dayOfWeek"),
+            )->groupBy(["dayOfWeek", "roomId"]),
 
-            "locations" => $locations,
+            "locations" => fn() => LocationResource::collection(
+                Location::with("rooms")
+                    ->orderBy("id")
+                    ->get(),
+            ),
         ]);
     }
 }

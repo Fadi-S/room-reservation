@@ -16,14 +16,22 @@ class ReservationForTableResource extends JsonResource
             "id" => $this->id,
             "displayName" => $this->description,
             "isRepeating" => (bool) $this->is_repeating,
-            "room" => [
-                "id" => $this->room_id,
-                "name" => $this->room->fullName,
-            ],
+            "roomId" => $this->room_id,
+            "room" => $this->room->fullName,
             "service" => $this->service->name,
             "color" => $this->service->color,
-            "start" => Carbon::parse($this->start)->format("h:i a"),
-            "end" => Carbon::parse($this->end)->format("h:i a"),
+            "start" => [
+                "time" => $this->start,
+                "formatted" => Carbon::parse($this->start)->translatedFormat(
+                    "h:i a",
+                ),
+            ],
+            "end" => [
+                "time" => $this->end,
+                "formatted" => Carbon::parse($this->end)->translatedFormat(
+                    "h:i a",
+                ),
+            ],
             "dayOfWeek" => $this->day_of_week,
         ];
     }

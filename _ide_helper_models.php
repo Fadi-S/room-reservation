@@ -37,6 +37,7 @@ namespace App\Models{
  * @property int $service_id
  * @property int $room_id
  * @property int $user_id
+ * @property string|null $description
  * @property int|null $approved_by_id
  * @property string $start
  * @property string $end
@@ -51,23 +52,32 @@ namespace App\Models{
  * @property-read \App\Models\User $reservedBy
  * @property-read \App\Models\Room $room
  * @property-read \App\Models\Service $service
- * @method static \Illuminate\Database\Eloquent\Builder|Reservation newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Reservation newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Reservation query()
- * @method static \Illuminate\Database\Eloquent\Builder|Reservation whereApprovedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Reservation whereApprovedById($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Reservation whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Reservation whereDate($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Reservation whereDayOfWeek($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Reservation whereEnd($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Reservation whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Reservation whereIsRepeating($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Reservation whereRoomId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Reservation whereServiceId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Reservation whereStart($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Reservation whereStoppedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Reservation whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Reservation whereUserId($value)
+ * @method static \App\Queries\ReservationQuery|Reservation approved()
+ * @method static \App\Queries\ReservationQuery|Reservation forDay($day)
+ * @method static \App\Queries\ReservationQuery|Reservation forRoom($room)
+ * @method static \App\Queries\ReservationQuery|Reservation newModelQuery()
+ * @method static \App\Queries\ReservationQuery|Reservation newQuery()
+ * @method static \App\Queries\ReservationQuery|Reservation notStopped($date = null)
+ * @method static \App\Queries\ReservationQuery|Reservation overlapping($start, $end)
+ * @method static \App\Queries\ReservationQuery|Reservation query()
+ * @method static \App\Queries\ReservationQuery|Reservation repeated($isRepeated = true)
+ * @method static \App\Queries\ReservationQuery|Reservation valid($date = null)
+ * @method static \App\Queries\ReservationQuery|Reservation validBetween($start, $end)
+ * @method static \App\Queries\ReservationQuery|Reservation whereApprovedAt($value)
+ * @method static \App\Queries\ReservationQuery|Reservation whereApprovedById($value)
+ * @method static \App\Queries\ReservationQuery|Reservation whereCreatedAt($value)
+ * @method static \App\Queries\ReservationQuery|Reservation whereDate($value)
+ * @method static \App\Queries\ReservationQuery|Reservation whereDayOfWeek($value)
+ * @method static \App\Queries\ReservationQuery|Reservation whereDescription($value)
+ * @method static \App\Queries\ReservationQuery|Reservation whereEnd($value)
+ * @method static \App\Queries\ReservationQuery|Reservation whereId($value)
+ * @method static \App\Queries\ReservationQuery|Reservation whereIsRepeating($value)
+ * @method static \App\Queries\ReservationQuery|Reservation whereRoomId($value)
+ * @method static \App\Queries\ReservationQuery|Reservation whereServiceId($value)
+ * @method static \App\Queries\ReservationQuery|Reservation whereStart($value)
+ * @method static \App\Queries\ReservationQuery|Reservation whereStoppedAt($value)
+ * @method static \App\Queries\ReservationQuery|Reservation whereUpdatedAt($value)
+ * @method static \App\Queries\ReservationQuery|Reservation whereUserId($value)
  */
 	class Reservation extends \Eloquent {}
 }
@@ -139,22 +149,24 @@ namespace App\Models{
  * @property-read int|null $services_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\Laravel\Sanctum\PersonalAccessToken[] $tokens
  * @property-read int|null $tokens_count
+ * @method static \App\Queries\UserQuery|User active($isActive = true)
  * @method static \Database\Factories\UserFactory factory(...$parameters)
- * @method static \Illuminate\Database\Eloquent\Builder|User newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|User newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|User query()
- * @method static \Illuminate\Database\Eloquent\Builder|User whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereEmail($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereIsActive($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereIsAdmin($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User wherePassword($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereRememberToken($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereTwoFactorRecoveryCodes($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereTwoFactorSecret($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|User whereUsername($value)
+ * @method static \App\Queries\UserQuery|User newModelQuery()
+ * @method static \App\Queries\UserQuery|User newQuery()
+ * @method static \App\Queries\UserQuery|User query()
+ * @method static \App\Queries\UserQuery|User search($search)
+ * @method static \App\Queries\UserQuery|User whereCreatedAt($value)
+ * @method static \App\Queries\UserQuery|User whereEmail($value)
+ * @method static \App\Queries\UserQuery|User whereId($value)
+ * @method static \App\Queries\UserQuery|User whereIsActive($value)
+ * @method static \App\Queries\UserQuery|User whereIsAdmin($value)
+ * @method static \App\Queries\UserQuery|User whereName($value)
+ * @method static \App\Queries\UserQuery|User wherePassword($value)
+ * @method static \App\Queries\UserQuery|User whereRememberToken($value)
+ * @method static \App\Queries\UserQuery|User whereTwoFactorRecoveryCodes($value)
+ * @method static \App\Queries\UserQuery|User whereTwoFactorSecret($value)
+ * @method static \App\Queries\UserQuery|User whereUpdatedAt($value)
+ * @method static \App\Queries\UserQuery|User whereUsername($value)
  */
 	class User extends \Eloquent {}
 }

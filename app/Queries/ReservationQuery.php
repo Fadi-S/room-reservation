@@ -29,18 +29,23 @@ class ReservationQuery extends Builder
         return $this->where("room_id", "=", $room);
     }
 
+    public function forDay($day): static
+    {
+        return $this->where("day_of_week", "=", $day);
+    }
+
     public function overlapping($start, $end): static
     {
         return $this->where(function ($query) use ($start, $end) {
             $query
                 ->where(function ($query) use ($start, $end) {
                     $query
-                        ->where("start", ">", $start)
+                        ->where("start", ">=", $start)
                         ->where("start", "<", $end);
                 })
 
                 ->orWhere(function ($query) use ($start, $end) {
-                    $query->where("end", ">", $start)->where("end", "<", $end);
+                    $query->where("end", ">", $start)->where("end", "<=", $end);
                 })
 
                 ->orWhere(function ($query) use ($start, $end) {

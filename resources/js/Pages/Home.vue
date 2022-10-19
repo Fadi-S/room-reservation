@@ -13,6 +13,7 @@
                 <option
                     v-for="tab in days"
                     :key="tab.id"
+                    :value="tab.id"
                     :selected="tab.id === day"
                 >
                     {{ tab.name }}
@@ -41,19 +42,100 @@
             </div>
         </div>
 
-        <div class="mt-3"></div>
+        <div class="mt-3">
+            <div v-if="!reservationsForDay" class="text-center">
+                <CalendarDaysIcon class="mx-auto h-10 w-10 text-gray-400" />
+                <h3 class="mt-2 text-sm font-medium text-gray-900">
+                    لا يوجد حجوزات في هذا اليوم
+                </h3>
+                <div class="mt-4">
+                    <InertiaLink
+                        href="/reserve"
+                        class="inline-flex items-center rounded-md border border-transparent bg-green-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
+                    >
+                        <PlusIcon
+                            class="-mr-1 ml-2 h-5 w-5"
+                            aria-hidden="true"
+                        />
+                        حجز جديد
+                    </InertiaLink>
+                </div>
+            </div>
+
+            <template v-else>
+                <div class="flex flex-col space-y-6 p-4">
+                    <div
+                        class="bg-white rounded-lg shadow p-3"
+                        v-for="location in locations"
+                    >
+                        <h2
+                            class="text-gray-600 font-bold text-lg max-w-xs"
+                            v-text="location.name"
+                        />
+
+                        <div
+                            class="space-y-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3"
+                        >
+                            <div
+                                class="border mt-3 border-gray-200 overflow-hidden pb-2 rounded-lg"
+                                v-for="room in location.rooms"
+                                v-show="reservationsForDay[room.id]?.length > 0"
+                            >
+                                <h3
+                                    class="text-gray-500 flex items-center justify-center bg-gray-200 w-full font-bold"
+                                    v-text="room.name + ' ' + room.description"
+                                />
+
+                                <div class="mt-3 flex flex-col space-y-3">
+                                    <div
+                                        v-for="reservation in reservationsForDay[
+                                            room.id
+                                        ]"
+                                        class="flex flex-col space-y-0.5 px-3"
+                                    >
+                                        <span>
+                                            {{ reservation.displayName }}
+                                            {{ reservation.service }}
+                                        </span>
+                                        <span>
+                                            <time
+                                                datetime="reservation.start.time"
+                                                v-text="
+                                                    reservation.start.formatted
+                                                "
+                                            />
+                                            -
+                                            <time
+                                                datetime="reservation.end.time"
+                                                v-text="
+                                                    reservation.end.formatted
+                                                "
+                                            />
+                                        </span>
+
+                                        <hr />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </template>
+        </div>
     </div>
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { computed, ref } from "vue";
+import { PlusIcon, CalendarDaysIcon } from "@heroicons/vue/24/solid";
 
-defineProps({
+const props = defineProps({
     reservations: Object,
     locations: Array,
 });
 
 let day = ref(new Date().getDay());
+const reservationsForDay = computed(() => props.reservations[day.value]);
 
 const days = [
     {
