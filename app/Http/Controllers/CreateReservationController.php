@@ -38,7 +38,17 @@ class CreateReservationController extends Controller
             ],
             "dayOfWeek" => ["required_if:isRepeating,true", "between:0,6"],
             "isRepeating" => ["boolean"],
-            "start" => ["required", "date_format:H:i", new RoomAvailableRule()],
+            "start" => [
+                "required",
+                "date_format:H:i",
+                new RoomAvailableRule(
+                    $request->get("room"),
+                    $request->date("date"),
+                    $request->get("dayOfWeek"),
+                    $request->get("start"),
+                    $request->get("end"),
+                ),
+            ],
             "end" => ["required", "date_format:H:i", "after:start"],
         ]);
 
@@ -59,15 +69,20 @@ class CreateReservationController extends Controller
             $reservation["date"] = $date->format("Y-m-d");
 
             $reservation["day_of_week"] = $date->dayOfWeek;
+
+            $reservation["stopped_at"] = $date
+                ->setTimeFrom($request->date("end", "H:i"))
+                ->addMinute();
         }
 
         $reservation = Reservation::query()->create($reservation);
 
         if (Auth::user()->isAdmin()) {
             $reservation->approve();
+            session()->flash("message", "تم الحجز");
+        } else {
+            session()->flash("message", "حفظ الحجز, في انتظار التأكيد");
         }
-
-        session()->flash("message", "Reservation made successfully");
 
         return redirect()->route("home");
     }

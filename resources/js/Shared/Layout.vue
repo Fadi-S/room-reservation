@@ -1,5 +1,5 @@
 <template>
-    <div class="min-h-full h-screen bg-gray-100">
+    <div class="min-h-full h-screen">
         <Disclosure as="nav" class="bg-gray-800" v-slot="{ open, close }">
             <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div class="flex h-16 items-center justify-between">
@@ -163,8 +163,8 @@
         </Disclosure>
 
         <main>
+            <FlashMessages />
             <div class="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
-                <FlashMessages />
                 <slot />
             </div>
         </main>

@@ -2,6 +2,8 @@
 
 namespace App\Rules;
 
+use App\Models\Reservation;
+use Carbon\Carbon;
 use Illuminate\Contracts\Validation\Rule;
 
 class RoomAvailableRule implements Rule
@@ -13,13 +15,12 @@ class RoomAvailableRule implements Rule
      */
     public function __construct(
         protected $roomId,
-        protected $isRepeating,
-        protected $date,
+        protected ?Carbon $date,
         protected $dayOfWeek,
         protected $start,
         protected $end
     ) {
-        //
+        $this->dayOfWeek ??= $this->date?->dayOfWeek;
     }
 
     /**
@@ -31,7 +32,12 @@ class RoomAvailableRule implements Rule
      */
     public function passes($attribute, $value)
     {
-        //
+        return Reservation::query()
+            ->valid($this->date)
+            ->forRoom($this->roomId)
+            ->where("day_of_week", "=", $this->dayOfWeek)
+            ->overlapping($this->start, $this->end)
+            ->doesntExist();
     }
 
     /**
@@ -41,6 +47,6 @@ class RoomAvailableRule implements Rule
      */
     public function message()
     {
-        return "The validation error message.";
+        return "Time overlap";
     }
 }

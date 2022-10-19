@@ -43,20 +43,16 @@
                                     aria-hidden="true"
                                 />
                             </div>
-                            <div class="ml-3 w-0 flex-1 pt-0.5">
+                            <div class="mr-3 w-0 flex-1 pt-0.5">
                                 <p class="text-sm font-medium text-gray-900">
                                     <span v-if="type === 'success'">
-                                        Success!
+                                        تم بنجاح
                                     </span>
 
-                                    <span v-if="type === 'clipboard'">
-                                        Copied!
-                                    </span>
-
-                                    <span v-if="type === 'error'"> Error </span>
+                                    <span v-if="type === 'error'"> خطأ </span>
 
                                     <span v-if="type === 'warning'">
-                                        Take care!
+                                        احظر
                                     </span>
                                 </p>
                                 <p
@@ -64,7 +60,7 @@
                                     v-text="message"
                                 ></p>
                             </div>
-                            <div class="ml-4 flex-shrink-0 flex">
+                            <div class="mr-4 flex-shrink-0 flex">
                                 <button
                                     @click="show = false"
                                     class="bg-white rounded-md inline-flex text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"

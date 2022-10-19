@@ -56,11 +56,14 @@
                     />
                 </div>
 
-                <Checkbox
-                    label="كل أسبوع"
-                    id="repeating"
-                    v-model="form.isRepeating"
-                />
+                <div class="flex items-center">
+                    <Checkbox
+                        class="w-full"
+                        :label="form.isRepeating ? 'كل أسبوع' : 'مرة واحدة'"
+                        id="repeating"
+                        v-model="form.isRepeating"
+                    />
+                </div>
 
                 <template v-if="form.isRepeating">
                     <Select
