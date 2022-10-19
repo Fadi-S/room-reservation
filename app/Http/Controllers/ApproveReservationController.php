@@ -12,12 +12,8 @@ class ApproveReservationController extends Controller
     {
         $this->authorize("admin");
 
-        $success = $reservation->approve();
-
-        if($success) {
+        if ($reservation->approve()) {
             session()->flash("message", "تم الموافقة علي المعاد");
-
-            ReservationApprovedEvent::dispatch($reservation);
         }
 
         return back();

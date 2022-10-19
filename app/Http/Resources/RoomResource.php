@@ -2,18 +2,23 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Room;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class RoomResource extends JsonResource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
-     */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        /* @var Room $this */
+
+        return [
+            "id" => $this->id,
+            "name" => $this->name,
+            "description" => $this->description ?? "",
+            "location" => $this->when(
+                $this->relationLoaded("location"),
+                fn() => LocationResource::make($this->location),
+            ),
+        ];
     }
 }

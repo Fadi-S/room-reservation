@@ -1,7 +1,12 @@
 <template>
     <div :class="width">
-        <label v-if="label" :for="id" class="block text-sm font-medium text-gray-700">
-            {{ label }} <span v-if="false && required" class="text-red-600">*</span>
+        <label
+            v-if="label"
+            :for="id"
+            class="block text-sm font-medium text-gray-700"
+        >
+            {{ label }}
+            <span v-if="false && required" class="text-red-600">*</span>
         </label>
         <div class="mt-1 relative rounded-md shadow-sm">
             <input
@@ -12,12 +17,15 @@
                 :value="modelValue"
                 :required="required"
                 :dir="dir"
-                :class="[
-                    errors.length
-                        ? 'border-red-300 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500'
-                        : 'border-gray-300 focus:ring-green-600 focus:border-green-600',
-                    dir === 'ltr' ? 'pr-10' : 'pl-10',
-                ]"
+                :class="{
+                    'border-red-300 text-red-900 placeholder-red-300 focus:ring-red-500 focus:border-red-500':
+                        errors.length,
+                    'border-gray-300 focus:ring-green-600 focus:border-green-600':
+                        !errors.length,
+
+                    'pr-10': dir === 'ltr' && type !== 'time',
+                    'pl-10': dir === 'rtl' && type !== 'time',
+                }"
                 class="block w-full focus:outline-none rounded-lg"
             />
             <div

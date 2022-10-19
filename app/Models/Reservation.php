@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Events\ReservationApprovedEvent;
 use App\Queries\ReservationQuery;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -13,11 +14,7 @@ class Reservation extends Model
 {
     use HasFactory;
 
-    protected $dates = [
-        "date",
-        "approved_at",
-        "stopped_at",
-    ];
+    protected $dates = ["date", "approved_at", "stopped_at"];
 
     protected $casts = [
         "is_repeating" => "boolean",
@@ -34,32 +31,40 @@ class Reservation extends Model
         return new ReservationQuery($query);
     }
 
-    public function approve() : bool
+    public function approve(): bool
     {
-        if($this->approved_at != null) return false;
+        if ($this->approved_at != null) {
+            return false;
+        }
 
         $this->approved_at = now();
         $this->approved_by_id = Auth::id();
 
-        return $this->save();
+        $saved = $this->save();
+
+        if ($saved) {
+            ReservationApprovedEvent::dispatch($this);
+        }
+
+        return $saved;
     }
 
-    public function room() : BelongsTo
+    public function room(): BelongsTo
     {
         return $this->belongsTo(Room::class);
     }
 
-    public function service() : BelongsTo
+    public function service(): BelongsTo
     {
         return $this->belongsTo(Service::class);
     }
 
-    public function reservedBy() : BelongsTo
+    public function reservedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, "user_id");
     }
 
-    public function approvedBy() : BelongsTo
+    public function approvedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, "approved_by_id");
     }

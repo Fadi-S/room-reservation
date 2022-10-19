@@ -7,15 +7,13 @@
         :class="finalColor + ' ' + padding + ' ' + width"
     >
         <div v-if="form">
-            <template v-show="!form.processing">
-                <slot name="icon" class="w-5 h-5 mr-2" />
+            <template v-if="!form.processing">
+                <slot name="icon" class="w-5 h-5 ml-2" />
             </template>
-            <Spinner v-show="form.processing" class="w-6 h-6 mr-2" />
+            <Spinner v-if="form.processing" class="w-6 h-6 ml-2" />
         </div>
 
         <slot />
-
-        <span v-show="form && form.isDirty">&nbsp;*</span>
     </button>
 </template>
 
@@ -62,5 +60,6 @@ let form = typeof props.form === "object" ? props.form : null;
 
 const suffix = props.outline ? "outline" : props.plain ? "plain" : "solid";
 
-let finalColor = colors[props.color + "-" + suffix] ?? colors["primary-" + suffix];
+let finalColor =
+    colors[props.color + "-" + suffix] ?? colors["primary-" + suffix];
 </script>

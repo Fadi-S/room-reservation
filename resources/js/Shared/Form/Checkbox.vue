@@ -3,12 +3,14 @@
         type="button"
         @click="$refs.input.click()"
         as="checkbox"
-        :aria-label="`Toggle ${label} permission`"
-        class="rounded-2xl flex items-center justify-center space-x-2 transition-colors focus:outline-none focus:ring focus:ring-primary duration-150 cursor-pointer my-2 p-2 group"
+        :aria-label="`Toggle ${label}`"
+        class="rounded-2xl flex items-center justify-center rtl:space-x-reverse space-x-2 transition-colors focus:outline-none focus:ring focus:ring-green-600 duration-150 cursor-pointer my-2 p-2 group"
         :class="[
             {
-                'bg-gray-200 text-gray-700 shadow-md active:hover:shadow-inner': !modelValue,
-                'bg-light text-primary shadow-inner shadow-primary-2/30': modelValue,
+                'bg-gray-200 text-gray-700 shadow-md active:hover:shadow-inner':
+                    !modelValue,
+                'bg-green-100 text-green-600 shadow-inner shadow-green-600-2/30':
+                    modelValue,
             },
             this.class,
         ]"

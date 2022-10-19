@@ -5,7 +5,7 @@
             :for="$attrs.id"
             class="block text-sm font-medium text-gray-700"
         >
-            {{ label }} <span v-if="required" class="text-red-600">*</span>
+            {{ label }}
         </label>
         <select
             v-bind="$attrs"
@@ -16,7 +16,7 @@
             :class="[
                 errors.length
                     ? 'border-red-300 text-red-900 focus:ring-red-500 focus:border-red-500'
-                    : 'border-gray-300 focus:ring-primary focus:border-primary',
+                    : 'border-gray-300 focus:ring-green-500 focus:border-green-500',
             ]"
         >
             <option v-if="placeholder" value="" v-text="placeholder" />
