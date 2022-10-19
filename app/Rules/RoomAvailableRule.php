@@ -42,7 +42,7 @@ class RoomAvailableRule implements Rule
             ->with("service:id,name")
             ->first();
 
-        return !!$this->reservation;
+        return !$this->reservation;
     }
 
     /**
