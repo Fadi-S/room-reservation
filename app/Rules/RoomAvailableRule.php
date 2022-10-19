@@ -52,6 +52,6 @@ class RoomAvailableRule implements Rule
      */
     public function message()
     {
-        return "يوجد {$this->reservation->description} {$this->reservation->service->name} في نفس المكان";
+        return "يوجد {$this->reservation?->description} {$this->reservation?->service->name} في نفس المكان";
     }
 }
