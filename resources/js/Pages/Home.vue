@@ -82,36 +82,58 @@
                                 v-show="reservationsForDay[room.id]?.length > 0"
                             >
                                 <h3
-                                    class="text-gray-500 flex items-center justify-center bg-gray-200 w-full font-bold"
+                                    class="text-gray-500 flex items-center justify-center bg-gray-200 py-2 w-full font-bold"
                                     v-text="room.name + ' ' + room.description"
                                 />
 
-                                <div class="mt-3 flex flex-col space-y-3">
+                                <div class="mt-3 flex flex-col space-y-6">
                                     <div
                                         v-for="reservation in reservationsForDay[
                                             room.id
                                         ]"
                                         class="flex flex-col space-y-0.5 px-3"
                                     >
-                                        <span>
-                                            {{ reservation.displayName }}
-                                            {{ reservation.service }}
-                                        </span>
-                                        <span>
-                                            <time
-                                                datetime="reservation.start.time"
-                                                v-text="
-                                                    reservation.start.formatted
-                                                "
-                                            />
-                                            -
-                                            <time
-                                                datetime="reservation.end.time"
-                                                v-text="
-                                                    reservation.end.formatted
-                                                "
-                                            />
-                                        </span>
+                                        <div
+                                            class="flex items-center space-x-2 rtl:space-x-reverse"
+                                        >
+                                            <div
+                                                class="rounded-full w-4 h-4"
+                                                :style="{
+                                                    backgroundColor:
+                                                        reservation.color,
+                                                }"
+                                            ></div>
+                                            <span>
+                                                {{ reservation.displayName }}
+                                                {{ reservation.service }}
+                                            </span>
+                                        </div>
+
+                                        <div class="flex items-center pb-3">
+                                            <span
+                                                class="px-2 py-1 rounded-full bg-green-50 text-green-800 border-green-800 border"
+                                            >
+                                                <time
+                                                    :datetime="
+                                                        reservation.start.time
+                                                    "
+                                                    v-text="
+                                                        reservation.start
+                                                            .formatted
+                                                    "
+                                                />
+                                                -
+                                                <time
+                                                    :datetime="
+                                                        reservation.end.time
+                                                    "
+                                                    v-text="
+                                                        reservation.end
+                                                            .formatted
+                                                    "
+                                                />
+                                            </span>
+                                        </div>
 
                                         <hr />
                                     </div>
