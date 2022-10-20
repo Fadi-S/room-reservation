@@ -74,7 +74,7 @@
                         />
 
                         <div
-                            class="space-y-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3"
+                            class="space-y-3 grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3"
                         >
                             <div
                                 class="border mt-3 border-gray-200 overflow-hidden pb-2 rounded-lg"
