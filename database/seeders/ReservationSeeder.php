@@ -573,11 +573,245 @@ class ReservationSeeder extends Seeder
             ],
 
             [
+                "service_id" => $services["مدرسة الشاروبيم"],
+                "room_id" => $rooms["C203"],
+                "description" => "ألحان ثانوي بنات",
+                "start" => "11:00",
+                "end" => "12:00",
+                "day_of_week" => $daysOfWeek["fri"],
+            ],
+
+            [
+                "service_id" => $services["مدرسة الشاروبيم"],
+                "room_id" => $rooms["B102"],
+                "description" => "ألحان ثانوي بنات",
+                "start" => "13:00",
+                "end" => "14:00",
+                "day_of_week" => $daysOfWeek["fri"],
+            ],
+
+            [
                 "service_id" => $services["ابتدائي بنات"],
                 "room_id" => $rooms["4"],
                 "description" => "اجتماع الخدمة",
                 "start" => "13:00",
                 "end" => "14:00",
+                "day_of_week" => $daysOfWeek["fri"],
+            ],
+
+            [
+                "service_id" => $services["حتة من السماء"],
+                "room_id" => $rooms["C208"],
+                "description" => "اجتماع الخدمة",
+                "start" => "13:00",
+                "end" => "18:00",
+                "day_of_week" => $daysOfWeek["fri"],
+            ],
+
+            [
+                "service_id" => $services["ملايكة"],
+                "room_id" => $rooms["4"],
+                "description" => "اجتماع خدمة",
+                "start" => "12:00",
+                "end" => "13:00",
+                "day_of_week" => $daysOfWeek["fri"],
+            ],
+
+            [
+                "service_id" => $services["ثانوي بنات"],
+                "room_id" => $rooms["1"],
+                "description" => "مدارس الأحد",
+                "start" => "12:00",
+                "end" => "14:00",
+                "day_of_week" => $daysOfWeek["fri"],
+            ],
+
+            [
+                "service_id" => $services["ثانوي بنات"],
+                "room_id" => $rooms["C205"],
+                "description" => "اجتماع الخدمة",
+                "start" => "14:00",
+                "end" => "15:00",
+                "day_of_week" => $daysOfWeek["fri"],
+            ],
+
+            [
+                "service_id" => $services["اعدادى بنات"],
+                "room_id" => $rooms["2"],
+                "description" => "مدارس الأحد",
+                "start" => "12:00",
+                "end" => "14:00",
+                "day_of_week" => $daysOfWeek["fri"],
+            ],
+
+            [
+                "service_id" => $services["اعدادى بنات"],
+                "room_id" => $rooms["C201"],
+                "description" => "اجتماع الخدمة",
+                "start" => "14:00",
+                "end" => "15:00",
+                "day_of_week" => $daysOfWeek["fri"],
+            ],
+
+            [
+                "service_id" => $services["ثانوي بنين"],
+                "room_id" => $rooms["B204"],
+                "description" => "اجتماع الخدمة",
+                "start" => "13:00",
+                "end" => "14:00",
+                "day_of_week" => $daysOfWeek["fri"],
+            ],
+
+            [
+                "service_id" => $services["ثانوي بنين"],
+                "room_id" => $rooms["2"],
+                "description" => "افتتاحية مدارس الأحد",
+                "start" => "14:00",
+                "end" => "15:00",
+                "day_of_week" => $daysOfWeek["fri"],
+            ],
+
+            [
+                "service_id" => $services["شباب"],
+                "room_id" => $rooms["5"],
+                "description" => "اجتماع خدمة",
+                "start" => "14:00",
+                "end" => "16:00",
+                "day_of_week" => $daysOfWeek["fri"],
+            ],
+
+            [
+                "service_id" => $services["مدرسة الشاروبيم"],
+                "room_id" => $rooms["C203"],
+                "description" => "اعدادي",
+                "start" => "16:00",
+                "end" => "17:00",
+                "day_of_week" => $daysOfWeek["fri"],
+            ],
+
+            [
+                "service_id" => $services["اعدادى بنين"],
+                "room_id" => $rooms["1"],
+                "description" => "مدارس الأحد",
+                "start" => "17:00",
+                "end" => "19:00",
+                "day_of_week" => $daysOfWeek["fri"],
+            ],
+
+            [
+                "service_id" => $services["اعدادى بنين"],
+                "room_id" => $rooms["B204"],
+                "description" => "اجتماع خدمة",
+                "start" => "19:00",
+                "end" => "21:00",
+                "day_of_week" => $daysOfWeek["fri"],
+            ],
+
+            [
+                "service_id" => $services["حديثي الزواج"],
+                "room_id" => $rooms["1"],
+                "description" => "اجتماع",
+                "start" => "19:00",
+                "end" => "21:00",
+                "day_of_week" => $daysOfWeek["fri"],
+            ],
+
+            [
+                "service_id" => $services["حديثي الزواج"],
+                "room_id" => $rooms["B102"],
+                "description" => "كورال",
+                "start" => "17:30",
+                "end" => "19:00",
+                "day_of_week" => $daysOfWeek["fri"],
+            ],
+
+            [
+                "service_id" => $services["حديثي الزواج"],
+                "room_id" => $rooms["C205"],
+                "description" => "براعم",
+                "start" => "19:00",
+                "end" => "20:00",
+                "day_of_week" => $daysOfWeek["fri"],
+            ],
+
+            [
+                "service_id" => $services["حديثي الزواج"],
+                "room_id" => $rooms["C201"],
+                "description" => "براعم",
+                "start" => "19:00",
+                "end" => "20:00",
+                "day_of_week" => $daysOfWeek["fri"],
+            ],
+
+            [
+                "service_id" => $services["عام"],
+                "room_id" => $rooms["1"],
+                "description" => "اجتماع الصلاة",
+                "start" => "21:00",
+                "end" => "22:00",
+                "day_of_week" => $daysOfWeek["fri"],
+            ],
+
+            [
+                "service_id" => $services["المقبلين على الزواج"],
+                "room_id" => $rooms["2"],
+                "description" => "خدمة",
+                "start" => "18:00",
+                "end" => "21:30",
+                "day_of_week" => $daysOfWeek["fri"],
+            ],
+
+            [
+                "service_id" => $services["المقبلين على الزواج"],
+                "room_id" => $rooms["C208"],
+                "description" => "خدمة",
+                "start" => "18:00",
+                "end" => "21:00",
+                "day_of_week" => $daysOfWeek["fri"],
+            ],
+
+            [
+                "service_id" => $services["الرسم و التصميم"],
+                "room_id" => $rooms["C207"],
+                "description" => "خدمة",
+                "start" => "19:00",
+                "end" => "21:00",
+                "day_of_week" => $daysOfWeek["fri"],
+            ],
+
+            [
+                "service_id" => $services["إعداد خدمة بنات"],
+                "room_id" => $rooms["5"],
+                "description" => "",
+                "start" => "19:00",
+                "end" => "21:00",
+                "day_of_week" => $daysOfWeek["fri"],
+            ],
+
+            [
+                "service_id" => $services["يسوع بيحبك"],
+                "room_id" => $rooms["4"],
+                "description" => "اجتماع خدمة",
+                "start" => "17:30",
+                "end" => "19:30",
+                "day_of_week" => $daysOfWeek["fri"],
+            ],
+
+            [
+                "service_id" => $services["مدرسة الشاروبيم"],
+                "room_id" => $rooms["C203"],
+                "description" => "اجتماع خدمة",
+                "start" => "19:30",
+                "end" => "21:00",
+                "day_of_week" => $daysOfWeek["fri"],
+            ],
+
+            [
+                "service_id" => $services["مدرسة الشاروبيم"],
+                "room_id" => $rooms["C203"],
+                "description" => "الحان ثانوى بنين",
+                "start" => "18:00",
+                "end" => "19:30",
                 "day_of_week" => $daysOfWeek["fri"],
             ],
         ];
@@ -590,6 +824,61 @@ class ReservationSeeder extends Seeder
                 "start" => "16:00",
                 "end" => "18:30",
                 "day_of_week" => $daysOfWeek["tue"],
+            ];
+        }
+
+        foreach (["C205", "11", "12"] as $room) {
+            $reservations[] = [
+                "service_id" => $services["ثانوي بنين"],
+                "room_id" => $rooms[$room],
+                "description" => "مدارس الأحد",
+                "start" => "15:00",
+                "end" => "16:00",
+                "day_of_week" => $daysOfWeek["fri"],
+            ];
+        }
+
+        foreach (["B202", "B203", "B204"] as $room) {
+            $reservations[] = [
+                "service_id" => $services["اعدادى بنين"],
+                "room_id" => $rooms[$room],
+                "description" => "مدارس الأحد",
+                "start" => "17:30",
+                "end" => "19:00",
+                "day_of_week" => $daysOfWeek["fri"],
+            ];
+        }
+
+        foreach (["C201", "C207", "C205"] as $room) {
+            $reservations[] = [
+                "service_id" => $services["ثانوي بنات"],
+                "room_id" => $rooms[$room],
+                "description" => "مدارس الأحد",
+                "start" => "13:00",
+                "end" => "14:00",
+                "day_of_week" => $daysOfWeek["fri"],
+            ];
+        }
+
+        foreach (["C203", "11", "12", "5"] as $room) {
+            $reservations[] = [
+                "service_id" => $services["اعدادى بنات"],
+                "room_id" => $rooms[$room],
+                "description" => "مدارس الأحد",
+                "start" => "13:00",
+                "end" => "14:30",
+                "day_of_week" => $daysOfWeek["fri"],
+            ];
+        }
+
+        foreach (["B204", "11", "12", "4", "5", "8", "9"] as $room) {
+            $reservations[] = [
+                "service_id" => $services["ملايكة"],
+                "room_id" => $rooms[$room],
+                "description" => "خدمة",
+                "start" => "11:00",
+                "end" => "12:30",
+                "day_of_week" => $daysOfWeek["fri"],
             ];
         }
 
