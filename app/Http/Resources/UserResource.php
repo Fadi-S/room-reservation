@@ -15,7 +15,16 @@ class UserResource extends JsonResource
             "id" => $this->id,
             "isAdmin" => $this->isAdmin(),
             "name" => $this->name,
+            "email" => $this->email,
             "username" => $this->username,
+            "services" => $this->when(
+                $this->relationLoaded("services"),
+                fn() => ServiceResource::collection($this->services),
+            ),
+            "links" => [
+                "edit" => route("users.edit", $this),
+                "delete" => route("users.destroy", $this),
+            ],
         ];
     }
 }

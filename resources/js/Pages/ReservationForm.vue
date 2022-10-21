@@ -45,24 +45,24 @@
                 />
 
                 <div class="contents">
-                    <Input
-                        type="time"
+                    <TimePicker
+                        required
+                        class="col-span-1"
                         label="وقت البداية"
+                        minutesGridIncrement="30"
+                        minutes-increment="30"
                         v-model="form.start"
                         :errors="form.errors.start"
-                        id="start"
-                        class="col-span-1"
-                        required
                     />
 
-                    <Input
-                        type="time"
+                    <TimePicker
+                        required
+                        class="col-span-1"
                         label="وقت النهاية"
+                        minutesGridIncrement="30"
+                        minutes-increment="30"
                         v-model="form.end"
                         :errors="form.errors.end"
-                        id="end"
-                        class="col-span-1"
-                        required
                     />
                 </div>
 
@@ -138,19 +138,14 @@
 <script setup>
 import { useForm } from "@inertiajs/inertia-vue3";
 import Button from "@/Shared/Form/Button.vue";
-import { CheckCircleIcon, ArrowLeftIcon } from "@heroicons/vue/24/outline";
+import { CheckCircleIcon } from "@heroicons/vue/24/outline";
 import Input from "@/Shared/Form/Input.vue";
 import Select from "@/Shared/Form/Select.vue";
-import Checkbox from "@/Shared/Form/Checkbox.vue";
 import DatePicker from "@/Shared/Form/DatePicker.vue";
 import { computed, ref, watch } from "vue";
-import {
-    RadioGroup,
-    RadioGroupDescription,
-    RadioGroupLabel,
-    RadioGroupOption,
-} from "@headlessui/vue";
+import { RadioGroup, RadioGroupLabel } from "@headlessui/vue";
 import MyRadioOption from "@/Pages/MyRadioOption.vue";
+import TimePicker from "@/Shared/Form/TimePicker.vue";
 
 const props = defineProps({
     locations: Array,
@@ -165,8 +160,14 @@ let form = useForm("ReservationForm", {
     dayOfWeek: null,
     description: null,
     date: null,
-    start: null,
-    end: null,
+    start: {
+        hours: new Date().getHours(),
+        minutes: 0,
+    },
+    end: {
+        hours: new Date().getHours(),
+        minutes: 0,
+    },
     service: Object.keys(props.services)[0] ?? null,
 });
 

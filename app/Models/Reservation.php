@@ -4,6 +4,9 @@ namespace App\Models;
 
 use App\Events\ReservationApprovedEvent;
 use App\Queries\ReservationQuery;
+use Carbon\Carbon;
+use Carbon\CarbonInterval;
+use Carbon\CarbonPeriod;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -14,7 +17,7 @@ class Reservation extends Model
 {
     use HasFactory;
 
-    protected $dates = ["date", "approved_at", "stopped_at"];
+    protected $dates = ["date", "approved_at", "stopped_at", "start", "end"];
 
     protected $casts = [
         "is_repeating" => "boolean",
@@ -29,6 +32,20 @@ class Reservation extends Model
     #[Pure]
     public function newEloquentBuilder($query): ReservationQuery {
         return new ReservationQuery($query);
+    }
+
+    public function isApproved(): bool
+    {
+        return !!$this->approved_at;
+    }
+
+    public function numberOfTimeSlotsIn(CarbonInterval $interval): int
+    {
+        return CarbonPeriod::create(
+            $this->start,
+            $interval,
+            $this->end,
+        )->count() - 1;
     }
 
     public function approve(): bool

@@ -26,6 +26,34 @@ class CreateReservationController extends Controller
 
     public function store(Request $request)
     {
+        if (is_array($request->get("start"))) {
+            $start = $request->get("start");
+            $end = $request->get("end");
+            $request->request->set(
+                "start",
+                Carbon::create(
+                    hour: $start["hours"],
+                    minute: $start["minutes"],
+                )->format("H:i"),
+            );
+            $request->request->set(
+                "end",
+                Carbon::create(
+                    hour: $end["hours"],
+                    minute: $end["minutes"],
+                )->format("H:i"),
+            );
+        }
+
+        if (!$request->boolean("isRepeating")) {
+            $request->request->set(
+                "date",
+                $request
+                    ->date("date")
+                    ->setTimeFrom(Carbon::parse($request->get("start"))),
+            );
+        }
+
         $request->validate([
             "service" => ["required", "exists:services,id"],
             "room" => ["required", "exists:rooms,id"],
@@ -34,7 +62,7 @@ class CreateReservationController extends Controller
                 "nullable",
                 "required_if:isRepeating,false",
                 "date",
-                "after_or_equal:" . now()->format("Y-m-d"),
+                "after_or_equal:" . now()->format("Y-m-d h:i a"),
             ],
             "dayOfWeek" => ["required_if:isRepeating,true", "between:0,6"],
             "isRepeating" => ["boolean"],
@@ -84,6 +112,8 @@ class CreateReservationController extends Controller
             session()->flash("message", "حفظ الحجز, في انتظار التأكيد");
         }
 
-        return redirect()->route("home");
+        return redirect()->route("home", [
+            "day" => $reservation->date->format("Y-m-d"),
+        ]);
     }
 }

@@ -21,6 +21,7 @@
     "@inertiajs/progress": "^0.2.7",
     "@tailwindcss/forms": "^0.5.3",
     "@vitejs/plugin-vue": "^3.1.2",
+    "@vuepic/vue-datepicker": "^3.5.2",
     "vue": "^3.2.41",
     "vue-flatpickr-component": "^9.0.8"
   }

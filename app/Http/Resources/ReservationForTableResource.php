@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use App\Models\Reservation;
 use Carbon\Carbon;
+use Carbon\CarbonInterval;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ReservationForTableResource extends JsonResource
@@ -20,6 +21,9 @@ class ReservationForTableResource extends JsonResource
             "room" => $this->room->fullName,
             "service" => $this->service->name,
             "color" => $this->service->color,
+            "numberOfTimeSlots" => $this->numberOfTimeSlotsIn(
+                CarbonInterval::minutes(30),
+            ),
             "start" => [
                 "time" => $this->start,
                 "formatted" => Carbon::parse($this->start)->translatedFormat(

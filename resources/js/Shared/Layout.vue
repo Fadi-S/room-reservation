@@ -190,15 +190,26 @@ import FlashMessages from "@/Shared/FlashMessages.vue";
 
 const user = useUser();
 
-const navigation = ref(
-    [
-        { name: "الجدول", href: "/", current: true },
-        { name: "حجز غرفة", href: "/reserve", current: false },
-    ],
-    {
-        deep: true,
-    }
-);
+const navigation = ref([
+    { name: "الرئيسية", href: "/", current: true },
+    { name: "الجدول", href: "/table", current: false },
+    { name: "حجز غرفة", href: "/reserve", current: false },
+]);
+
+if (user.isAdmin) {
+    navigation.value.push(
+        {
+            name: "الموافقة علي الحجز",
+            href: "/reservations/not-approved",
+            current: false,
+        },
+        {
+            name: "المستخدمين",
+            href: "/users",
+            current: false,
+        }
+    );
+}
 
 Inertia.on("navigate", () => {
     navigation.value.forEach((link) => {

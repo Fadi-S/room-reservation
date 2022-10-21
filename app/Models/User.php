@@ -34,6 +34,11 @@ class User extends Authenticatable
         return $this->is_admin;
     }
 
+    public function getRouteKeyName(): string
+    {
+        return "username";
+    }
+
     public function services(): BelongsToMany
     {
         return $this->belongsToMany(Service::class);

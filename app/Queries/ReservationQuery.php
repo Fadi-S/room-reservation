@@ -2,12 +2,17 @@
 
 namespace App\Queries;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 
 class ReservationQuery extends Builder
 {
-    public function approved(): static
+    public function approved(bool $approved = true): static
     {
+        if (!$approved) {
+            return $this->where("approved_at", "=", null);
+        }
+
         return $this->where("approved_at", "<>", null);
     }
 
@@ -61,17 +66,24 @@ class ReservationQuery extends Builder
         return $this->where("repeated", "=", $isRepeated);
     }
 
-    public function valid($date = null): static
+    public function valid($date = null, $approved = true): static
     {
-        return $this->approved()->notStopped($date);
+        return $this->approved($approved)->notStopped($date);
     }
 
-    public function validBetween($start, $end)
+    public function validBetween($start, $end): static
     {
         return $this->valid()->where(function ($query) use ($start, $end) {
             $query
                 ->where("date", "=", null)
                 ->orWhereBetween("date", [$start, $end]);
         });
+    }
+
+    public function date(Carbon $date): static
+    {
+        return $this->validBetween($date, $date->copy()->addDay())->forDay(
+            $date->dayOfWeek,
+        );
     }
 }
