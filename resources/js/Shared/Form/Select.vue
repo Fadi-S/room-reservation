@@ -8,6 +8,7 @@
             {{ label }}
         </label>
         <select
+            :multiple="multiple"
             v-bind="$attrs"
             @input="onChanged"
             :value="modelValue"

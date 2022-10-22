@@ -17,7 +17,7 @@ class CreateReservationController extends Controller
         return inertia("ReservationForm", [
             "services" => Auth::user()
                 ->allowedServices()
-                ->pluck("name", "id"),
+                ->pluck("services.name", "services.id"),
             "locations" => LocationResource::collection(
                 Location::with("rooms")->get(),
             ),
@@ -112,8 +112,6 @@ class CreateReservationController extends Controller
             session()->flash("message", "حفظ الحجز, في انتظار التأكيد");
         }
 
-        return redirect()->route("home", [
-            "day" => $reservation->date->format("Y-m-d"),
-        ]);
+        return redirect()->route("home");
     }
 }

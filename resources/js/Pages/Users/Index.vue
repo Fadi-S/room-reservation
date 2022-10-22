@@ -4,15 +4,15 @@
     <div class="bg-white p-6 rounded-lg shadow">
         <Table create-label="أضف مستخدم" :items="users">
             <template #header>
-                <TH>ID</TH>
-                <TH>Name</TH>
-                <TH>Username</TH>
-                <TH>Email</TH>
-                <TH>Services</TH>
-                <TH empty>Edit</TH>
+                <TH empty>ID</TH>
+                <TH>الإسم</TH>
+                <TH>اسم المستخدم</TH>
+                <TH>الأيميل</TH>
+                <TH>الخدمة</TH>
+                <TH empty>تعديل</TH>
             </template>
 
-            <tr v-for="user in users.data">
+            <tr class="odd:bg-white bg-gray-50" v-for="user in users.data">
                 <TD>#{{ user.id }}</TD>
                 <TD>{{ user.name }}</TD>
                 <TD>{{ user.username }}</TD>
@@ -26,7 +26,7 @@
                 </TD>
                 <TD>
                     <Link color="blue" outline :href="user.links.edit">
-                        Edit
+                        تعديل
                     </Link>
                 </TD>
             </tr>

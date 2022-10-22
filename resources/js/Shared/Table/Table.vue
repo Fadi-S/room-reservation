@@ -6,7 +6,7 @@
             <Link
                 color="green"
                 outline
-                class="w-full sm:w-auto"
+                class="w-full md:w-64"
                 :href="createLink"
                 v-if="createLink"
             >
@@ -117,12 +117,12 @@
                                     class="px-6 py-4 whitespace-no-wrap text-center"
                                 >
                                     <p
-                                        class="text-sm leading-5 py-4 flex space-x-2 items-center justify-center text-gray-600"
+                                        class="text-sm leading-5 py-4 flex rtl:space-x-reverse space-x-2 items-center justify-center text-gray-600"
                                     >
                                         <InboxIcon
                                             class="w-10 h-10 text-gray-500"
                                         />
-                                        <span>No results found.</span>
+                                        <span>لا يوجد</span>
                                     </p>
                                 </td>
                             </tr>

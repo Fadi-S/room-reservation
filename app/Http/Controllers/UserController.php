@@ -17,7 +17,9 @@ class UserController extends Controller
         return inertia("Users/Index", [
             "users" => UserResource::collection(
                 User::query()
+                    ->search(request("search"))
                     ->with("services")
+                    ->orderBy("id")
                     ->paginate(15),
             ),
         ]);
@@ -29,7 +31,9 @@ class UserController extends Controller
 
         return inertia("Users/Form", [
             "user" => new User(),
-            "services" => Service::query()->pluck("name", "id"),
+            "services" => Service::query()
+                ->orderBy("id")
+                ->pluck("name", "id"),
             "create" => true,
         ]);
     }
@@ -48,7 +52,7 @@ class UserController extends Controller
                 "max:255",
                 "unique:users",
             ],
-            "password" => ["required", "string", "min:8", "confirmed"],
+            "password" => ["required", "string", "min:6"],
             "services" => ["required", "array"],
             "services.*" => ["exists:services,id"],
             "is_admin" => ["required", "boolean"],
@@ -81,8 +85,12 @@ class UserController extends Controller
         $user->load("services:id");
 
         return inertia("Users/Form", [
-            "user" => $user,
-            "services" => Service::query()->pluck("name", "id"),
+            "user" => array_replace($user->toArray(), [
+                "services" => $user->services->pluck("id")->toArray(),
+            ]),
+            "services" => Service::query()
+                ->orderBy("id")
+                ->pluck("name", "id"),
             "create" => false,
         ]);
     }
@@ -106,7 +114,7 @@ class UserController extends Controller
                 "max:255",
                 Rule::unique("users")->ignore($user->id),
             ],
-            "password" => ["nullable", "string", "min:8", "confirmed"],
+            "password" => ["nullable", "string", "min:6"],
             "services" => ["required", "array"],
             "services.*" => ["exists:services,id"],
             "is_admin" => ["required", "boolean"],
@@ -121,6 +129,8 @@ class UserController extends Controller
                 : $user->password,
             "is_admin" => $request->boolean("is_admin"),
         ]);
+
+        $user->services()->sync($request->get("services", []));
 
         session()->flash("message", "تم تعديل المستخدم بنجاح");
 

@@ -59,8 +59,6 @@ const rooms = computed(() => {
     }, []);
 });
 
-console.log(props.reservations);
-
 const day = ref(new Date().getDay());
 function setupStateFromURL() {
     const params = new URLSearchParams(window.location.search);

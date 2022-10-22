@@ -1,9 +1,7 @@
 <template>
     <Head title="Make Reservation" />
 
-    <div
-        class="bg-white md:rounded-lg shadow px-3 md:px-6 py-4 max-w-xl mx-auto"
-    >
+    <Card>
         <form @submit.prevent="submit" action="/reserve" method="POST">
             <div class="grid gap-8 grid-cols-2 md:gap-6">
                 <Select
@@ -132,7 +130,7 @@
                 احجز
             </Button>
         </form>
-    </div>
+    </Card>
 </template>
 
 <script setup>
@@ -146,6 +144,7 @@ import { computed, ref, watch } from "vue";
 import { RadioGroup, RadioGroupLabel } from "@headlessui/vue";
 import MyRadioOption from "@/Pages/MyRadioOption.vue";
 import TimePicker from "@/Shared/Form/TimePicker.vue";
+import Card from "@/Shared/Card.vue";
 
 const props = defineProps({
     locations: Array,
