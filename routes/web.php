@@ -31,10 +31,15 @@ Route::middleware("auth")->group(function () {
         "approve",
     ])->name("reservation.approve");
 
+    Route::delete("/delete/{reservation}", [
+        ApproveReservationController::class,
+        "delete",
+    ])->name("reservation.delete");
+
     Route::get("/reservations/not-approved", [
         ApproveReservationController::class,
         "index",
-    ])->name("reservations.not-approved");
+    ])->name("reservation.not-approved");
 
     Route::resource("/users", UserController::class);
 });

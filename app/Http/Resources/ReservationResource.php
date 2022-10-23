@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use App\Models\Reservation;
+use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ReservationResource extends JsonResource
@@ -13,7 +14,18 @@ class ReservationResource extends JsonResource
 
         return [
             "id" => $this->id,
-            "displayName" => $this->description,
+            "description" => $this->description,
+            "name" => $this->when(
+                $this->relationLoaded("service"),
+                fn() => $this->description . " " . $this->service->name,
+            ),
+            "start" => $this->start->translatedFormat("h:i a"),
+            "end" => $this->end->translatedFormat("h:i a"),
+            "date" => $this->when(
+                !$this->is_repeating,
+                fn() => $this->date->translatedFormat("d F"),
+            ),
+            "dayName" => $this->dayOfWeekName,
             "isRepeating" => (bool) $this->is_repeating,
             "room" => $this->when(
                 $this->relationLoaded("room"),
@@ -33,6 +45,7 @@ class ReservationResource extends JsonResource
                     !$this->isApproved(),
                     route("reservation.approve", $this),
                 ),
+                "delete" => route("reservation.delete", $this),
             ],
         ];
     }

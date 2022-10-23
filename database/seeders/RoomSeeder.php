@@ -38,7 +38,7 @@ class RoomSeeder extends Seeder
                 "8" => null,
                 "9" => null,
             ],
-            "ذوي الأحتياجات" => [
+            "غرفة ذوي الأحتياجات" => [
                 "C108" => null,
             ],
             "الكنيسة" => [

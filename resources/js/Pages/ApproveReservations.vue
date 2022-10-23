@@ -29,15 +29,117 @@
 
     <div v-else class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div
-            class="bg-white rounded-lg p-4"
+            class="bg-white rounded-lg p-4 border-t-4 flex flex-col justify-between"
+            :style="{
+                borderColor: reservation.service.color,
+            }"
             v-for="reservation in reservations"
         >
-            {{ reservation.displayName }}
+            <h3
+                class="font-semibold text-gray-600 text-lg"
+                v-text="reservation.name"
+            />
+
+            <div class="mt-4 space-y-6">
+                <div class="text-xl">
+                    <span
+                        :style="{
+                            color: reservation.service.color,
+                        }"
+                        class="font-bold"
+                    >
+                        {{ reservation.dayName }}
+                        <template v-if="!reservation.isRepeating">
+                            {{ reservation.date }}
+                        </template>
+                    </span>
+                    من
+                    <time
+                        :datetime="reservation.start"
+                        :style="{
+                            color: reservation.service.color,
+                        }"
+                        class="font-bold"
+                        v-text="reservation.start"
+                    />
+                    إلي
+                    <time
+                        :datetime="reservation.end"
+                        :style="{
+                            color: reservation.service.color,
+                        }"
+                        class="font-bold"
+                        v-text="reservation.end"
+                    />
+
+                    <div class="flex items-center">
+                        <div
+                            v-if="reservation.isRepeating"
+                            class="text-green-800 bg-green-200 rounded-full p-1"
+                        >
+                            <ArrowPathIcon class="w-6 h-6" />
+                        </div>
+
+                        <div
+                            v-else
+                            class="text-red-800 bg-red-200 rounded-full p-1"
+                        >
+                            <ClockIcon class="w-6 h-6" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="text-xl">
+                    <span
+                        v-text="
+                            reservation.room.location.name +
+                            ' ' +
+                            reservation.room.name
+                        "
+                        :style="{
+                            color: reservation.service.color,
+                        }"
+                        class="font-bold"
+                    />&nbsp;
+                </div>
+            </div>
+
+            <div class="mt-4 flex items-center text-gray-500">
+                <span>عبر</span>&nbsp;
+                <span
+                    v-text="'أ/ ' + reservation.reservedBy.name"
+                    class="font-bold"
+                />&nbsp;
+            </div>
+
+            <div class="mt-8 flex items-center justify-between">
+                <Link
+                    color="green"
+                    as="button"
+                    method="POST"
+                    :href="reservation.links.approve"
+                >
+                    موافقة
+                </Link>
+
+                <Link
+                    color="red"
+                    outline
+                    as="button"
+                    method="DELETE"
+                    :href="reservation.links.delete"
+                >
+                    مسح
+                </Link>
+            </div>
         </div>
     </div>
 </template>
 
 <script setup>
+import Link from "@/Shared/Link.vue";
+import { ArrowPathIcon, ClockIcon } from "@heroicons/vue/24/outline";
+
 defineProps({
     reservations: Array,
 });

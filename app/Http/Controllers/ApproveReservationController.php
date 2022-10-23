@@ -30,4 +30,16 @@ class ApproveReservationController extends Controller
 
         return back();
     }
+
+    public function delete(Reservation $reservation)
+    {
+        $this->authorize("admin");
+
+        if ($reservation->delete()) {
+            session()->flash("message", "تم الغاء الحجز");
+            session()->flash("type", "warning");
+        }
+
+        return back();
+    }
 }

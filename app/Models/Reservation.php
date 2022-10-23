@@ -7,6 +7,7 @@ use App\Queries\ReservationQuery;
 use Carbon\Carbon;
 use Carbon\CarbonInterval;
 use Carbon\CarbonPeriod;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -37,6 +38,22 @@ class Reservation extends Model
     public function isApproved(): bool
     {
         return !!$this->approved_at;
+    }
+
+    public function dayOfWeekName(): Attribute
+    {
+        return new Attribute(
+            get: fn() => collect(
+                CarbonPeriod::between(
+                    now()
+                        ->startOfWeek()
+                        ->subDay(),
+                    now()
+                        ->endOfWeek()
+                        ->subDay(),
+                )->toArray(),
+            )->map->translatedFormat("l")[$this->day_of_week],
+        );
     }
 
     public function numberOfTimeSlotsIn(CarbonInterval $interval): int

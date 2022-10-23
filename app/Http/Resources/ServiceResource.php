@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Helpers\Color;
 use App\Models\Service;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -14,7 +15,9 @@ class ServiceResource extends JsonResource
         return [
             "id" => $this->id,
             "name" => $this->name,
-            "color" => $this->color,
+            "color" => Color::make($this->color)
+                ->darken(25)
+                ->get(),
         ];
     }
 }

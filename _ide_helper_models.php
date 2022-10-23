@@ -39,8 +39,8 @@ namespace App\Models{
  * @property int $user_id
  * @property string|null $description
  * @property int|null $approved_by_id
- * @property string $start
- * @property string $end
+ * @property \Illuminate\Support\Carbon $start
+ * @property \Illuminate\Support\Carbon $end
  * @property \Illuminate\Support\Carbon|null $date
  * @property int $day_of_week
  * @property bool $is_repeating
@@ -52,7 +52,8 @@ namespace App\Models{
  * @property-read \App\Models\User $reservedBy
  * @property-read \App\Models\Room $room
  * @property-read \App\Models\Service $service
- * @method static \App\Queries\ReservationQuery|Reservation approved()
+ * @method static \App\Queries\ReservationQuery|Reservation approved(bool $approved = true)
+ * @method static \App\Queries\ReservationQuery|Reservation date(\Carbon\Carbon $date)
  * @method static \App\Queries\ReservationQuery|Reservation forDay($day)
  * @method static \App\Queries\ReservationQuery|Reservation forRoom($room)
  * @method static \App\Queries\ReservationQuery|Reservation newModelQuery()
@@ -61,7 +62,7 @@ namespace App\Models{
  * @method static \App\Queries\ReservationQuery|Reservation overlapping($start, $end)
  * @method static \App\Queries\ReservationQuery|Reservation query()
  * @method static \App\Queries\ReservationQuery|Reservation repeated($isRepeated = true)
- * @method static \App\Queries\ReservationQuery|Reservation valid($date = null)
+ * @method static \App\Queries\ReservationQuery|Reservation valid($date = null, $approved = true)
  * @method static \App\Queries\ReservationQuery|Reservation validBetween($start, $end)
  * @method static \App\Queries\ReservationQuery|Reservation whereApprovedAt($value)
  * @method static \App\Queries\ReservationQuery|Reservation whereApprovedById($value)
