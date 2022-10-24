@@ -51,7 +51,6 @@
                     v-model="form.password"
                     :errors="form.errors.password"
                     id="password"
-                    autocomplete="off"
                 />
 
                 <MultiSelect
@@ -93,7 +92,7 @@ const props = defineProps({
     services: Object,
 });
 
-const form = useForm("UsersForm" + props.user.id, {
+const form = useForm({
     name: props.user.name,
     username: props.user.username,
     email: props.user.email,

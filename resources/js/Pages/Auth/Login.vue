@@ -68,7 +68,7 @@ export default {
     layout: AuthLayout,
     components: { Spinner, Logo, Input, Button, LockClosedIcon },
     setup() {
-        let form = useForm("LoginForm", {
+        let form = useForm({
             email: "",
             password: "",
             remember: true,

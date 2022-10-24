@@ -46,52 +46,45 @@
     </div>
 </template>
 
-<script>
+<script setup>
 import { ExclamationCircleIcon } from "@heroicons/vue/24/solid";
 
-export default {
-    name: "Input",
-    inheritAttrs: false,
-    components: {
-        ExclamationCircleIcon,
+defineProps({
+    modelValue: String,
+    type: {
+        type: String,
+        default: "text",
     },
-    methods: {
-        onChanged(event) {
-            this.$emit("update:modelValue", event.currentTarget.value);
-        },
+    errors: {
+        default: [],
     },
-    emits: ["update:modelValue"],
-    props: {
-        modelValue: String,
-        type: {
-            type: String,
-            default: "text",
-        },
-        errors: {
-            default: [],
-        },
-        value: {
-            type: String,
-            default: "",
-        },
-        required: {
-            type: Boolean,
-            default: false,
-        },
-        id: {
-            type: String,
-            default: "",
-        },
-        label: {
-            type: String,
-            default: "",
-        },
-        dir: {
-            type: String,
-            default: "ltr",
-        },
-        icon: Function | Object,
-        width: String,
+    value: {
+        type: String,
+        default: "",
     },
-};
+    required: {
+        type: Boolean,
+        default: false,
+    },
+    id: {
+        type: String,
+        default: "",
+    },
+    label: {
+        type: String,
+        default: "",
+    },
+    dir: {
+        type: String,
+        default: "ltr",
+    },
+    icon: Function | Object,
+    width: String,
+});
+
+let emit = defineEmits(["update:modelValue"]);
+
+function onChanged(event) {
+    emit("update:modelValue", event.currentTarget.value);
+}
 </script>
