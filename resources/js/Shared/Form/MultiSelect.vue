@@ -1,41 +1,42 @@
 <template>
-    <select class="hidden" multiple @input="onChanged" v-bind="$attrs">
-        <option
-            v-for="item in options"
-            :selected="isSelected(item)"
-            :value="key(item)"
-        >
-            {{ print(item) }}
-        </option>
-    </select>
+    <div class="border-none p-0" v-bind="$attrs">
+        <select class="hidden" multiple @input="onChanged" v-bind="$attrs">
+            <option
+                v-for="item in options"
+                :selected="isSelected(item)"
+                :value="key(item)"
+            >
+                {{ print(item) }}
+            </option>
+        </select>
 
-    <div
-        :class="this.class"
-        class="flex w-full space-x-3 rtl:space-x-reverse justify-between items-center"
-    >
         <div
-            class="border flex w-full flex-col space-y-1 h-64 bg-gray-50 overflow-y-auto rounded-lg"
+            class="flex w-full space-x-3 rtl:space-x-reverse justify-between items-center"
         >
-            <button
-                v-for="item in notSelected"
-                type="button"
-                @click="add(item)"
-                class="hover:bg-gray-100 py-4 sm:py-2"
+            <div
+                class="border flex w-full flex-col space-y-1 h-64 bg-gray-50 overflow-y-auto rounded-lg"
             >
-                {{ print(item) }}
-            </button>
-        </div>
-        <div
-            class="border flex w-full flex-col space-y-1 h-64 bg-gray-50 overflow-y-auto rounded-lg"
-        >
-            <button
-                v-for="item in selected"
-                type="button"
-                @click="remove(item)"
-                class="hover:bg-gray-100 py-4 sm:py-2"
+                <button
+                    v-for="item in notSelected"
+                    type="button"
+                    @click="add(item)"
+                    class="hover:bg-gray-100 py-4 sm:py-2"
+                >
+                    {{ print(item) }}
+                </button>
+            </div>
+            <div
+                class="border flex w-full flex-col space-y-1 h-64 bg-gray-50 overflow-y-auto rounded-lg"
             >
-                {{ print(item) }}
-            </button>
+                <button
+                    v-for="item in selected"
+                    type="button"
+                    @click="remove(item)"
+                    class="hover:bg-gray-100 py-4 sm:py-2"
+                >
+                    {{ print(item) }}
+                </button>
+            </div>
         </div>
     </div>
 </template>
@@ -51,9 +52,6 @@ const props = defineProps({
     modelValue: {
         type: Array,
         default: [],
-    },
-    class: {
-        type: String,
     },
 });
 

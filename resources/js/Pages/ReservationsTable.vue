@@ -41,15 +41,50 @@
                         backgroundColor: reservation?.color?.bg,
                     }"
                 >
-                    <span
-                        v-if="reservation && !reservation.empty"
-                        :style="{
-                            color: reservation.color.text,
-                        }"
-                    >
-                        {{ reservation.displayName }}
-                        {{ reservation.service }}
-                    </span>
+                    <template v-if="reservation && !reservation.empty">
+                        <div class="flex flex-col space-y-1">
+                            <span
+                                :style="{
+                                    color: reservation.color.text,
+                                }"
+                            >
+                                {{ reservation.displayName }}
+                                {{ reservation.service }}
+                            </span>
+
+                            <span
+                                class="text-sm font-semibold opacity-60"
+                                :style="{
+                                    color: reservation.color.text,
+                                }"
+                            >
+                                {{ reservation.room }}
+                            </span>
+                            <div class="text-sm font-semibold opacity-80">
+                                <div class="flex items-center">
+                                    <div
+                                        v-if="reservation.isRepeating"
+                                        class="rounded-full"
+                                        :style="{
+                                            color: reservation.color.text,
+                                        }"
+                                    >
+                                        <ArrowPathIcon class="w-6 h-6" />
+                                    </div>
+
+                                    <div
+                                        v-else
+                                        class="rounded-full"
+                                        :style="{
+                                            color: reservation.color.text,
+                                        }"
+                                    >
+                                        <ClockIcon class="w-6 h-6" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
                 </td>
             </tr>
         </table>
@@ -61,6 +96,7 @@ import { computed, ref, watch } from "vue";
 import { Inertia } from "@inertiajs/inertia";
 import useQueryStringToJSON from "@/Composables/useQueryStringToJSON.js";
 import Tabs from "@/Shared/Tabs.vue";
+import { ArrowPathIcon, ClockIcon } from "@heroicons/vue/20/solid";
 
 const props = defineProps({
     reservations: Object,

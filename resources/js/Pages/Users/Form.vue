@@ -56,10 +56,8 @@
 
                 <MultiSelect
                     class="col-span-2"
-                    multiple
                     :options="services"
                     v-model="form.services"
-                    placeholder="-- الخدمات --"
                 />
 
                 <Checkbox id="is-admin" v-model="form.is_admin" label="أدمن" />
