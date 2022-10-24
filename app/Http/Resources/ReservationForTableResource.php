@@ -20,10 +20,14 @@ class ReservationForTableResource extends JsonResource
             "roomId" => $this->room_id,
             "room" => $this->room->fullName,
             "service" => $this->service->name,
-            "color" => $this->service->color,
+            "color" => [
+                "bg" => $this->service->color->lighten(40)->get(),
+                "text" => $this->service->color->darken(80)->get(),
+            ],
             "numberOfTimeSlots" => $this->numberOfTimeSlotsIn(
                 CarbonInterval::minutes(30),
             ),
+            "startTime" => $this->start,
             "start" => [
                 "time" => $this->start,
                 "formatted" => Carbon::parse($this->start)->translatedFormat(

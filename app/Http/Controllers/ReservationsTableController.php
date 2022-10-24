@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use Carbon\CarbonInterval;
 use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
+use Illuminate\Support\Benchmark;
 
 class ReservationsTableController extends Controller
 {
@@ -31,7 +32,7 @@ class ReservationsTableController extends Controller
                         ->with("room.location", "service")
                         ->get(),
                 )->resolve(),
-            )->groupBy("roomId"),
+            )->groupBy(["roomId", "startTime"]),
 
             "locations" => fn() => LocationResource::collection(
                 Location::query()
@@ -57,7 +58,7 @@ class ReservationsTableController extends Controller
                 )->toArray(),
             )->map(
                 fn(Carbon $date) => [
-                    "id" => $date->format("H:i"),
+                    "id" => $date->format("H:i:s"),
                     "name" => $date->translatedFormat("h:i a"),
                 ],
             ),

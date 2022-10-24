@@ -6,7 +6,7 @@ use JetBrains\PhpStorm\Pure;
 
 class Color
 {
-    protected $original;
+    protected readonly string $original;
 
     public function __construct(protected $color)
     {
@@ -23,12 +23,12 @@ class Color
         return $this->color;
     }
 
-    public function getOriginal()
+    public function getOriginal() : string
     {
         return $this->original;
     }
 
-    public function lighten(int $by = 50)
+    public function lighten(int $by = 50) : self
     {
         $adjustPercent = $by / 100;
 
@@ -58,16 +58,12 @@ class Color
             );
         }
 
-        $this->color = "#" . implode($hexCode);
-
-        return $this;
+        return self::make("#" . implode($hexCode));
     }
 
-    public function darken(int $by = 50)
+    public function darken(int $by = 50) : self
     {
-        $this->lighten(-$by);
-
-        return $this;
+        return $this->lighten(-$by);
     }
 
     #[Pure]

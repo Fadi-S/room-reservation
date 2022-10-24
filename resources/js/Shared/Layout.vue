@@ -181,7 +181,7 @@ import {
     MenuItem,
     MenuItems,
 } from "@headlessui/vue";
-import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/vue/24/outline";
+import { Bars3Icon, XMarkIcon } from "@heroicons/vue/24/outline";
 import useUser from "@/Composables/useUser.js";
 import Logo from "@/Pages/Auth/Logo.vue";
 import { Inertia } from "@inertiajs/inertia";
