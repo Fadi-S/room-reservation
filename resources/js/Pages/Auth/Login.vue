@@ -18,6 +18,7 @@
                         <Input
                             id="username"
                             name="email"
+                            width="w-full"
                             label="الأسم"
                             v-model="form.email"
                             :errors="form.errors.email"
@@ -30,6 +31,7 @@
                             id="password"
                             name="password"
                             label="كلمة المرور"
+                            width="w-full"
                             v-model="form.password"
                             type="password"
                             autocomplete="password"

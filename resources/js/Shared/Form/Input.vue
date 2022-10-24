@@ -6,7 +6,6 @@
             class="block text-sm font-medium text-gray-700"
         >
             {{ label }}
-            <span v-if="false && required" class="text-red-600">*</span>
         </label>
         <div class="mt-1 relative rounded-md shadow-sm">
             <input

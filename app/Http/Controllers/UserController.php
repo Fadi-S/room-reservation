@@ -53,7 +53,7 @@ class UserController extends Controller
                 "unique:users",
             ],
             "password" => ["required", "string", "min:6"],
-            "services" => ["required", "array"],
+            "services" => ["nullable", "array"],
             "services.*" => ["exists:services,id"],
             "is_admin" => ["required", "boolean"],
         ]);
@@ -115,7 +115,7 @@ class UserController extends Controller
                 Rule::unique("users")->ignore($user->id),
             ],
             "password" => ["nullable", "string", "min:6"],
-            "services" => ["required", "array"],
+            "services" => ["nullable", "array"],
             "services.*" => ["exists:services,id"],
             "is_admin" => ["required", "boolean"],
         ]);
