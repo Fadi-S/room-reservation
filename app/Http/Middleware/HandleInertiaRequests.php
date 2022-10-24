@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Reservation;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -38,7 +39,7 @@ class HandleInertiaRequests extends Middleware
     {
         $user = auth()->user();
         if ($user) {
-            $user = [
+            $userArray = [
                 "name" => $user->name,
                 "username" => $user->username,
                 "imageUrl" => asset("/images/defaultPicture.png"),
@@ -46,10 +47,18 @@ class HandleInertiaRequests extends Middleware
             ];
         }
 
+        $data = [];
+        if ($user && $user->isAdmin()) {
+            $data["pendingReservationsCount"] = Reservation::valid(
+                approved: false,
+            )->count();
+        }
+
         return array_merge(parent::share($request), [
             "auth" => [
-                "user" => $user,
+                "user" => $userArray ?? null,
             ],
+            "data" => $data,
             "flash" => [
                 "success" => session("success"),
                 "message" => session("message"),

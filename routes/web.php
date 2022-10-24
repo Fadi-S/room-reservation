@@ -3,13 +3,27 @@
 use App\Http\Controllers\ApproveReservationController;
 use App\Http\Controllers\CreateReservationController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\PasswordlessSignInController;
 use App\Http\Controllers\ReservationsTableController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
+if (!app()->environment("production")) {
+    Route::get("/login/{id}", function ($user) {
+        $user = \App\Models\User::where("id", "=", $user)->firstOrFail();
+        Auth::login($user);
+        return redirect()->route("home");
+    })->name("login.temp");
+}
+
 Route::inertia("/login", "Auth/Login")
     ->middleware("guest")
     ->name("login");
+
+Route::post("login-by-email", [
+    PasswordlessSignInController::class,
+    "sendLink",
+]);
 
 Route::get("/table", ReservationsTableController::class)->name("table");
 

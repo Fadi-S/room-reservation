@@ -43,16 +43,6 @@
                     required
                 />
 
-                <Input
-                    dir="ltr"
-                    type="password"
-                    width="w-full col-span-2"
-                    placeholder="كلمة المرور"
-                    v-model="form.password"
-                    :errors="form.errors.password"
-                    id="password"
-                />
-
                 <MultiSelect
                     class="col-span-2"
                     :options="services"

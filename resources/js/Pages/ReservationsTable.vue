@@ -3,7 +3,7 @@
 
     <Tabs v-model="day" :tabs="nextWeekDays" />
 
-    <div class="overflow-x-auto">
+    <div class="overflow-x-auto bg-white">
         <table class="mt-3">
             <colgroup span="2"></colgroup>
             <colgroup span="2"></colgroup>

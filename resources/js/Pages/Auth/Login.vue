@@ -19,22 +19,11 @@
                             id="username"
                             name="email"
                             width="w-full"
-                            label="الأسم"
+                            label="الاسم أو البريد الإلكتروني"
                             v-model="form.email"
                             :errors="form.errors.email"
                             type="text"
                             autocomplete="username"
-                            required
-                        />
-
-                        <Input
-                            id="password"
-                            name="password"
-                            label="كلمة المرور"
-                            width="w-full"
-                            v-model="form.password"
-                            type="password"
-                            autocomplete="password"
                             required
                         />
 
@@ -70,11 +59,10 @@ export default {
     setup() {
         let form = useForm({
             email: "",
-            password: "",
             remember: true,
         });
 
-        const submit = () => form.post("/login");
+        const submit = () => form.post("/login-by-email");
 
         return {
             form,

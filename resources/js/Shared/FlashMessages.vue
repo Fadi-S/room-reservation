@@ -42,6 +42,12 @@
                                     class="h-6 w-6 text-orange-400"
                                     aria-hidden="true"
                                 />
+
+                                <ExclamationTriangleIcon
+                                    v-if="type === 'info'"
+                                    class="h-6 w-6 text-blue-400"
+                                    aria-hidden="true"
+                                />
                             </div>
                             <div class="mr-3 w-0 flex-1 pt-0.5">
                                 <p class="text-sm font-medium text-gray-900">
@@ -54,6 +60,8 @@
                                     <span v-if="type === 'warning'">
                                         احظر
                                     </span>
+
+                                    <span v-if="type === 'info'"> انتبه </span>
                                 </p>
                                 <p
                                     class="mt-1 text-sm text-gray-500"

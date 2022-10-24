@@ -19,13 +19,20 @@
                                         item.current
                                             ? 'bg-gray-900 text-white'
                                             : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                                        'px-3 py-2 rounded-md text-sm font-medium',
+                                        'px-3 py-2 rounded-md text-sm font-medium relative',
                                     ]"
                                     :aria-current="
                                         item.current ? 'page' : undefined
                                     "
                                 >
                                     {{ item.name }}
+
+                                    <div
+                                        v-if="item.notifications > 0"
+                                        class="inline-flex absolute -top-2 -right-2 justify-center items-center w-6 h-6 text-xs font-bold text-white bg-red-500 rounded-full border-2 border-gray-900"
+                                    >
+                                        {{ item.notifications }}
+                                    </div>
                                 </InertiaLink>
                             </div>
                         </div>
@@ -115,16 +122,24 @@
                         <InertiaLink
                             v-for="item in navigation"
                             :key="item.name"
+                            @click="close"
                             :href="item.href"
                             :class="[
                                 item.current
                                     ? 'bg-gray-900 text-white'
                                     : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                                'block px-3 py-2 rounded-md text-start w-full font-medium',
+                                'block px-3 py-2 rounded-md text-start w-full font-medium flex items-center space-x-2 rtl:space-x-reverse',
                             ]"
                             :aria-current="item.current ? 'page' : undefined"
                         >
-                            {{ item.name }}
+                            <span>{{ item.name }}</span>
+
+                            <div
+                                v-if="item.notifications > 0"
+                                class="inline-flex justify-center items-center w-6 h-6 text-xs font-bold text-white bg-red-500 rounded-full border-2 border-gray-900"
+                            >
+                                {{ item.notifications }}
+                            </div>
                         </InertiaLink>
                     </div>
                     <div class="border-t border-gray-700 pt-4 pb-3">
@@ -149,8 +164,8 @@
                             <InertiaLink
                                 v-for="item in userNavigation"
                                 :key="item.name"
-                                as="Button"
-                                method="POST"
+                                :as="item.method === 'POST' ? 'Button' : null"
+                                :method="item.method"
                                 :href="item.href"
                                 class="block w-full rounded-md px-3 py-2 text-start font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
                             >
@@ -187,8 +202,10 @@ import Logo from "@/Pages/Auth/Logo.vue";
 import { Inertia } from "@inertiajs/inertia";
 import { ref } from "vue";
 import FlashMessages from "@/Shared/FlashMessages.vue";
+import { usePage } from "@inertiajs/inertia-vue3";
 
 const user = useUser();
+const page = usePage();
 
 const navigation = ref([
     { name: "الرئيسية", href: "/", current: true },
@@ -202,6 +219,7 @@ if (user.isAdmin) {
             name: "الموافقة علي الحجز",
             href: "/reservations/not-approved",
             current: false,
+            notifications: page.props.value.data?.pendingReservationsCount ?? 0,
         },
         {
             name: "المستخدمين",
@@ -217,5 +235,7 @@ Inertia.on("navigate", () => {
     });
 });
 
-const userNavigation = [{ name: "تسجيل خروج", href: "/logout" }];
+const userNavigation = [
+    { name: "تسجيل خروج", href: "/logout", method: "POST" },
+];
 </script>

@@ -52,7 +52,6 @@ class UserController extends Controller
                 "max:255",
                 "unique:users",
             ],
-            "password" => ["required", "string", "min:6"],
             "services" => ["nullable", "array"],
             "services.*" => ["exists:services,id"],
             "is_admin" => ["required", "boolean"],
@@ -62,7 +61,6 @@ class UserController extends Controller
             "name" => $request->get("name"),
             "username" => $request->get("username"),
             "email" => $request->get("email"),
-            "password" => bcrypt($request->get("password")),
             "is_admin" => $request->boolean("is_admin"),
         ]);
 
@@ -114,7 +112,6 @@ class UserController extends Controller
                 "max:255",
                 Rule::unique("users")->ignore($user->id),
             ],
-            "password" => ["nullable", "string", "min:6"],
             "services" => ["nullable", "array"],
             "services.*" => ["exists:services,id"],
             "is_admin" => ["required", "boolean"],
@@ -124,9 +121,6 @@ class UserController extends Controller
             "name" => $request->get("name"),
             "username" => $request->get("username"),
             "email" => $request->get("email"),
-            "password" => $request->has("password")
-                ? bcrypt($request->get("password"))
-                : $user->password,
             "is_admin" => $request->boolean("is_admin"),
         ]);
 
