@@ -19,8 +19,8 @@ class ReservationResource extends JsonResource
                 $this->relationLoaded("service"),
                 fn() => $this->description . " " . $this->service->name,
             ),
-            "start" => $this->start->translatedFormat("h:i a"),
-            "end" => $this->end->translatedFormat("h:i a"),
+            "start" => Carbon::parse($this->start)->translatedFormat("h:i a"),
+            "end" => Carbon::parse($this->end)->translatedFormat("h:i a"),
             "date" => $this->when(
                 !$this->is_repeating,
                 fn() => $this->date->translatedFormat("d F"),
