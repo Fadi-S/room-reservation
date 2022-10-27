@@ -12,9 +12,15 @@ class PasswordlessSignInController extends Controller
 {
     public function sendLink(Request $request)
     {
+        if (\Auth::check()) {
+            return redirect()->route("home");
+        }
+
+        $username = trim(strtolower($request->email));
+
         $user = User::query()
-            ->where("email", "=", $request->email)
-            ->orWhere("username", "=", $request->email)
+            ->where("email", "=", $username)
+            ->orWhere("username", "=", $username)
             ->first();
 
         if (!$user) {

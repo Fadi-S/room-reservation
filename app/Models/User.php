@@ -4,11 +4,13 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Queries\UserQuery;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
 use JetBrains\PhpStorm\Pure;
 use Laravel\Sanctum\HasApiTokens;
 
@@ -51,5 +53,23 @@ class User extends Authenticatable
         }
 
         return $this->services()->toBase();
+    }
+
+    public function email(): Attribute
+    {
+        return new Attribute(
+            set: fn($value) => ($this->attributes["email"] = trim(
+                strtolower($value),
+            )),
+        );
+    }
+
+    public function username(): Attribute
+    {
+        return new Attribute(
+            set: fn($value) => ($this->attributes["username"] = trim(
+                strtolower($value),
+            )),
+        );
     }
 }
