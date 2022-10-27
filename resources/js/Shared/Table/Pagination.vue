@@ -10,7 +10,7 @@
                 :preserve-state="true"
                 class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
             >
-                Previous
+                السابق
             </InertiaLink>
             <span class="text-center">
                 {{ items.meta.to }}
@@ -23,10 +23,12 @@
                 :preserve-state="true"
                 class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
             >
-                Next
+                التالي
             </InertiaLink>
         </div>
-        <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+        <div
+            class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between"
+        >
             <div>
                 <p class="text-sm text-gray-700">
                     Showing
@@ -54,22 +56,26 @@
                         :preserve-scroll="true"
                         :preserve-state="true"
                         :href="items.links.prev"
-                        class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+                        class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
                     >
                         <span class="sr-only">Previous</span>
-                        <ChevronLeftIcon class="h-5 w-5" aria-hidden="true" />
+                        <ChevronRightIcon class="h-5 w-5" aria-hidden="true" />
                     </InertiaLink>
 
                     <span
                         v-else
-                        class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-300"
+                        class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-300"
                     >
                         <span class="sr-only">Previous</span>
-                        <ChevronLeftIcon class="h-5 w-5" aria-hidden="true" />
+                        <ChevronRightIcon class="h-5 w-5" aria-hidden="true" />
                     </span>
 
                     <template v-for="(link, key) in items.meta.links">
-                        <template v-if="key !== 0 && key < items.meta.links.length - 1">
+                        <template
+                            v-if="
+                                key !== 0 && key < items.meta.links.length - 1
+                            "
+                        >
                             <Component
                                 :is="link.active ? 'span' : 'InertiaLink'"
                                 v-if="link.url"
@@ -98,18 +104,18 @@
                         :preserve-state="true"
                         v-if="items.links.next"
                         :href="items.links.next"
-                        class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
+                        class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50"
                     >
                         <span class="sr-only">Next</span>
-                        <ChevronRightIcon class="h-5 w-5" aria-hidden="true" />
+                        <ChevronLeftIcon class="h-5 w-5" aria-hidden="true" />
                     </InertiaLink>
 
                     <span
                         v-else
-                        class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-300"
+                        class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-300"
                     >
                         <span class="sr-only">Next</span>
-                        <ChevronRightIcon class="h-5 w-5" aria-hidden="true" />
+                        <ChevronLeftIcon class="h-5 w-5" aria-hidden="true" />
                     </span>
                 </nav>
             </div>

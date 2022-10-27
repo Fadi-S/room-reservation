@@ -62,7 +62,12 @@ export default {
             remember: true,
         });
 
-        const submit = () => form.post("/login-by-email");
+        const submit = () =>
+            form.post("/login-by-email", {
+                onSuccess: () => {
+                    form.reset();
+                },
+            });
 
         return {
             form,

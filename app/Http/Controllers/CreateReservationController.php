@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\MakeReservationEvent;
 use App\Http\Resources\LocationResource;
 use App\Models\Location;
 use App\Models\Reservation;
@@ -109,6 +110,8 @@ class CreateReservationController extends Controller
             $reservation->approve();
             session()->flash("message", "تم الحجز");
         } else {
+            MakeReservationEvent::dispatch($reservation);
+
             session()->flash("message", "حفظ الحجز, في انتظار التأكيد");
         }
 

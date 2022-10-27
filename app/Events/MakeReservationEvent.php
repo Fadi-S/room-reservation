@@ -2,7 +2,7 @@
 
 namespace App\Events;
 
-use App\Http\Resources\ReservationForTableResource;
+use App\Http\Resources\ReservationResource;
 use App\Models\Reservation;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
@@ -12,7 +12,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class ReservationApprovedEvent implements ShouldBroadcast
+class MakeReservationEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -25,14 +25,18 @@ class ReservationApprovedEvent implements ShouldBroadcast
      */
     public function __construct(protected Reservation $reservationModel)
     {
-        $this->reservation = ReservationForTableResource::make(
-            $this->reservationModel,
+        $this->reservation = ReservationResource::make(
+            $this->reservationModel->load(
+                "service",
+                "reservedBy",
+                "room.location",
+            ),
         )->resolve();
     }
 
     public function broadcastAs()
     {
-        return "reservations.approved";
+        return "reservations.created";
     }
 
     /**
@@ -42,6 +46,6 @@ class ReservationApprovedEvent implements ShouldBroadcast
      */
     public function broadcastOn()
     {
-        return new PrivateChannel("reservations-changed");
+        return new Channel("reservation-created");
     }
 }
