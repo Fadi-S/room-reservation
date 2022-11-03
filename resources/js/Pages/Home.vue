@@ -62,7 +62,8 @@
                                                 class="rounded-full w-4 h-4"
                                                 :style="{
                                                     backgroundColor:
-                                                        reservation.color,
+                                                        reservation.color
+                                                            .original,
                                                 }"
                                             ></div>
                                             <span>

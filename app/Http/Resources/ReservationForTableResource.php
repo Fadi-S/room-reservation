@@ -23,6 +23,7 @@ class ReservationForTableResource extends JsonResource
             "color" => [
                 "bg" => $this->service->color->lighten(40)->get(),
                 "text" => $this->service->color->darken(80)->get(),
+                "original" => $this->service->color->get(),
             ],
             "numberOfTimeSlots" => $this->numberOfTimeSlotsIn(
                 CarbonInterval::minutes(30),
@@ -41,6 +42,7 @@ class ReservationForTableResource extends JsonResource
                 ),
             ],
             "dayOfWeek" => $this->day_of_week,
+            "edit" => route("reservations.edit", $this),
         ];
     }
 }

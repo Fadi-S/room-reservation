@@ -3,6 +3,7 @@
 use App\Http\Controllers\ApproveReservationController;
 use App\Http\Controllers\CreateReservationController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\EditReservationController;
 use App\Http\Controllers\PasswordlessSignInController;
 use App\Http\Controllers\ReservationsTableController;
 use App\Http\Controllers\UserController;
@@ -54,6 +55,9 @@ Route::middleware("auth")->group(function () {
         ApproveReservationController::class,
         "index",
     ])->name("reservation.not-approved");
+
+    Route::get("reservations/{reservation}/edit", [EditReservationController::class, "edit"])->name("reservations.edit");
+    Route::patch("reservations/{reservation}", [EditReservationController::class, "update"])->name("reservation.update");
 
     Route::resource("/users", UserController::class);
 });

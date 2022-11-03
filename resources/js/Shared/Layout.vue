@@ -1,6 +1,6 @@
 <template>
     <div class="min-h-full h-screen">
-        <Disclosure as="nav" class="bg-gray-800" v-slot="{ open, close }">
+        <Disclosure v-if="user" as="nav" class="bg-gray-800" v-slot="{ open, close }">
             <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <div class="flex h-16 items-center justify-between">
                     <div class="flex items-center">
@@ -212,28 +212,30 @@ const navigation = ref([
     { name: "الجدول", href: "/table", current: false },
     { name: "حجز غرفة", href: "/reserve", current: false },
 ]);
+if(user) {
+    if (user.isAdmin) {
+        navigation.value.push(
+            {
+                name: "الموافقة علي الحجز",
+                href: "/reservations/not-approved",
+                current: false,
+                notifications: page.props.value.data?.pendingReservationsCount ?? 0,
+            },
+            {
+                name: "المستخدمين",
+                href: "/users",
+                current: false,
+            }
+        );
+    }
 
-if (user.isAdmin) {
-    navigation.value.push(
-        {
-            name: "الموافقة علي الحجز",
-            href: "/reservations/not-approved",
-            current: false,
-            notifications: page.props.value.data?.pendingReservationsCount ?? 0,
-        },
-        {
-            name: "المستخدمين",
-            href: "/users",
-            current: false,
-        }
-    );
+    Inertia.on("navigate", () => {
+        navigation.value.forEach((link) => {
+            link.current = window.location.pathname === link.href;
+        });
+    });
 }
 
-Inertia.on("navigate", () => {
-    navigation.value.forEach((link) => {
-        link.current = window.location.pathname === link.href;
-    });
-});
 
 const userNavigation = [
     { name: "تسجيل خروج", href: "/logout", method: "POST" },

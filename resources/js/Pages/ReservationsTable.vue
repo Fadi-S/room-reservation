@@ -81,6 +81,10 @@
                                     >
                                         <ClockIcon class="w-6 h-6" />
                                     </div>
+
+                                    <InertiaLink class="text-gray-50" v-if="user.isAdmin" :href="reservation.edit">
+                                        <PencilSquareIcon class="w-6 h-6" />
+                                    </InertiaLink>
                                 </div>
                             </div>
                         </div>
@@ -96,7 +100,8 @@ import { computed, ref, watch } from "vue";
 import { Inertia } from "@inertiajs/inertia";
 import useQueryStringToJSON from "@/Composables/useQueryStringToJSON.js";
 import Tabs from "@/Shared/Tabs.vue";
-import { ArrowPathIcon, ClockIcon } from "@heroicons/vue/20/solid";
+import { ArrowPathIcon, ClockIcon, PencilSquareIcon } from "@heroicons/vue/20/solid";
+import useUser from "@/Composables/useUser.js";
 
 const props = defineProps({
     reservations: Object,
@@ -104,6 +109,8 @@ const props = defineProps({
     nextWeekDays: Array,
     timeSteps: Array,
 });
+
+let user = useUser();
 
 const rooms = computed(() => {
     return props.locations.reduce((acc, location) => {
