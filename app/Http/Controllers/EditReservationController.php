@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\MakeReservation;
 use App\Http\Resources\LocationResource;
 use App\Models\Location;
 use App\Models\Reservation;
@@ -12,6 +13,7 @@ class EditReservationController extends Controller
 {
     public function edit(Reservation $reservation)
     {
+        $reservation->load("room");
         $this->authorize("admin");
 
         return inertia("ReservationForm", [
@@ -19,8 +21,18 @@ class EditReservationController extends Controller
                 ->allowedServices()
                 ->pluck("services.name", "services.id"),
             "reservation" => [
-
+                "description" => $reservation->description,
+                "service_id" => $reservation->service_id,
+                "room_id" => $reservation->room_id,
+                "location_id" => $reservation->room->location_id,
+                "start" => $reservation->start,
+                "end" => $reservation->end,
+                "date" => $reservation->date?->format("Y-m-d"),
+                "day_of_week" => $reservation->day_of_week,
+                "is_repeating" => $reservation->is_repeating,
             ],
+            "url" => route("reservation.update", $reservation),
+            "deleteUrl" => route("reservation.stop", $reservation),
             "locations" => LocationResource::collection(
                 Location::with("rooms")->get(),
             ),
@@ -31,13 +43,25 @@ class EditReservationController extends Controller
     {
         $this->authorize("admin");
 
+        MakeReservation::update($reservation, $request->all());
 
+        session()->flash("message", "تم تعديل الحجز");
+
+        return back();
     }
 
     public function destroy(Reservation $reservation)
     {
+        $date = $reservation->nextOccurrence;
+
         $reservation->stopped_at = now();
 
         $reservation->save();
+
+        session()->flash("message", "تم أيقاف الحجز");
+
+        return redirect()->route("table", [
+            "day" => $date?->format("Y-m-d"),
+        ]);
     }
 }

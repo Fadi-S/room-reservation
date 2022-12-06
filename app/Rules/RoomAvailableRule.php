@@ -20,7 +20,8 @@ class RoomAvailableRule implements Rule
         protected ?Carbon $date,
         protected $dayOfWeek,
         protected $start,
-        protected $end
+        protected $end,
+        protected $ignore = null
     ) {
         $this->dayOfWeek ??= $this->date?->dayOfWeek;
     }
@@ -35,6 +36,10 @@ class RoomAvailableRule implements Rule
     public function passes($attribute, $value)
     {
         $this->reservation = Reservation::query()
+            ->when(
+                $this->ignore,
+                fn($query) => $query->where("id", "<>", $this->ignore),
+            )
             ->valid($this->date)
             ->forRoom($this->roomId)
             ->forDay($this->dayOfWeek)

@@ -60,7 +60,24 @@ class Reservation extends Model
     {
         $diff = (new \DateTime($this->end))->diff(new \DateTime($this->start));
 
-        return ($diff->h * 60 + $diff->i) / $interval->minutes + 1;
+        return ($diff->h * 60 + $diff->i) / $interval->minutes;
+    }
+
+    public function nextOccurrence(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                if (now()->gte($this->stopped_at)) {
+                    return null;
+                }
+
+                if ($this->is_repeating) {
+                    return now()->next($this->day_of_week);
+                }
+
+                return $this->date;
+            },
+        );
     }
 
     public function approve(): bool

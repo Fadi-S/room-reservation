@@ -2,8 +2,20 @@
     <Head title="Make Reservation" />
 
     <Card>
-        <form @submit.prevent="submit" action="/reserve" method="POST">
-            <div class="grid gap-8 grid-cols-2 md:gap-6">
+        <form @submit.prevent="submit" :action="url" method="POST">
+            <Link
+                v-if="deleteUrl"
+                as="button"
+                method="DELETE"
+                color="red"
+                outline
+                class="space-x-reverse"
+                :href="deleteUrl"
+            >
+                <TrashIcon class="w-6 h-6" />
+                <span>مسح</span>
+            </Link>
+            <div class="grid gap-8 grid-cols-2 md:gap-6 mt-4">
                 <Select
                     id="service"
                     class="col-span-2"
@@ -24,7 +36,6 @@
                     id="description"
                     name="reservation-description"
                     autocomplete="reservation-description"
-                    required
                 />
 
                 <Select
@@ -136,7 +147,7 @@
 <script setup>
 import { useForm } from "@inertiajs/inertia-vue3";
 import Button from "@/Shared/Form/Button.vue";
-import { CheckCircleIcon } from "@heroicons/vue/24/outline";
+import { CheckCircleIcon, TrashIcon } from "@heroicons/vue/24/outline";
 import Input from "@/Shared/Form/Input.vue";
 import Select from "@/Shared/Form/Select.vue";
 import DatePicker from "@/Shared/Form/DatePicker.vue";
@@ -145,29 +156,41 @@ import { RadioGroup, RadioGroupLabel } from "@headlessui/vue";
 import MyRadioOption from "@/Pages/MyRadioOption.vue";
 import TimePicker from "@/Shared/Form/TimePicker.vue";
 import Card from "@/Shared/Card.vue";
+import Link from "@/Shared/Link.vue";
 
 const props = defineProps({
     locations: Array,
     services: Object,
+    reservation: Object,
+    url: String,
+    deleteUrl: String,
 });
 
-const locationID = ref(null);
+let isCreate = props.reservation == null;
+
+const locationID = ref(props.reservation?.location_id);
 
 let form = useForm("ReservationForm", {
-    isRepeating: false,
-    room: null,
-    dayOfWeek: null,
-    description: null,
-    date: null,
+    isRepeating: isCreate ? false : props.reservation.is_repeating,
+    room: props.reservation?.room_id,
+    dayOfWeek: props.reservation?.day_of_week,
+    description: props.reservation?.description,
+    date: props.reservation?.date,
     start: {
-        hours: new Date().getHours(),
-        minutes: 0,
+        hours: isCreate
+            ? new Date().getHours()
+            : props.reservation.start.split(":")[0],
+        minutes: isCreate ? 0 : props.reservation.start.split(":")[1],
     },
     end: {
-        hours: new Date().getHours(),
-        minutes: 0,
+        hours: isCreate
+            ? new Date().getHours()
+            : props.reservation.end.split(":")[0],
+        minutes: isCreate ? 0 : props.reservation.end.split(":")[1],
     },
-    service: Object.keys(props.services)[0] ?? null,
+    service: isCreate
+        ? Object.keys(props.services)[0] ?? null
+        : props.reservation?.service_id,
 });
 
 const location = computed(
@@ -205,7 +228,8 @@ const rooms = computed(() => {
 });
 
 watch(location, () => {
-    form.room = location.value?.rooms[0]?.id?.toString();
+    form.room =
+        props.reservation?.room_id ?? location.value?.rooms[0]?.id?.toString();
 });
 
 const days = {
@@ -219,6 +243,7 @@ const days = {
 };
 
 function submit() {
-    form.post("/reserve");
+    if (isCreate) form.post(props.url);
+    else form.patch(props.url);
 }
 </script>

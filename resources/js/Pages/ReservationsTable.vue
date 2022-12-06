@@ -13,7 +13,7 @@
                     class="border border-gray-500 p-2"
                     v-for="time in timeSteps"
                 >
-                    {{ time.name }}
+                    <time :datetime="day + ' ' + time.id">{{ time.name }}</time>
                 </th>
             </tr>
 
@@ -42,7 +42,7 @@
                     }"
                 >
                     <template v-if="reservation && !reservation.empty">
-                        <div class="flex flex-col space-y-1">
+                        <div class="flex flex-col space-y-2">
                             <span
                                 :style="{
                                     color: reservation.color.text,
@@ -61,28 +61,60 @@
                                 {{ reservation.room }}
                             </span>
                             <div class="text-sm font-semibold opacity-80">
-                                <div class="flex items-center">
-                                    <div
-                                        v-if="reservation.isRepeating"
-                                        class="rounded-full"
-                                        :style="{
-                                            color: reservation.color.text,
-                                        }"
-                                    >
-                                        <ArrowPathIcon class="w-6 h-6" />
+                                <div
+                                    class="flex flex-col items-start justify-center"
+                                >
+                                    <div class="flex items-center">
+                                        <div
+                                            v-if="reservation.isRepeating"
+                                            class="rounded-full"
+                                            :style="{
+                                                color: reservation.color.text,
+                                            }"
+                                        >
+                                            <ArrowPathIcon class="w-6 h-6" />
+                                        </div>
+
+                                        <div
+                                            v-else
+                                            class="rounded-full"
+                                            :style="{
+                                                color: reservation.color.text,
+                                            }"
+                                        >
+                                            <ClockIcon class="w-6 h-6" />
+                                        </div>
+
+                                        <span class="text-gray-800">
+                                            <time
+                                                :datetime="
+                                                    day +
+                                                    ' ' +
+                                                    reservation.start.time
+                                                "
+                                                >{{
+                                                    reservation.start.formatted
+                                                }}</time
+                                            >
+                                            ->
+                                            <time
+                                                :datetime="
+                                                    day +
+                                                    ' ' +
+                                                    reservation.end.time
+                                                "
+                                                >{{
+                                                    reservation.end.formatted
+                                                }}</time
+                                            >
+                                        </span>
                                     </div>
 
-                                    <div
-                                        v-else
-                                        class="rounded-full"
-                                        :style="{
-                                            color: reservation.color.text,
-                                        }"
+                                    <InertiaLink
+                                        class="mt-2 text-gray-800/60 bg-gray-100/50 p-1 border-gray-800 rounded-full"
+                                        v-if="user?.isAdmin"
+                                        :href="reservation.edit"
                                     >
-                                        <ClockIcon class="w-6 h-6" />
-                                    </div>
-
-                                    <InertiaLink class="text-gray-50" v-if="user.isAdmin" :href="reservation.edit">
                                         <PencilSquareIcon class="w-6 h-6" />
                                     </InertiaLink>
                                 </div>
@@ -100,7 +132,11 @@ import { computed, ref, watch } from "vue";
 import { Inertia } from "@inertiajs/inertia";
 import useQueryStringToJSON from "@/Composables/useQueryStringToJSON.js";
 import Tabs from "@/Shared/Tabs.vue";
-import { ArrowPathIcon, ClockIcon, PencilSquareIcon } from "@heroicons/vue/20/solid";
+import {
+    ArrowPathIcon,
+    ClockIcon,
+    PencilSquareIcon,
+} from "@heroicons/vue/20/solid";
 import useUser from "@/Composables/useUser.js";
 
 const props = defineProps({

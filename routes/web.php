@@ -51,13 +51,24 @@ Route::middleware("auth")->group(function () {
         "delete",
     ])->name("reservation.delete");
 
+    Route::delete("/reservations/{reservation}", [
+        EditReservationController::class,
+        "destroy",
+    ])->name("reservation.stop");
+
     Route::get("/reservations/not-approved", [
         ApproveReservationController::class,
         "index",
     ])->name("reservation.not-approved");
 
-    Route::get("reservations/{reservation}/edit", [EditReservationController::class, "edit"])->name("reservations.edit");
-    Route::patch("reservations/{reservation}", [EditReservationController::class, "update"])->name("reservation.update");
+    Route::get("reservations/{reservation}/edit", [
+        EditReservationController::class,
+        "edit",
+    ])->name("reservations.edit");
+    Route::patch("reservations/{reservation}", [
+        EditReservationController::class,
+        "update",
+    ])->name("reservation.update");
 
     Route::resource("/users", UserController::class);
 });
