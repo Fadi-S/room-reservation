@@ -23,7 +23,7 @@ class MakeReservationEvent implements ShouldBroadcast
      *
      * @return void
      */
-    public function __construct(protected Reservation $reservationModel)
+    public function __construct(public Reservation $reservationModel)
     {
         $this->reservation = ReservationResource::make(
             $this->reservationModel->load(

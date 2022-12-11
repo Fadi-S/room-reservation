@@ -72,7 +72,7 @@ class Reservation extends Model
                 }
 
                 if ($this->is_repeating) {
-                    return now()->next($this->day_of_week);
+                    return now()->next((int) $this->day_of_week);
                 }
 
                 return $this->date;

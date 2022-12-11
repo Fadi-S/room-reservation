@@ -10,9 +10,12 @@ class ApproveReservationController extends Controller
 {
     public function index()
     {
+        $this->authorize("admin");
+
         return inertia("ApproveReservations", [
             "reservations" => ReservationResource::collection(
                 Reservation::query()
+                    ->latest("id")
                     ->valid(approved: false)
                     ->with(["room.location", "service", "reservedBy"])
                     ->get(),
@@ -25,7 +28,7 @@ class ApproveReservationController extends Controller
         $this->authorize("admin");
 
         if ($reservation->approve()) {
-            session()->flash("message", "تم الموافقة علي المعاد");
+            session()->flash("message", "تم الموافقة علي الميعاد");
         }
 
         return back();
