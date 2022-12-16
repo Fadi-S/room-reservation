@@ -65,6 +65,11 @@ class MakeReservation
 
     private static function validate(array $data, $ignore = null): array
     {
+        $dayOfWeek = $data["dayOfWeek"] ?? null;
+        if (isset($data["date"])) {
+            $dayOfWeek ??= Carbon::parse($data["date"])->dayOfWeek;
+        }
+
         return Validator::validate($data, [
             "service" => ["required", "exists:services,id"],
             "room" => ["required", "exists:rooms,id"],
@@ -82,8 +87,8 @@ class MakeReservation
                 "date_format:H:i",
                 new RoomAvailableRule(
                     $data["room"],
-                    $data["date"],
-                    $data["dayOfWeek"],
+                    $data["date"] ?? null,
+                    $dayOfWeek,
                     $data["start"],
                     $data["end"],
                     $ignore,
