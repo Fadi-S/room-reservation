@@ -28,17 +28,10 @@ class ApproveReservationController extends Controller
     {
         $this->authorize("admin");
 
-        $available = new RoomAvailableRule(
-            $reservation->room_id,
-            $reservation->date,
-            $reservation->day_of_week,
-            $reservation->start,
-            $reservation->end,
-            $reservation->id,
-        );
+        $roomAvailability = RoomAvailableRule::fromReservation($reservation);
 
-        if (!$available->passes(null, null)) {
-            session()->flash("message", $available->message());
+        if (!$roomAvailability->isAvailable()) {
+            session()->flash("message", $roomAvailability->message());
             session()->flash("type", "error");
 
             return back();

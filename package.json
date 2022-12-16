@@ -27,6 +27,7 @@
     "laravel-echo": "^1.14.0",
     "pusher-js": "^7.4.0",
     "vue": "^3.2.41",
-    "vue-flatpickr-component": "^9.0.8"
+    "vue-flatpickr-component": "^9.0.8",
+    "vue-pinch-zoom": "^1.0.1"
   }
 }

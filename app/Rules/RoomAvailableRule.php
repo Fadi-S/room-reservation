@@ -26,6 +26,23 @@ class RoomAvailableRule implements Rule
         $this->dayOfWeek ??= $this->date?->dayOfWeek;
     }
 
+    public static function fromReservation(Reservation $reservation): self
+    {
+        return new self(
+            $reservation->room_id,
+            $reservation->date,
+            $reservation->day_of_week,
+            $reservation->start,
+            $reservation->end,
+            $reservation->id,
+        );
+    }
+
+    public function isAvailable(): bool
+    {
+        return $this->passes(null, null);
+    }
+
     /**
      * Determine if the validation rule passes.
      *
