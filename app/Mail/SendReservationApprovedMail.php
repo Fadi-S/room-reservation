@@ -52,6 +52,12 @@ class SendReservationApprovedMail extends Mailable
                 "dayOfWeek" => $this->reservation->nextOccurrence?->locale(
                     "ar",
                 )->translatedFormat("l"),
+
+                "nextDate" => route("table", [
+                    "day" => $this->reservation->nextOccurrence?->format(
+                        "Y-m-d",
+                    ),
+                ]),
             ],
         );
     }
