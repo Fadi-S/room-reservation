@@ -91,7 +91,7 @@ class Reservation extends Model
 
         $saved = $this->save();
 
-        if ($saved) {
+        if ($saved && $this->user_id != Auth::id()) {
             ReservationApprovedEvent::dispatch($this);
         }
 
