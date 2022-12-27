@@ -128,9 +128,7 @@ class MakeReservation
 
             $reservation["day_of_week"] = $date->dayOfWeek;
 
-            $reservation["stopped_at"] = $date
-                ->setTimeFrom($data->get("end"))
-                ->addMinute();
+            $reservation["stopped_at"] = $date->setTimeFrom($data->get("end"));
         }
 
         return $reservation;

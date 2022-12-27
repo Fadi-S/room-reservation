@@ -53,50 +53,65 @@
                                         v-for="reservation in reservationsForDay[
                                             room.id
                                         ]"
-                                        class="flex flex-col space-y-0.5 px-3"
+                                        class="flex items-center justify-between"
                                     >
                                         <div
-                                            class="flex items-center space-x-2 rtl:space-x-reverse"
+                                            class="flex flex-col space-y-0.5 px-3"
                                         >
                                             <div
-                                                class="rounded-full w-4 h-4"
-                                                :style="{
-                                                    backgroundColor:
-                                                        reservation.color
-                                                            .original,
-                                                }"
-                                            ></div>
-                                            <span>
-                                                {{ reservation.displayName }}
-                                                {{ reservation.service }}
-                                            </span>
+                                                class="flex items-center space-x-2 rtl:space-x-reverse"
+                                            >
+                                                <div
+                                                    class="rounded-full w-4 h-4"
+                                                    :style="{
+                                                        backgroundColor:
+                                                            reservation.color
+                                                                .original,
+                                                    }"
+                                                ></div>
+                                                <span>
+                                                    {{
+                                                        reservation.displayName
+                                                    }}
+                                                    {{ reservation.service }}
+                                                </span>
+                                            </div>
+
+                                            <div class="flex items-center pb-3">
+                                                <span
+                                                    class="px-2 py-1 rounded-full bg-green-50 text-green-800 border-green-800 border"
+                                                >
+                                                    <time
+                                                        :datetime="
+                                                            reservation.start
+                                                                .time
+                                                        "
+                                                        v-text="
+                                                            reservation.start
+                                                                .formatted
+                                                        "
+                                                    />
+                                                    -
+                                                    <time
+                                                        :datetime="
+                                                            reservation.end.time
+                                                        "
+                                                        v-text="
+                                                            reservation.end
+                                                                .formatted
+                                                        "
+                                                    />
+                                                </span>
+                                            </div>
                                         </div>
 
-                                        <div class="flex items-center pb-3">
-                                            <span
-                                                class="px-2 py-1 rounded-full bg-green-50 text-green-800 border-green-800 border"
-                                            >
-                                                <time
-                                                    :datetime="
-                                                        reservation.start.time
-                                                    "
-                                                    v-text="
-                                                        reservation.start
-                                                            .formatted
-                                                    "
-                                                />
-                                                -
-                                                <time
-                                                    :datetime="
-                                                        reservation.end.time
-                                                    "
-                                                    v-text="
-                                                        reservation.end
-                                                            .formatted
-                                                    "
-                                                />
-                                            </span>
-                                        </div>
+                                        <InertiaLink
+                                            class="text-gray-600 bg-gray-100 border-gray-800 rounded-full"
+                                            v-if="user?.isAdmin"
+                                            :href="reservation.edit"
+                                        >
+                                            <PencilSquareIcon class="w-6 h-6" />
+                                        </InertiaLink>
 
                                         <hr />
                                     </div>
@@ -112,16 +127,23 @@
 
 <script setup>
 import { computed, ref, watch } from "vue";
-import { PlusIcon, CalendarDaysIcon } from "@heroicons/vue/24/solid";
+import {
+    PlusIcon,
+    CalendarDaysIcon,
+    PencilSquareIcon,
+} from "@heroicons/vue/24/solid";
 import Tabs from "@/Shared/Tabs.vue";
 import { Inertia } from "@inertiajs/inertia";
 import useQueryStringToJSON from "@/Composables/useQueryStringToJSON.js";
+import useUser from "@/Composables/useUser.js";
 
 const props = defineProps({
     reservations: Object,
     locations: Array,
     days: Array,
 });
+
+let user = useUser();
 
 let day = ref(new Date().getDay());
 function setupStateFromURL() {
