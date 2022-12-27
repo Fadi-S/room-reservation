@@ -2,7 +2,7 @@
     <Head title="جدول الغرف" />
 
     <div>
-        <Tabs v-model="day" :tabs="days" />
+        <Tabs v-model="day" />
 
         <div class="mt-3">
             <div v-if="!reservationsForDay" class="text-center">
@@ -136,6 +136,7 @@ import Tabs from "@/Shared/Tabs.vue";
 import { Inertia } from "@inertiajs/inertia";
 import useQueryStringToJSON from "@/Composables/useQueryStringToJSON.js";
 import useUser from "@/Composables/useUser.js";
+import DatePicker from "@/Shared/Form/DatePicker.vue";
 
 const props = defineProps({
     reservations: Object,
