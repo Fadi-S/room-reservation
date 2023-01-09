@@ -29,8 +29,6 @@ test("Can make reservation", function () {
 
     Mail::fake();
 
-    dump($reservation["start"], $reservation["end"]);
-
     login()
         ->post(route("reservation.store"), [
             "isRepeating" => $reservation["is_repeating"],

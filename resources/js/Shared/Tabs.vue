@@ -1,10 +1,10 @@
 <template>
-    <div class="max-w-xs mx-auto md:mx-0">
+    <div class="max-w-xs mx-auto md:mx-0 mb-4">
         <DatePicker
             v-bind="$attrs"
             :config="{
                 altInput: true,
-                altFormat: 'F j, Y',
+                altFormat: 'l j M, Y',
                 disableMobile: false,
                 minDate: 'today',
             }"

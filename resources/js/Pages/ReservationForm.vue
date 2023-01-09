@@ -42,6 +42,7 @@
                     class="col-span-2"
                     placeholder="-- اختار المكان --"
                     :options="locationsForSelect"
+                    :errors="form.errors.room"
                     v-model="locationID"
                 />
 
@@ -54,25 +55,27 @@
                 />
 
                 <div class="contents">
-                    <TimePicker
-                        required
-                        class="col-span-1"
-                        label="وقت البداية"
-                        minutesGridIncrement="30"
-                        minutes-increment="30"
-                        v-model="form.start"
-                        :errors="form.errors.start"
-                    />
+                    <div class="col-span-1">
+                        <TimePicker
+                            required
+                            label="وقت البداية"
+                            minutesGridIncrement="5"
+                            minutes-increment="30"
+                            v-model="form.start"
+                            :errors="form.errors.start"
+                        />
+                    </div>
 
-                    <TimePicker
-                        required
-                        class="col-span-1"
-                        label="وقت النهاية"
-                        minutesGridIncrement="30"
-                        minutes-increment="30"
-                        v-model="form.end"
-                        :errors="form.errors.end"
-                    />
+                    <div class="col-span-1">
+                        <TimePicker
+                            required
+                            label="وقت النهاية"
+                            minutesGridIncrement="5"
+                            minutes-increment="30"
+                            v-model="form.end"
+                            :errors="form.errors.end"
+                        />
+                    </div>
                 </div>
 
                 <div class="flex col-span-2">
@@ -186,7 +189,7 @@ let form = useForm("ReservationForm", {
         hours: isCreate
             ? new Date().getHours()
             : props.reservation.end.split(":")[0],
-        minutes: isCreate ? 0 : props.reservation.end.split(":")[1],
+        minutes: isCreate ? 30 : props.reservation.end.split(":")[1],
     },
     service: isCreate
         ? Object.keys(props.services)[0] ?? null

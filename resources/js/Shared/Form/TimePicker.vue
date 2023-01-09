@@ -7,8 +7,9 @@
         >
             {{ label }}
         </label>
-        <div dir="ltr" class="mt-1 relative rounded-md shadow-sm">
+        <div class="mt-1 relative rounded-md shadow-sm">
             <Datepicker
+                dir="ltr"
                 :required="required"
                 input-class-name="block w-full focus:outline-none rounded-lg"
                 :uid="id"

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl" class="h-full bg-gray-100">
+<html lang="ar" class="h-full bg-gray-100">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport"
@@ -11,7 +11,7 @@
     @vite('resources/js/app.js')
     @inertiaHead
 </head>
-<body class="h-full font-vazirmatn">
+<body dir="rtl" class="h-full font-vazirmatn">
 @inertia
 </body>
 </html>

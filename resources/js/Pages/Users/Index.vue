@@ -1,7 +1,7 @@
 <template>
     <Head title="المستخدمين" />
 
-    <div class="bg-white p-6 rounded-lg shadow">
+    <div class="bg-white p-6 rounded-lg shadow max-w-7xl mx-auto">
         <Table create-label="أضف مستخدم" :items="users">
             <template #header>
                 <TH empty>ID</TH>

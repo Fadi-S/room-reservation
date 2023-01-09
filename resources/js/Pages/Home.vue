@@ -1,7 +1,7 @@
 <template>
     <Head title="جدول الغرف" />
 
-    <div>
+    <div class="max-w-7xl mx-auto">
         <Tabs v-model="day" />
 
         <div class="mt-3">
