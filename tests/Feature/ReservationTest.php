@@ -2,6 +2,7 @@
 
 use App\Mail\SendReservationMadeMail;
 use App\Models\Reservation;
+use Carbon\Carbon;
 use Database\Seeders\RoomSeeder;
 use Database\Seeders\ServiceSeeder;
 use Database\Seeders\UserSeeder;
@@ -130,6 +131,54 @@ test("Can reserve at consecutive times", function (
 
     adminLogin()
         ->post(route("reservation.store"), $reservationArray)
+        ->assertSessionDoesntHaveErrors();
+
+    expect(Reservation::count())->toBe(2);
+})->with([
+    ["10:00", "12:00", "12:00", "13:00"],
+    ["10:00", "12:00", "09:00", "10:00"],
+    ["09:00", "10:00", "10:00", "12:00"],
+    ["12:00", "13:00", "10:00", "12:00"],
+]);
+
+test("Can edit reservation to be consecutive", function (
+    $start1,
+    $end1,
+    $start2,
+    $end2
+) {
+    /* @var Reservation $reservation1 */
+    $reservation1 = Reservation::factory()
+        ->state([
+            "start" => $start1,
+            "end" => $end1,
+        ])
+        ->approved()
+        ->create();
+
+    $reservation2 = $reservation1
+        ->replicate(["start", "end"])
+        ->fill([
+            "start" => Carbon::parse($start1)->addHours(2),
+            "end" => Carbon::parse($end1)->addHours(2),
+        ])
+        ->save();
+
+    $reservationArray = [
+        "isRepeating" => true,
+        "service" => $reservation1["service_id"],
+        "room" => $reservation1["room_id"],
+        "description" => $reservation1["description"],
+        "date" => $reservation1["date"],
+        "dayOfWeek" => $reservation1["day_of_week"],
+        "start" => $start2,
+        "end" => $end2,
+    ];
+
+    expect(Reservation::count())->toBe(2);
+
+    adminLogin()
+        ->post(route("reservation.update", $reservation2), $reservationArray)
         ->assertSessionDoesntHaveErrors();
 
     expect(Reservation::count())->toBe(2);

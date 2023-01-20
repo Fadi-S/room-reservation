@@ -2,19 +2,20 @@
     <Head title="Make Reservation" />
 
     <Card>
+        <Link
+            v-if="deleteUrl"
+            as="button"
+            method="DELETE"
+            color="red"
+            outline
+            class="space-x-reverse"
+            :href="deleteUrl"
+        >
+            <TrashIcon class="w-6 h-6" />
+            <span>مسح</span>
+        </Link>
+
         <form @submit.prevent="submit" :action="url" method="POST">
-            <Link
-                v-if="deleteUrl"
-                as="button"
-                method="DELETE"
-                color="red"
-                outline
-                class="space-x-reverse"
-                :href="deleteUrl"
-            >
-                <TrashIcon class="w-6 h-6" />
-                <span>مسح</span>
-            </Link>
             <div class="grid gap-8 grid-cols-2 md:gap-6 mt-4">
                 <Select
                     id="service"

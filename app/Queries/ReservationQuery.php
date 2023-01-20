@@ -43,21 +43,23 @@ class ReservationQuery extends Builder
     {
         return $this->where(function ($query) use ($start, $end) {
             $query
-                ->where(function ($query) use ($start, $end) {
-                    $query
+                ->where(
+                    fn($query) => $query
                         ->where("start", ">=", $start)
-                        ->where("start", "<", $end);
-                })
+                        ->where("start", "<", $end),
+                )
 
-                ->orWhere(function ($query) use ($start, $end) {
-                    $query->where("end", ">", $start)->where("end", "<=", $end);
-                })
+                ->orWhere(
+                    fn($query) => $query
+                        ->where("end", ">", $start)
+                        ->where("end", "<=", $end),
+                )
 
-                ->orWhere(function ($query) use ($start, $end) {
-                    $query
+                ->orWhere(
+                    fn($query) => $query
                         ->where("start", "<", $start)
-                        ->where("end", ">", $end);
-                });
+                        ->where("end", ">", $end),
+                );
         });
     }
 
