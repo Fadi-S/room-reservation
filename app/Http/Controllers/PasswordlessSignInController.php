@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\FlashMessageType;
 use App\Mail\SendPasswordlessLoginLink;
 use App\Models\User;
+use Carbon\CarbonInterval;
 use Grosv\LaravelPasswordlessLogin\PasswordlessLogin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
@@ -12,33 +14,27 @@ class PasswordlessSignInController extends Controller
 {
     public function sendLink(Request $request)
     {
-        if (\Auth::check()) {
-            return redirect()->route("home");
-        }
+        $request->validate([
+            "email" => ["required", "string", "max:255"],
+        ]);
 
-        $username = trim(strtolower($request->email));
+        $username = trim(strtolower($request->string("email")));
 
-        $user = User::query()
-            ->where("email", "=", $username)
-            ->orWhere("username", "=", $username)
-            ->first();
+        $user = User::byKey($username);
 
         if (!$user) {
-            return back()->withErrors([
-                "email" => __("auth.failed"),
-            ]);
+            return back()->withErrors(["email" => __("auth.failed")]);
         }
 
         $url = PasswordlessLogin::forUser($user)->generate();
 
         Mail::to($user)->send(new SendPasswordlessLoginLink($url));
 
-        session()->flash(
-            "message",
-            "لقد تم ارسال طلب لتسجيل الدخول علي " . $user->email,
+        $this->flash(
+            __("ui.email_sent", ["email" => $user->email]),
+            FlashMessageType::Info,
+            CarbonInterval::seconds(35),
         );
-        session()->flash("type", "info");
-        session()->flash("important", 35000);
 
         return redirect()->route("login");
     }

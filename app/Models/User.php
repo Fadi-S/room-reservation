@@ -55,6 +55,13 @@ class User extends Authenticatable
         return $this->services()->toBase();
     }
 
+    public static function byKey($key): ?self
+    {
+        return self::where("email", "=", $key)
+            ->orWhere("username", "=", $key)
+            ->first();
+    }
+
     public function email(): Attribute
     {
         return new Attribute(

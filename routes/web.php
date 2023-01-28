@@ -9,7 +9,7 @@ use App\Http\Controllers\ReservationsTableController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
-if (!app()->environment("production")) {
+if (app()->environment("local")) {
     Route::get("/login/{id}", function ($user) {
         $user = \App\Models\User::where("id", "=", $user)->firstOrFail();
         Auth::login($user);
@@ -21,7 +21,7 @@ Route::inertia("/login", "Auth/Login")
     ->middleware("guest")
     ->name("login");
 
-Route::post("login-by-email", [
+Route::middleware("guest")->post("login-by-email", [
     PasswordlessSignInController::class,
     "sendLink",
 ]);
