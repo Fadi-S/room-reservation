@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Actions\MakeReservation;
+use App\Enums\FlashMessageType;
 use App\Events\MakeReservationEvent;
 use App\Http\Resources\LocationResource;
 use App\Models\Location;
@@ -30,11 +31,15 @@ class CreateReservationController extends Controller
 
         if (Auth::user()->isAdmin()) {
             $reservation->approve();
-            session()->flash("message", "تم الحجز");
+
+            $this->flash(__("ui.reserved"));
         } else {
             MakeReservationEvent::dispatch($reservation);
 
-            session()->flash("message", "حفظ الحجز, في انتظار التأكيد");
+            $this->flashPermanently(
+                __("ui.waiting_for_approval"),
+                FlashMessageType::Warning,
+            );
         }
 
         return redirect()->route("home");

@@ -45,7 +45,7 @@ class EditReservationController extends Controller
 
         MakeReservation::update($reservation, $request->all());
 
-        session()->flash("message", "تم تعديل الحجز");
+        $this->flash(__("ui.reservation_edited"));
 
         return back();
     }
@@ -58,7 +58,7 @@ class EditReservationController extends Controller
 
         $reservation->save();
 
-        session()->flash("message", "تم أيقاف الحجز");
+        $this->flash(__("ui.reservation_stopped"));
 
         return redirect()->route("table", [
             "day" => $date?->format("Y-m-d"),

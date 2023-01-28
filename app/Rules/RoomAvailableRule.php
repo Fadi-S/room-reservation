@@ -74,6 +74,8 @@ class RoomAvailableRule implements Rule
      */
     public function message()
     {
-        return "يوجد {$this->reservation->description} {$this->reservation->service->name} في نفس المكان";
+        $reservation = "{$this->reservation->description} {$this->reservation->service->name}";
+
+        return __("validation.conflict", ["reservation" => $reservation]);
     }
 }

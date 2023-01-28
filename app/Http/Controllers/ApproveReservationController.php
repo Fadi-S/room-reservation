@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\FlashMessageType;
 use App\Http\Resources\ReservationResource;
 use App\Models\Reservation;
 use App\Rules\RoomAvailableRule;
-use Illuminate\Http\Request;
 
 class ApproveReservationController extends Controller
 {
@@ -23,7 +23,6 @@ class ApproveReservationController extends Controller
             ),
         ]);
     }
-
     public function approve(Reservation $reservation)
     {
         $this->authorize("admin");
@@ -31,14 +30,13 @@ class ApproveReservationController extends Controller
         $roomAvailability = RoomAvailableRule::fromReservation($reservation);
 
         if (!$roomAvailability->isAvailable()) {
-            session()->flash("message", $roomAvailability->message());
-            session()->flash("type", "error");
+            $this->flash($roomAvailability->message(), FlashMessageType::Error);
 
             return back();
         }
 
         if ($reservation->approve()) {
-            session()->flash("message", "تم الموافقة علي الميعاد");
+            $this->flash(__("ui.approved"));
         }
 
         return back();
@@ -49,8 +47,10 @@ class ApproveReservationController extends Controller
         $this->authorize("admin");
 
         if ($reservation->delete()) {
-            session()->flash("message", "تم الغاء الحجز");
-            session()->flash("type", "warning");
+            $this->flash(
+                __("ui.reservation_deleted"),
+                FlashMessageType::Warning,
+            );
         }
 
         return back();

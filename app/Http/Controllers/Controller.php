@@ -13,16 +13,29 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
-    public function flash(
+    protected function flash(
         string $message,
         FlashMessageType $type = FlashMessageType::Success,
         CarbonInterval $for = null
-    ) {
+    ): self {
         session()->flash("message", $message);
         session()->flash("type", $type->value);
 
-        if ($for) {
+        if ($for !== null) {
             session()->flash("important", $for->milliseconds);
         }
+
+        return $this;
+    }
+
+    protected function flashPermanently(
+        string $message,
+        FlashMessageType $type = null
+    ): self {
+        $this->flash($message, $type);
+
+        session()->flash("important");
+
+        return $this;
     }
 }

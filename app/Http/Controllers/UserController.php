@@ -66,7 +66,7 @@ class UserController extends Controller
 
         $user->services()->sync($request->get("services"));
 
-        session()->flash("message", "تم إنشاء المستخدم بنجاح");
+        $this->flash(__("ui.user_created"));
 
         return redirect()->route("users.index");
     }
@@ -126,7 +126,7 @@ class UserController extends Controller
 
         $user->services()->sync($request->get("services", []));
 
-        session()->flash("message", "تم تعديل المستخدم بنجاح");
+        $this->flash(__("ui.user_edited"));
 
         return redirect()->route("users.edit", $user);
     }
