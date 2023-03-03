@@ -52,13 +52,14 @@ class ReservationQuery extends Builder
                 ->orWhere(
                     fn($query) => $query
                         ->where("end", ">", $start)
-                        ->where("end", "<=", $end),
+                        ->where("end", "<", $end),
                 )
 
+                // If new event is inside of current event
                 ->orWhere(
                     fn($query) => $query
-                        ->where("start", "<", $start)
-                        ->where("end", ">", $end),
+                        ->where("start", "<=", $start)
+                        ->where("end", ">=", $end),
                 );
         });
     }
