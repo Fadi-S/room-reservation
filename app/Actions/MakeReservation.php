@@ -84,7 +84,7 @@ class MakeReservation
             "isRepeating" => ["boolean"],
             "start" => [
                 "required",
-                "date_format:H:i",
+                "date_format:H:i:s",
                 new RoomAvailableRule(
                     $data["room"] ?? null,
                     $data["date"] ?? null,
@@ -94,7 +94,7 @@ class MakeReservation
                     $ignore,
                 ),
             ],
-            "end" => ["required", "date_format:H:i", "after:start"],
+            "end" => ["required", "date_format:H:i:s", "after:start"],
         ]);
     }
 
