@@ -43,12 +43,14 @@ class ReservationQuery extends Builder
     {
         return $this->where(function ($query) use ($start, $end) {
             $query
+                // If new event includes the old event, or they are overlapping from the start
                 ->where(
                     fn($query) => $query
                         ->where("start", ">=", $start)
                         ->where("start", "<", $end),
                 )
 
+                // If new event includes the old event, or they are overlapping from the end
                 ->orWhere(
                     fn($query) => $query
                         ->where("end", ">", $start)

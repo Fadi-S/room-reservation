@@ -70,6 +70,15 @@ class MakeReservation
             $dayOfWeek ??= Carbon::parse($data["date"])->dayOfWeek;
         }
 
+        \Log::error("Validation", [
+            $data["room"] ?? null,
+            $data["date"] ?? null,
+            $dayOfWeek,
+            $data["start"] ?? null,
+            $data["end"] ?? null,
+            $ignore,
+        ]);
+
         return Validator::validate($data, [
             "service" => ["required", "exists:services,id"],
             "room" => ["required", "exists:rooms,id"],
