@@ -21,8 +21,8 @@ class ReservationForTableResource extends JsonResource
             "room" => $this->room->fullName,
             "service" => $this->service->name,
             "color" => [
-                "bg" => $this->service->color->lighten(40)->get(),
-                "text" => $this->service->color->darken(80)->get(),
+                "bg" => $this->service->color->lighten(70)->get(),
+                "text" => $this->service->color->darken(70)->get(),
                 "original" => $this->service->color->get(),
             ],
             "numberOfTimeSlots" => $this->numberOfTimeSlotsIn(

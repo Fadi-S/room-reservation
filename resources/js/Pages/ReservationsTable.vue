@@ -11,9 +11,27 @@
                 <td class="border border-gray-500 p-2" colspan="2"></td>
                 <th
                     class="border border-gray-500 p-2"
-                    v-for="time in timeSteps"
+                    v-for="(time, index) in timeSteps.slice(0, -1)"
                 >
-                    <time :datetime="day + ' ' + time.id">{{ time.name }}</time>
+                    <div class="flex items-center justify-center space-x-0.5">
+                        <div>
+                            <time :datetime="day + ' ' + time.id">
+                                {{ time.name }}
+                            </time>
+                        </div>
+
+                        <span v-if="(timeSteps[index + 1] ?? null) != null">
+                            &nbsp;-
+                        </span>
+
+                        <div v-if="(timeSteps[index + 1] ?? null) != null">
+                            <time
+                                :datetime="day + ' ' + timeSteps[index + 1].id"
+                            >
+                                {{ timeSteps[index + 1].name }}
+                            </time>
+                        </div>
+                    </div>
                 </th>
             </tr>
 
@@ -166,7 +184,7 @@ const reservationsInTime = computed(() => {
     for (let room of rooms.value) {
         reservations[room.id] = [];
 
-        for (let i = 0; i < props.timeSteps.length; i++) {
+        for (let i = 0; i < props.timeSteps.length - 1; i++) {
             let time = props.timeSteps[i];
             if (
                 props.reservations[room.id] &&

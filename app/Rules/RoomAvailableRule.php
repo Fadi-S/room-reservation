@@ -33,8 +33,8 @@ class RoomAvailableRule implements Rule
         }
 
         if (is_string($start)) {
-            $this->start = $start;
-            $this->end = $end;
+            $this->start = Carbon::parse($start)->format("H:i:s");
+            $this->end = Carbon::parse($end)->format("H:i:s");
         }
     }
 

@@ -54,12 +54,12 @@ class ReservationsTableController extends Controller
                 CarbonPeriod::create(
                     $date->copy()->setTime(8, 0),
                     CarbonInterval::minutes(30),
-                    $date->copy()->setTime(22, 0),
+                    $date->copy()->setTime(23, 0),
                 )->toArray(),
             )->map(
                 fn(Carbon $date) => [
                     "id" => $date->format("H:i:s"),
-                    "name" => $date->translatedFormat("h:i a"),
+                    "name" => $date->translatedFormat("h:i"),
                 ],
             ),
         ]);

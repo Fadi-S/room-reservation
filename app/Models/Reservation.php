@@ -30,6 +30,21 @@ class Reservation extends Model
         return parent::query();
     }
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($reservation) {
+            $reservation->start = Carbon::parse($reservation->start)
+                ->setSecond(0)
+                ->format("H:i:s");
+
+            $reservation->end = Carbon::parse($reservation->end)
+                ->setSecond(0)
+                ->format("H:i:s");
+        });
+    }
+
     #[Pure]
     public function newEloquentBuilder($query): ReservationQuery {
         return new ReservationQuery($query);

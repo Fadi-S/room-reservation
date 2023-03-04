@@ -21,14 +21,14 @@ class MakeReservation
                 Carbon::create(
                     hour: $start["hours"],
                     minute: $start["minutes"],
-                )->format("H:i:s"),
+                )->format("H:i"),
             );
             $data->put(
                 "end",
                 Carbon::create(
                     hour: $end["hours"],
                     minute: $end["minutes"],
-                )->format("H:i:s"),
+                )->format("H:i"),
             );
         }
 
@@ -84,7 +84,7 @@ class MakeReservation
             "isRepeating" => ["boolean"],
             "start" => [
                 "required",
-                "date_format:H:i:s",
+                "date_format:H:i",
                 new RoomAvailableRule(
                     $data["room"] ?? null,
                     $data["date"] ?? null,
@@ -94,7 +94,7 @@ class MakeReservation
                     $ignore,
                 ),
             ],
-            "end" => ["required", "date_format:H:i:s", "after:start"],
+            "end" => ["required", "date_format:H:i", "after:start"],
         ]);
     }
 
