@@ -3,8 +3,8 @@
 
     <Tabs v-model="day" :tabs="nextWeekDays" />
 
-    <div class="overflow-x-auto bg-white">
-        <table class="mt-3">
+    <div class="overflow-x-auto bg-white mt-3">
+        <table id="table" class="scale-[0.4] sm:scale-[0.8] origin-top-right">
             <colgroup span="2"></colgroup>
             <colgroup span="2"></colgroup>
             <tr>
@@ -146,7 +146,7 @@
 </template>
 
 <script setup>
-import { computed, ref, watch } from "vue";
+import { computed, onMounted, ref, watch } from "vue";
 import { Inertia } from "@inertiajs/inertia";
 import useQueryStringToJSON from "@/Composables/useQueryStringToJSON.js";
 import Tabs from "@/Shared/Tabs.vue";
@@ -156,6 +156,7 @@ import {
     PencilSquareIcon,
 } from "@heroicons/vue/20/solid";
 import useUser from "@/Composables/useUser.js";
+import Input from "@/Shared/Form/Input.vue";
 
 const props = defineProps({
     reservations: Object,
@@ -229,5 +230,65 @@ watch(day, () => {
             onSuccess: setupStateFromURL,
         }
     );
+});
+
+const pinchZoom = (element) => {
+    let scale = 0.4;
+
+    let start = {};
+
+    // Calculate distance between two fingers
+    const distance = (event) => {
+        return Math.hypot(
+            event.touches[0].pageX - event.touches[1].pageX,
+            event.touches[0].pageY - event.touches[1].pageY
+        );
+    };
+
+    const map = (x, newStart, newEnd) => {
+        return x * (newEnd - newStart) + newStart;
+    };
+
+    element.addEventListener("touchstart", (event) => {
+        // console.log('touchstart', event);
+        if (event.touches.length === 2) {
+            event.preventDefault();
+
+            // Calculate where the fingers have started on the X and Y axis
+            start.x = (event.touches[0].pageX + event.touches[1].pageX) / 2;
+            start.y = (event.touches[0].pageY + event.touches[1].pageY) / 2;
+            start.distance = distance(event);
+        }
+    });
+
+    element.addEventListener("touchmove", (event) => {
+        // console.log('touchmove', event);
+        if (event.touches.length === 2) {
+            event.preventDefault(); // Prevent page scroll
+
+            const deltaDistance = distance(event);
+            scale = map(deltaDistance / start.distance, 0.2, 0.4);
+
+            // scale = Math.max(Math.min(scale, 0.4), 0.2);
+
+            // Transform the image to make it grow and move with fingers
+            const transform = `scale(${scale})`;
+            element.style.transform = transform;
+            element.style.WebkitTransform = transform;
+            // element.style.zIndex = "9999";
+        }
+    });
+
+    // element.addEventListener("touchend", (event) => {
+    //     // console.log('touchend', event);
+    //     // Reset image to its original format
+    //     element.style.transform = "";
+    //     element.style.WebkitTransform = "";
+    //     element.style.zIndex = "";
+    // });
+};
+
+onMounted(() => {
+    pinchZoom(document.getElementById("table"));
 });
 </script>
