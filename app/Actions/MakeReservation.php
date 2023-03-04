@@ -21,14 +21,14 @@ class MakeReservation
                 Carbon::create(
                     hour: $start["hours"],
                     minute: $start["minutes"],
-                )->format("H:i"),
+                )->format("H:i:s"),
             );
             $data->put(
                 "end",
                 Carbon::create(
                     hour: $end["hours"],
                     minute: $end["minutes"],
-                )->format("H:i"),
+                )->format("H:i:s"),
             );
         }
 
@@ -89,10 +89,8 @@ class MakeReservation
                     $data["room"] ?? null,
                     $data["date"] ?? null,
                     $dayOfWeek,
-                    isset($data["start"])
-                        ? Carbon::parse($data["start"])
-                        : null,
-                    isset($data["end"]) ? Carbon::parse($data["end"]) : null,
+                    $data["start"] ?? null,
+                    $data["end"] ?? null,
                     $ignore,
                 ),
             ],

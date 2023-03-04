@@ -9,6 +9,8 @@ use Illuminate\Contracts\Validation\Rule;
 class RoomAvailableRule implements Rule
 {
     protected ?Reservation $reservation;
+    protected string $start;
+    protected string $end;
 
     /**
      * Create a new rule instance.
@@ -19,11 +21,21 @@ class RoomAvailableRule implements Rule
         protected $roomId,
         protected ?Carbon $date,
         protected $dayOfWeek,
-        protected $start,
-        protected $end,
+        $start,
+        $end,
         protected $ignore = null
     ) {
         $this->dayOfWeek ??= $this->date?->dayOfWeek;
+
+        if ($start instanceof Carbon) {
+            $this->start = $start->format("H:i:s");
+            $this->end = $end->format("H:i:s");
+        }
+
+        if (is_string($start)) {
+            $this->start = $start;
+            $this->end = $end;
+        }
     }
 
     public static function fromReservation(Reservation $reservation): self
