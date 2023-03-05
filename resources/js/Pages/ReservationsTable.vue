@@ -20,11 +20,9 @@
                             </time>
                         </div>
 
-                        <span v-if="(timeSteps[index + 1] ?? null) != null">
-                            &nbsp;-
-                        </span>
+                        <span> &nbsp;- </span>
 
-                        <div v-if="(timeSteps[index + 1] ?? null) != null">
+                        <div>
                             <time
                                 :datetime="day + ' ' + timeSteps[index + 1].id"
                             >
