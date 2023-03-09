@@ -72,47 +72,67 @@
                         v-text="reservation.end"
                     />
 
-                    <div class="flex items-center">
+                    <div class="flex items-center space-x-2 space-x-reverse">
                         <div
                             v-if="reservation.isRepeating"
-                            class="text-green-800 bg-green-200 rounded-full p-1"
+                            class="text-green-700 bg-green-100 rounded-lg py-1 px-3 flex space-x-reverse space-x-1"
                         >
                             <ArrowPathIcon class="w-6 h-6" />
+                            <span class="font-semibold">متكرر</span>
                         </div>
 
                         <div
                             v-else
-                            class="text-red-800 bg-red-200 rounded-full p-1"
+                            class="text-red-700 bg-red-100 rounded-lg py-1 px-3 flex space-x-reverse space-x-1"
                         >
                             <ClockIcon class="w-6 h-6" />
+                            <span class="font-semibold">مرة واحدة</span>
+                        </div>
+
+                        <div
+                            v-if="reservation.isRepeating"
+                            class="font-medium text-gray-500"
+                        >
+                            <span v-text="'حتى ' + reservation.stopped_at" />
                         </div>
                     </div>
                 </div>
 
-                <div class="text-xl">
+                <div>
                     <span
                         v-text="
                             reservation.room.location.name +
                             ' ' +
-                            reservation.room.name
+                            reservation.room.name +
+                            ' '
                         "
                         :style="{
                             color: reservation.service.color,
                         }"
                         class="font-bold"
-                    />&nbsp;
+                    />
+                    <span
+                        :style="{
+                            color: reservation.service.color,
+                        }"
+                        v-text="'(' + reservation.room.description + ')'"
+                        class="text-gray-500 text-sm"
+                    />
                 </div>
             </div>
 
             <div class="mt-4 flex items-center text-gray-500">
                 <span>عبر</span>&nbsp;
-                <span
-                    v-text="'أ/ ' + reservation.reservedBy.name"
-                    class="font-bold"
-                />&nbsp;
+                <span v-text="reservation.reservedBy.name" class="font-bold" />
+                &nbsp;
+                <span>|</span>
+                &nbsp;
+                <span v-text="reservation.created_at" class="font-bold" />
             </div>
 
-            <div class="mt-8 flex items-center justify-between">
+            <div class="mt-6"></div>
+            <hr />
+            <div class="mt-2 flex items-center justify-between">
                 <Link
                     color="green"
                     as="button"

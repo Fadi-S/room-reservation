@@ -78,7 +78,7 @@ class ReservationQuery extends Builder
 
     public function validBetween($start, $end): static
     {
-        return $this->valid()->where(function ($query) use ($start, $end) {
+        return $this->valid($end)->where(function ($query) use ($start, $end) {
             $query
                 ->where("date", "=", null)
                 ->orWhereBetween("date", [$start, $end]);

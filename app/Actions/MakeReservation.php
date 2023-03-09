@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Validator;
 
 class MakeReservation
 {
-    private static function manipulate($data): Collection
+    private function manipulate($data): Collection
     {
         $data = collect($data);
         if (is_array($data->get("start"))) {
@@ -41,36 +41,51 @@ class MakeReservation
         return $data;
     }
 
-    public static function create($data): Reservation
+    public function create($data): Reservation
     {
-        $data = self::manipulate($data);
+        $data = $this->manipulate($data);
 
-        self::validate($data->toArray());
+        $this->validate($data->all());
 
-        $reservation = self::getReservationArray($data);
-
-        return Reservation::query()->create($reservation);
+        return Reservation::query()->create(
+            array_merge(
+                ["user_id" => auth()->id()],
+                $this->getReservationArray($data),
+            ),
+        );
     }
 
-    public static function update(Reservation $reservation, $data): Reservation
+    public function update(Reservation $reservation, $data): Reservation
     {
-        $data = self::manipulate($data);
+        $data = $this->manipulate($data);
 
-        self::validate($data->toArray(), $reservation->id);
+        $this->validate($data->all(), $reservation->id);
 
-        $reservation->update(self::getReservationArray($data, isCreate: false));
+        $reservation->update($this->getReservationArray($data));
 
         return $reservation;
     }
 
-    private static function validate(array $data, $ignore = null): array
+    public function isSummer(): bool
+    {
+        return now()->between(
+            now()
+                ->setMonth(4)
+                ->startOfMonth(),
+            now()
+                ->setMonth(9)
+                ->endOfMonth(),
+        );
+    }
+
+    private function validate(array $data, $ignore = null): void
     {
         $dayOfWeek = $data["dayOfWeek"] ?? null;
         if (isset($data["date"])) {
             $dayOfWeek ??= Carbon::parse($data["date"])->dayOfWeek;
         }
 
-        return Validator::validate($data, [
+        Validator::validate($data, [
             "service" => ["required", "exists:services,id"],
             "room" => ["required", "exists:rooms,id"],
             "description" => ["nullable", "max:250"],
@@ -81,7 +96,7 @@ class MakeReservation
                 "after_or_equal:" . now()->format("Y-m-d h:i a"),
             ],
             "dayOfWeek" => ["required_if:isRepeating,true", "between:0,6"],
-            "isRepeating" => ["boolean"],
+            "isRepeating" => ["in:0,1,false,true,,summer"],
             "start" => [
                 "required",
                 "date_format:H:i",
@@ -98,30 +113,24 @@ class MakeReservation
         ]);
     }
 
-    /**
-     * @param Collection $data
-     * @param bool $isCreate
-     * @return array
-     */
-    private static function getReservationArray(
-        Collection $data,
-        bool $isCreate = true
-    ): array {
+    private function getReservationArray(Collection $data): array
+    {
         $reservation = [
-            "is_repeating" => !!$data->get("isRepeating"),
+            "is_repeating" => $data->get("isRepeating") == true,
             "service_id" => $data->get("service"),
             "room_id" => $data->get("room"),
             "start" => $data->get("start"),
             "end" => $data->get("end"),
             "description" => $data->get("description"),
+            "day_of_week" => $data->get("dayOfWeek"),
         ];
 
-        if ($isCreate) {
-            $reservation["user_id"] = auth()->id();
-        }
-
-        if ($data->get("isRepeating")) {
-            $reservation["day_of_week"] = $data->get("dayOfWeek");
+        if ($data->get("isRepeating") === true) {
+            $reservation["stopped_at"] = null;
+        } elseif ($data->get("isRepeating") === "summer" && $this->isSummer()) {
+            $reservation["stopped_at"] = now()
+                ->month(9)
+                ->endOfMonth();
         } else {
             $date = Carbon::parse($data->get("date"));
             $reservation["date"] = $date->format("Y-m-d");

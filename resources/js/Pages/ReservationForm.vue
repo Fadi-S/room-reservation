@@ -101,6 +101,13 @@
                                 id="repeating"
                                 :value="true"
                             />
+
+                            <MyRadioOption
+                                v-if="isInSummer"
+                                label="في الصيف"
+                                id="summer-only"
+                                value="summer"
+                            />
                         </div>
                     </RadioGroup>
                 </div>
@@ -168,6 +175,7 @@ const props = defineProps({
     reservation: Object,
     url: String,
     deleteUrl: String,
+    isInSummer: Boolean,
 });
 
 let isCreate = props.reservation == null;

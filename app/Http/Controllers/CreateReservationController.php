@@ -12,8 +12,14 @@ use Illuminate\Support\Facades\Auth;
 
 class CreateReservationController extends Controller
 {
+    public function __construct(private readonly MakeReservation $repository)
+    {
+    }
+
     public function create()
     {
+        $isInSummer = $this->repository->isSummer();
+
         return inertia("ReservationForm", [
             "services" => Auth::user()
                 ->allowedServices()
@@ -22,12 +28,13 @@ class CreateReservationController extends Controller
                 Location::with("rooms")->get(),
             ),
             "url" => route("reservation.store"),
+            "isInSummer" => $isInSummer,
         ]);
     }
 
     public function store(Request $request)
     {
-        $reservation = MakeReservation::create($request->all());
+        $reservation = $this->repository->create($request->all());
 
         if (Auth::user()->isAdmin()) {
             $reservation->approve();
@@ -44,4 +51,5 @@ class CreateReservationController extends Controller
 
         return redirect()->route("home");
     }
+
 }

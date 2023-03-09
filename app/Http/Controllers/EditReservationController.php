@@ -11,10 +11,16 @@ use Illuminate\Support\Facades\Auth;
 
 class EditReservationController extends Controller
 {
+    public function __construct(private readonly MakeReservation $repository)
+    {
+    }
+
     public function edit(Reservation $reservation)
     {
         $reservation->load("room");
         $this->authorize("admin");
+
+        $isInSummer = $this->repository->isSummer();
 
         return inertia("ReservationForm", [
             "services" => Auth::user()
@@ -36,6 +42,7 @@ class EditReservationController extends Controller
             "locations" => LocationResource::collection(
                 Location::with("rooms")->get(),
             ),
+            "isInSummer" => $isInSummer,
         ]);
     }
 
@@ -43,7 +50,7 @@ class EditReservationController extends Controller
     {
         $this->authorize("admin");
 
-        MakeReservation::update($reservation, $request->all());
+        $this->repository->update($reservation, $request->all());
 
         $this->flash(__("ui.reservation_edited"));
 

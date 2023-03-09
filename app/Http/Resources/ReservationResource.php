@@ -39,7 +39,8 @@ class ReservationResource extends JsonResource
                 $this->relationLoaded("reservedBy"),
                 fn() => UserResource::make($this->reservedBy),
             ),
-            "created_at" => $this->created_at->format("Y-m-d h:i:s a"),
+            "created_at" => $this->created_at->translatedFormat("h:i a j F"),
+            "stopped_at" => $this->stopped_at?->translatedFormat("F Y"),
             "links" => [
                 "approve" => $this->when(
                     !$this->isApproved(),
