@@ -64,12 +64,25 @@ class RoomAvailableRule implements Rule
      */
     public function passes($attribute, $value)
     {
+        $start =
+            $this->date ??
+            now()
+                ->next($this->dayOfWeek)
+                ->setTimeFrom($this->start);
+
+        $end =
+            $this->date?->setTimeFrom($this->end) ??
+            now()
+                ->next($this->dayOfWeek)
+                ->setTimeFrom($this->start)
+                ->addYear();
+
         $this->reservation = Reservation::query()
             ->when(
                 $this->ignore,
                 fn($query) => $query->where("id", "<>", $this->ignore),
             )
-            ->valid($this->date)
+            ->validBetween($start, $end)
             ->forRoom($this->roomId)
             ->forDay($this->dayOfWeek)
             ->overlapping($this->start, $this->end)
