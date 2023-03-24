@@ -78,6 +78,7 @@ test(
                 "end" => $end1,
             ])
             ->approved()
+            ->repeating()
             ->create();
 
         $reservationArray = [
@@ -104,6 +105,8 @@ test(
     ["10:00", "12:00", "10:00", "12:00"],
     ["10:00", "14:00", "11:00", "12:00"],
 ]);
+
+test("Can't reserve in the same time as a non repeating event");
 
 test("Can reserve at consecutive times", function (
     $start1,

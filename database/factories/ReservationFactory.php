@@ -53,6 +53,22 @@ class ReservationFactory extends Factory
         ];
     }
 
+    public function repeating($repeating = true): static
+    {
+        return $this->state(function () use ($repeating) {
+            $data = [
+                "is_repeating" => $repeating,
+            ];
+
+            if ($repeating) {
+                $data["date"] = null;
+                $data["stopped_at"] = null;
+            }
+
+            return $data;
+        });
+    }
+
     public function approved(): static
     {
         return $this->state(function () {
