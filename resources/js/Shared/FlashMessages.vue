@@ -108,7 +108,7 @@ let page = usePage();
 
 watch(
     () => page,
-    () => setFlash(page.props.value.flash),
+    () => setFlash(page.props.flash),
     { deep: true }
 );
 
