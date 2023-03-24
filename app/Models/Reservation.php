@@ -18,10 +18,11 @@ class Reservation extends Model
 {
     use HasFactory;
 
-    protected $dates = ["date", "approved_at", "stopped_at"];
-
     protected $casts = [
         "is_repeating" => "boolean",
+        "date" => "datetime",
+        "approved_at" => "datetime",
+        "stopped_at" => "datetime",
     ];
 
     /** @noinspection PhpIncompatibleReturnTypeInspection */

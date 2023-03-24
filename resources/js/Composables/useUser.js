@@ -1,5 +1,5 @@
-import { Inertia } from "@inertiajs/inertia";
+import { usePage } from "@inertiajs/vue3";
 
 export default function useUser() {
-    return Inertia.page.props?.auth?.user;
+    return usePage().props?.auth?.user;
 }

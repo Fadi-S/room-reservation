@@ -56,7 +56,7 @@ import Link from "@/Shared/Link.vue";
 import { CheckCircleIcon, PencilIcon } from "@heroicons/vue/24/solid";
 
 defineProps({
-    users: Array,
+    users: Object,
 });
 
 const search = ref("");

@@ -204,10 +204,10 @@ import {
 import { Bars3Icon, XMarkIcon } from "@heroicons/vue/24/outline";
 import useUser from "@/Composables/useUser.js";
 import Logo from "@/Pages/Auth/Logo.vue";
-import { Inertia } from "@inertiajs/inertia";
+import { router } from "@inertiajs/vue3";
 import { ref } from "vue";
 import FlashMessages from "@/Shared/FlashMessages.vue";
-import { usePage } from "@inertiajs/inertia-vue3";
+import { usePage } from "@inertiajs/vue3";
 
 const user = useUser();
 const page = usePage();
@@ -224,8 +224,7 @@ if (user) {
                 name: "الموافقة علي الحجز",
                 href: "/reservations/not-approved",
                 current: false,
-                notifications:
-                    page.props.value.data?.pendingReservationsCount ?? 0,
+                notifications: page.props.data?.pendingReservationsCount ?? 0,
             },
             {
                 name: "المستخدمين",
@@ -235,7 +234,7 @@ if (user) {
         );
     }
 
-    Inertia.on("navigate", () => {
+    router.on("navigate", () => {
         navigation.value.forEach((link) => {
             link.current = window.location.pathname === link.href;
         });

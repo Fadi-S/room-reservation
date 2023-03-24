@@ -97,7 +97,7 @@ import {
 } from "@heroicons/vue/24/outline";
 import { XMarkIcon } from "@heroicons/vue/24/solid";
 import { ref, watch } from "vue";
-import { usePage } from "@inertiajs/inertia-vue3";
+import { usePage } from "@inertiajs/vue3";
 
 let show = ref(false);
 let type = ref("success");

@@ -156,7 +156,7 @@
 </template>
 
 <script setup>
-import { useForm } from "@inertiajs/inertia-vue3";
+import { useForm } from "@inertiajs/vue3";
 import Button from "@/Shared/Form/Button.vue";
 import { CheckCircleIcon, TrashIcon } from "@heroicons/vue/24/outline";
 import Input from "@/Shared/Form/Input.vue";
