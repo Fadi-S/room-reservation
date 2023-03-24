@@ -68,7 +68,7 @@
 </template>
 
 <script setup>
-import { useForm } from "@inertiajs/inertia-vue3";
+import { useForm } from "@inertiajs/vue3";
 import { computed } from "vue";
 import Button from "@/Shared/Form/Button.vue";
 import Card from "@/Shared/Card.vue";

@@ -27,7 +27,7 @@
 import { MagnifyingGlassIcon } from "@heroicons/vue/24/solid";
 import debounce from "lodash/debounce";
 import { onMounted, ref, watch } from "vue";
-import { Inertia } from "@inertiajs/inertia";
+import { router } from "@inertiajs/vue3";
 import useQueryStringToJSON from "@/Composables/useQueryStringToJSON.js";
 
 const props = defineProps({
@@ -61,7 +61,7 @@ function getSearch() {
         params.delete("page");
     } else params.delete(props.queryString);
 
-    Inertia.get(props.url, useQueryStringToJSON(params.toString()), {
+    router.get(props.url, useQueryStringToJSON(params.toString()), {
         preserveState: true,
         preserveScroll: true,
         only: props.only,

@@ -49,7 +49,7 @@ import AuthLayout from "@/Pages/Auth/AuthLayout.vue";
 import Logo from "@/Pages/Auth/Logo.vue";
 import Input from "@/Shared/Form/Input.vue";
 import Button from "@/Shared/Form/Button.vue";
-import { useForm } from "@inertiajs/inertia-vue3";
+import { useForm } from "@inertiajs/vue3";
 import { LockClosedIcon } from "@heroicons/vue/24/solid";
 import Spinner from "@/Shared/Spinner.vue";
 

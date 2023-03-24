@@ -44,7 +44,6 @@
 import { ExclamationCircleIcon } from "@heroicons/vue/24/solid";
 import flatPickr from "vue-flatpickr-component";
 import "flatpickr/dist/flatpickr.css";
-import { onMounted, ref } from "vue";
 
 const props = defineProps({
     config: {
@@ -53,7 +52,7 @@ const props = defineProps({
         default: {
             altInput: true,
             altFormat: "F j, Y",
-            disableMobile: true,
+            disableMobile: false,
         },
     },
     type: {

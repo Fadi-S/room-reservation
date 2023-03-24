@@ -133,10 +133,9 @@ import {
     PencilSquareIcon,
 } from "@heroicons/vue/24/solid";
 import Tabs from "@/Shared/Tabs.vue";
-import { Inertia } from "@inertiajs/inertia";
 import useQueryStringToJSON from "@/Composables/useQueryStringToJSON.js";
 import useUser from "@/Composables/useUser.js";
-import DatePicker from "@/Shared/Form/DatePicker.vue";
+import { router } from "@inertiajs/vue3";
 
 const props = defineProps({
     reservations: Object,
@@ -159,7 +158,7 @@ watch(day, () => {
     const params = new URLSearchParams(window.location.search);
     params.set("day", day.value.toString());
 
-    Inertia.get(
+    router.get(
         window.location.pathname,
         useQueryStringToJSON(params.toString()),
         {

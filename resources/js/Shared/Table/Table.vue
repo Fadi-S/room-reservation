@@ -141,7 +141,7 @@ import Link from "@/Shared/Link.vue";
 import Search from "@/Shared/Search.vue";
 import { PlusIcon, InboxIcon, FunnelIcon } from "@heroicons/vue/24/solid";
 import { computed, provide, ref, watch } from "vue";
-import { Inertia } from "@inertiajs/inertia";
+import { router, usePage } from "@inertiajs/vue3";
 import { Popover, PopoverButton, PopoverPanel } from "@headlessui/vue";
 import Select from "@/Shared/Form/Select.vue";
 import useQueryStringToJSON from "@/Composables/useQueryStringToJSON.js";
@@ -171,6 +171,8 @@ const props = defineProps({
     },
 });
 
+const page = usePage();
+
 let sort = ref({
     name: "",
     direction: "",
@@ -184,7 +186,7 @@ let sort = ref({
 
         params.set("sort", column);
 
-        Inertia.get(
+        router.get(
             window.location.pathname,
             useQueryStringToJSON(params.toString()),
             {
@@ -196,11 +198,9 @@ let sort = ref({
     },
 });
 
-const filters = ref(Inertia.page.props.filters ?? []);
+const filters = ref(usePage().props.filters ?? []);
 const hasFilters =
-    filters.value.length > 0 ||
-    props.hasFilters ||
-    Inertia.page.props.hasFilters;
+    filters.value.length > 0 || props.hasFilters || page.props.hasFilters;
 
 let appliedFilters = ref({});
 const appliedFiltersCount = computed(
@@ -226,7 +226,7 @@ watch(
             params.set(`filter[${key}]`, value);
         }
 
-        Inertia.get(
+        router.get(
             window.location.pathname,
             useQueryStringToJSON(params.toString()),
             {
@@ -248,7 +248,7 @@ function setupSortAndFilters() {
             sortParams[0] === "-" ? sortParams.substring(1) : sortParams;
     }
 
-    filters.value = Inertia.page.props.filters ?? [];
+    filters.value = page.props.filters ?? [];
 
     filters.value.forEach((filter) => {
         appliedFilters.value[filter.column] =
