@@ -104,6 +104,8 @@ let type = ref("success");
 let message = ref("");
 let important = ref(true);
 
+//setFlash(usePage().props.flash);
+
 let page = usePage();
 
 watch(

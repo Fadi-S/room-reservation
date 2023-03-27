@@ -40,14 +40,18 @@ class CreateReservationController extends Controller
             $reservation->approve();
 
             $this->flash(__("ui.reserved"));
-        } else {
-            MakeReservationEvent::dispatch($reservation);
 
-            $this->flashPermanently(
-                __("ui.waiting_for_approval"),
-                FlashMessageType::Warning,
-            );
+            return redirect()->route("home", [
+                "day" => $reservation->nextOccurrence?->format("Y-m-d"),
+            ]);
         }
+
+        MakeReservationEvent::dispatch($reservation);
+
+        $this->flashPermanently(
+            __("ui.waiting_for_approval"),
+            FlashMessageType::Warning,
+        );
 
         return redirect()->route("home");
     }

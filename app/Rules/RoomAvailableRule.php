@@ -4,9 +4,10 @@ namespace App\Rules;
 
 use App\Models\Reservation;
 use Carbon\Carbon;
-use Illuminate\Contracts\Validation\Rule;
+use Closure;
+use Illuminate\Contracts\Validation\ValidationRule;
 
-class RoomAvailableRule implements Rule
+class RoomAvailableRule implements ValidationRule
 {
     protected ?Reservation $reservation;
     protected string $start;
@@ -27,15 +28,8 @@ class RoomAvailableRule implements Rule
     ) {
         $this->dayOfWeek ??= $this->date?->dayOfWeek;
 
-        if ($start instanceof Carbon) {
-            $this->start = $start->format("H:i:s");
-            $this->end = $end->format("H:i:s");
-        }
-
-        if (is_string($start)) {
-            $this->start = Carbon::parse($start)->format("H:i:s");
-            $this->end = Carbon::parse($end)->format("H:i:s");
-        }
+        $this->start = Carbon::parse($start)->format("H:i:s");
+        $this->end = Carbon::parse($end)->format("H:i:s");
     }
 
     public static function fromReservation(Reservation $reservation): self
@@ -52,30 +46,20 @@ class RoomAvailableRule implements Rule
 
     public function isAvailable(): bool
     {
-        return $this->passes(null, null);
-    }
+        if ($this->date) {
+            $start = $this->date->copy()->setTimeFrom($this->start);
 
-    /**
-     * Determine if the validation rule passes.
-     *
-     * @param  string  $attribute
-     * @param  mixed  $value
-     * @return bool
-     */
-    public function passes($attribute, $value)
-    {
-        $start =
-            $this->date ??
-            now()
-                ->next($this->dayOfWeek)
-                ->setTimeFrom($this->start);
+            $end = $this->date->copy()->setTimeFrom($this->end);
+        }
 
-        $end =
-            $this->date?->setTimeFrom($this->end) ??
-            now()
-                ->next($this->dayOfWeek)
-                ->setTimeFrom($this->start)
-                ->addYear();
+        $start ??= now()
+            ->next((int) $this->dayOfWeek)
+            ->setTimeFrom($this->start);
+
+        $end ??= now()
+            ->next((int) $this->dayOfWeek)
+            ->setTimeFrom($this->end)
+            ->addMonths(3);
 
         $this->reservation = Reservation::query()
             ->when(
@@ -83,9 +67,9 @@ class RoomAvailableRule implements Rule
                 fn($query) => $query->where("id", "<>", $this->ignore),
             )
             ->validBetween($start, $end)
+            ->overlapping($this->start, $this->end)
             ->forRoom($this->roomId)
             ->forDay($this->dayOfWeek)
-            ->overlapping($this->start, $this->end)
             ->with("service:id,name")
             ->first();
 
@@ -97,10 +81,20 @@ class RoomAvailableRule implements Rule
      *
      * @return string
      */
-    public function message()
+    protected function message(): string
     {
         $reservation = "{$this->reservation->description} {$this->reservation->service->name}";
 
         return __("validation.conflict", ["reservation" => $reservation]);
+    }
+
+    public function validate(
+        string $attribute,
+        mixed $value,
+        Closure $fail
+    ): void {
+        if (!$this->isAvailable()) {
+            $fail($this->message());
+        }
     }
 }

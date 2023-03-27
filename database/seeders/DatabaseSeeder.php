@@ -17,7 +17,10 @@ class DatabaseSeeder extends Seeder
         $this->call(RoomSeeder::class);
         $this->call(ServiceSeeder::class);
         $this->call(UserSeeder::class);
-        $this->call(ReservationSeeder::class);
+
+        if (!app()->environment("testing")) {
+            $this->call(ReservationSeeder::class);
+        }
 
         // \App\Models\User::factory(10)->create();
 

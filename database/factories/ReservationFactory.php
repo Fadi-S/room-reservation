@@ -30,19 +30,21 @@ class ReservationFactory extends Factory
                 "20:00",
                 "21:00",
             ])),
-            "end" => Carbon::parse($start)
+            "end" => ($end = Carbon::parse($start)
                 ->addHours(2)
-                ->format("H:i"),
+                ->format("H:i")),
             "is_repeating" => ($repeating = $this->faker->boolean()),
             "date" => ($date = !$repeating
                 ? $this->faker
-                    ->dateTimeBetween("now", "1 year")
+                    ->dateTimeBetween("tomorrow", "1 year")
                     ->format("Y-m-d")
                 : null),
             "day_of_week" => $date
                 ? Carbon::parse($date)->dayOfWeek
                 : $this->faker->randomElement(range(0, 6)),
-            "stopped_at" => $date ? Carbon::parse($date)->addDay() : null,
+            "stopped_at" => $date
+                ? Carbon::parse($date)->setTimeFrom($end)
+                : null,
             "approved_at" => ($approvedAt = $this->faker
                 ->optional()
                 ->dateTimeBetween("now", "+1 week")),
@@ -53,9 +55,9 @@ class ReservationFactory extends Factory
         ];
     }
 
-    public function repeating($repeating = true): static
+    public function repeating($repeating = true): self
     {
-        return $this->state(function () use ($repeating) {
+        return $this->state(function (array $attributes) use ($repeating) {
             $data = [
                 "is_repeating" => $repeating,
             ];
@@ -63,13 +65,23 @@ class ReservationFactory extends Factory
             if ($repeating) {
                 $data["date"] = null;
                 $data["stopped_at"] = null;
+            } else {
+                $data["date"] = $this->faker
+                    ->dateTimeBetween("tomorrow", "1 year")
+                    ->format("Y-m-d");
+
+                $data["day_of_week"] = Carbon::parse($data["date"])->dayOfWeek;
+
+                $data["stopped_at"] = Carbon::parse($data["date"])
+                    ->setTimeFrom($attributes["end"])
+                    ->format("Y-m-d H:i:s");
             }
 
             return $data;
         });
     }
 
-    public function approved(): static
+    public function approved(): self
     {
         return $this->state(function () {
             return [

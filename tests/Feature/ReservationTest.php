@@ -25,6 +25,66 @@ test("Visit reservation page", function () {
         ->assertOk();
 });
 
+test(
+    "Can make reservation for one-time event on a different day and same time and room",
+    function () {
+        $date = now()->addMonth();
+        $existingReservation = Reservation::factory()->create([
+            "is_repeating" => false,
+            "date" => $date->format("Y-m-d"),
+            "day_of_week" => $date->dayOfWeek,
+            "start" => "10:00:00",
+            "end" => "11:00:00",
+        ]);
+
+        // Create a new reservation for the same room and time on a different day
+        $newReservationAfter = Reservation::factory()->make([
+            "is_repeating" => false,
+            "date" => $date
+                ->copy()
+                ->addWeek()
+                ->format("Y-m-d"),
+            "start" => "10:00",
+            "end" => "11:00",
+            "day_of_week" => $date->dayOfWeek,
+            "room_id" => $existingReservation->room_id,
+        ]);
+
+        $newReservationBefore = Reservation::factory()->make([
+            "is_repeating" => false,
+            "date" => $date
+                ->copy()
+                ->subWeek()
+                ->format("Y-m-d"),
+            "start" => "10:00",
+            "end" => "11:00",
+            "day_of_week" => $date->dayOfWeek,
+            "room_id" => $existingReservation->room_id,
+        ]);
+
+        foreach (
+            [$newReservationAfter, $newReservationBefore]
+            as $newReservation
+        ) {
+            login()
+                ->post(route("reservation.store"), [
+                    "isRepeating" => $newReservation["is_repeating"],
+                    "service" => $newReservation["service_id"],
+                    "room" => $newReservation["room_id"],
+                    "description" => $newReservation["description"],
+                    "date" => $newReservation["date"], // use the one-time field
+                    "dayOfWeek" => $newReservation["day_of_week"], // not used for one-time
+                    "start" => $newReservation["start"],
+                    "end" => $newReservation["end"],
+                ])
+                ->assertSessionDoesntHaveErrors()
+                ->assertSessionHas("message");
+        }
+
+        $this->assertEquals(3, Reservation::count());
+    },
+);
+
 test("Can make reservation", function () {
     $reservation = Reservation::factory()->make();
 
@@ -42,8 +102,7 @@ test("Can make reservation", function () {
             "end" => $reservation["end"],
         ])
         ->assertSessionDoesntHaveErrors()
-        ->assertSessionHas("message")
-        ->assertRedirect(route("home"));
+        ->assertSessionHas("message");
 
     Mail::assertSent(SendReservationMadeMail::class);
 
@@ -71,23 +130,24 @@ test("Can't make reservation with end time before start time", function () {
 
 test(
     "Can't reserve in the same time and room as another reservation",
-    function ($start1, $end1, $start2, $end2) {
+    function ($start1, $end1, $start2, $end2, $isRepeating = true) {
+        /* @var Reservation $reservation */
         $reservation = Reservation::factory()
             ->state([
                 "start" => $start1,
                 "end" => $end1,
             ])
             ->approved()
-            ->repeating()
+            ->repeating($isRepeating)
             ->create();
 
         $reservationArray = [
-            "isRepeating" => $reservation["is_repeating"],
-            "service" => $reservation["service_id"],
-            "room" => $reservation["room_id"],
-            "description" => $reservation["description"],
-            "date" => $reservation["date"],
-            "dayOfWeek" => $reservation["day_of_week"],
+            "isRepeating" => $reservation->is_repeating,
+            "service" => $reservation->service_id,
+            "room" => $reservation->room_id,
+            "description" => $reservation->description,
+            "date" => $reservation->date,
+            "dayOfWeek" => $reservation->day_of_week,
             "start" => $start2,
             "end" => $end2,
         ];
@@ -99,14 +159,17 @@ test(
         expect(Reservation::count())->toBe(1);
     },
 )->with([
-    ["10:00", "12:00", "11:00", "13:00"],
-    ["10:00", "12:00", "10:00", "11:00"],
-    ["10:00", "12:00", "11:00", "12:00"],
-    ["10:00", "12:00", "10:00", "12:00"],
-    ["10:00", "14:00", "11:00", "12:00"],
+    "Repeating clash #1" => ["10:00", "12:00", "11:00", "13:00"],
+    "Repeating clash #2" => ["10:00", "12:00", "10:00", "11:00"],
+    "Repeating clash #3" => ["10:00", "12:00", "11:00", "12:00"],
+    "Repeating clash #4" => ["10:00", "12:00", "10:00", "12:00"],
+    "Repeating clash #5" => ["10:00", "14:00", "11:00", "12:00"],
+    "One time clash #1" => ["10:00", "12:00", "11:00", "13:00", false],
+    "One time clash #2" => ["10:00", "12:00", "10:00", "11:00", false],
+    "One time clash #3" => ["10:00", "12:00", "11:00", "12:00", false],
+    "One time clash #4" => ["10:00", "12:00", "10:00", "12:00", false],
+    "One time clash #5" => ["10:00", "14:00", "11:00", "12:00", false],
 ]);
-
-test("Can't reserve in the same time as a non repeating event");
 
 test("Can reserve at consecutive times", function (
     $start1,
@@ -196,6 +259,7 @@ test("Can edit reservation to be consecutive", function (
 test("Reservation wont take effect until approved", function () {
     /* @var Reservation $reservation */
     $reservation = Reservation::factory()
+        ->repeating()
         ->notApproved()
         ->create();
 

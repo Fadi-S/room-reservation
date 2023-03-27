@@ -9,23 +9,19 @@ class ReservationQuery extends Builder
 {
     public function approved(bool $approved = true): static
     {
-        if (!$approved) {
-            return $this->where("approved_at", "=", null);
-        }
-
-        return $this->where("approved_at", "<>", null);
+        return $this->where("approved_at", $approved ? "<>" : "=", null);
     }
 
     public function notStopped($date = null): static
     {
         $date ??= now();
 
-        return $this->where(function ($q) use ($date) {
-            $q->where("stopped_at", ">", $date->format("Y-m-d H:i:s"))->orWhere(
+        return $this->where(function (self $q) use ($date) {
+            $q->where(
                 "stopped_at",
-                "=",
-                null,
-            );
+                ">=",
+                $date->format("Y-m-d H:i:s"),
+            )->orWhereNull("stopped_at");
         });
     }
 
@@ -68,7 +64,7 @@ class ReservationQuery extends Builder
 
     public function repeated($isRepeated = true): static
     {
-        return $this->where("repeated", "=", $isRepeated);
+        return $this->where("is_repeating", "=", $isRepeated);
     }
 
     public function valid($date = null, $approved = true): static
@@ -78,13 +74,16 @@ class ReservationQuery extends Builder
 
     public function validBetween($start, $end): static
     {
-        return $this->valid($start)->where(function ($query) use (
+        return $this->valid($start)->where(function (self $query) use (
             $start,
             $end
         ) {
             $query
-                ->where("date", "=", null)
-                ->orWhereBetween("date", [$start, $end]);
+                ->whereNull("date")
+                ->orWhere("date", [
+                    $start->format("Y-m-d"),
+                    $end->format("Y-m-d"),
+                ]);
         });
     }
 
