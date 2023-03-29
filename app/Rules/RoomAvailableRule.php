@@ -81,7 +81,7 @@ class RoomAvailableRule implements ValidationRule
      *
      * @return string
      */
-    protected function message(): string
+    public function message(): string
     {
         $reservation = "{$this->reservation->description} {$this->reservation->service->name}";
 
