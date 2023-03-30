@@ -96,7 +96,7 @@ import {
     ClipboardIcon,
 } from "@heroicons/vue/24/outline";
 import { XMarkIcon } from "@heroicons/vue/24/solid";
-import { ref, watch } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { usePage } from "@inertiajs/vue3";
 
 let show = ref(false);
@@ -104,9 +104,9 @@ let type = ref("success");
 let message = ref("");
 let important = ref(true);
 
-//setFlash(usePage().props.flash);
-
 let page = usePage();
+
+onMounted(() => setFlash(page.props.flash));
 
 watch(
     () => page,
