@@ -71,7 +71,8 @@ class MakeReservation
         return now()->between(
             now()
                 ->setMonth(5)
-                ->startOfMonth(),
+                ->setDay(5)
+                ->startOfDay(),
             now()
                 ->setMonth(9)
                 ->endOfMonth(),
