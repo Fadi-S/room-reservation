@@ -117,7 +117,7 @@ watch(
 window.addEventListener("flash", (e) => setFlash(e.detail));
 
 function setFlash(flash) {
-    message.value = flash.message ?? flash.success;
+    message.value = flash.message;
 
     important.value = isNaN(flash.important) ? flash.important : false;
 
