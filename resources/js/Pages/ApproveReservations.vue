@@ -115,6 +115,7 @@
                         class="font-bold"
                     />
                     <span
+                        v-if="reservation.room.description"
                         :style="{
                             color: reservation.service.color,
                         }"
