@@ -90,7 +90,10 @@
                         </div>
 
                         <div
-                            v-if="reservation.isRepeating"
+                            v-if="
+                                reservation.isRepeating &&
+                                reservation.stopped_at
+                            "
                             class="font-medium text-gray-500"
                         >
                             <span v-text="'حتى ' + reservation.stopped_at" />
