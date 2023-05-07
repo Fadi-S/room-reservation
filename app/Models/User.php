@@ -3,14 +3,15 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Queries\ReservationQuery;
 use App\Queries\UserQuery;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Query\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Str;
 use JetBrains\PhpStorm\Pure;
 use Laravel\Sanctum\HasApiTokens;
 
@@ -69,6 +70,11 @@ class User extends Authenticatable
                 strtolower($value),
             )),
         );
+    }
+
+    public function reservations(): HasMany|ReservationQuery
+    {
+        return $this->hasMany(Reservation::class);
     }
 
     public function username(): Attribute

@@ -47,6 +47,8 @@ class ReservationResource extends JsonResource
                     route("reservation.approve", $this),
                 ),
                 "delete" => route("reservation.delete", $this),
+                "stop" => route("reservation.stop", $this),
+                "edit" => route("reservations.edit", $this),
             ],
         ];
     }

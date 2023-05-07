@@ -232,6 +232,13 @@ if (user) {
                 current: false,
             }
         );
+    } else {
+        navigation.value.push({
+            name: "حجوزاتي",
+            href: "/personal/reservations",
+            notifications: page.props.data?.pendingReservationsCount ?? 0,
+            current: false,
+        });
     }
 
     router.on("navigate", () => {

@@ -18,9 +18,11 @@ class EditReservationController extends Controller
     public function edit(Reservation $reservation)
     {
         $reservation->load("room");
-        $this->authorize("admin");
+        $this->authorize("update", $reservation);
 
         $isInSummer = $this->repository->isSummer();
+
+        $user = Auth::user();
 
         return inertia("ReservationForm", [
             "services" => Auth::user()
@@ -38,7 +40,7 @@ class EditReservationController extends Controller
                 "is_repeating" => $reservation->is_repeating,
             ],
             "url" => route("reservation.update", $reservation),
-            "deleteUrl" => route("reservation.stop", $reservation),
+            "deleteUrl" => $user->isAdmin() ? route("reservation.stop", $reservation) : null,
             "locations" => LocationResource::collection(
                 Location::with("rooms")->get(),
             ),
@@ -48,7 +50,7 @@ class EditReservationController extends Controller
 
     public function update(Reservation $reservation, Request $request)
     {
-        $this->authorize("admin");
+        $this->authorize("update", $reservation);
 
         $this->repository->update($reservation, $request->all());
 
@@ -59,6 +61,8 @@ class EditReservationController extends Controller
 
     public function destroy(Reservation $reservation)
     {
+        $this->authorize("delete", $reservation);
+
         $date = $reservation->nextOccurrence;
 
         $reservation->stopped_at = now();

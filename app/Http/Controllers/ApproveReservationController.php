@@ -44,7 +44,7 @@ class ApproveReservationController extends Controller
 
     public function delete(Reservation $reservation)
     {
-        $this->authorize("admin");
+        $this->authorize("forceDelete", $reservation);
 
         if ($reservation->delete()) {
             $this->flash(

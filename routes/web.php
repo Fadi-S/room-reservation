@@ -5,6 +5,7 @@ use App\Http\Controllers\CreateReservationController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EditReservationController;
 use App\Http\Controllers\PasswordlessSignInController;
+use App\Http\Controllers\PersonalReservationController;
 use App\Http\Controllers\ReservationsTableController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -65,6 +66,12 @@ Route::middleware("auth")->group(function () {
         EditReservationController::class,
         "edit",
     ])->name("reservations.edit");
+
+    Route::get("personal/reservations", [
+        PersonalReservationController::class,
+        "index",
+    ])->name("reservations.personal");
+
     Route::patch("reservations/{reservation}", [
         EditReservationController::class,
         "update",

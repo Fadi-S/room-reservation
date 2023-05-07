@@ -1,5 +1,5 @@
 <template>
-    <Head title="Approve" />
+    <Head title="حجوزاتي" />
 
     <div
         v-if="reservations.length === 0"
@@ -22,7 +22,7 @@
             </svg>
 
             <h3 class="mt-4 text-lg font-medium text-gray-600">
-                لا يوجد حجوزات للموافقة عليها
+                لا يوجد حجوزات
             </h3>
         </div>
     </div>
@@ -31,16 +31,18 @@
         <ReservationCard
             v-for="reservation in reservations"
             :reservation="reservation"
+            :show-creator="false"
         >
             <template v-slot:actions>
                 <div class="mt-2 flex items-center justify-between">
                     <Link
-                        color="green"
+                        color="blue"
                         as="button"
-                        method="POST"
-                        :href="reservation.links.approve"
+                        outline
+                        method="GET"
+                        :href="reservation.links.edit"
                     >
-                        موافقة
+                        تعديل
                     </Link>
 
                     <Link

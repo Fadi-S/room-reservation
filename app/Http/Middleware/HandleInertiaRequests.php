@@ -52,6 +52,11 @@ class HandleInertiaRequests extends Middleware
             $data["pendingReservationsCount"] = Reservation::valid(
                 approved: false,
             )->count();
+        } elseif ($user) {
+            $data["pendingReservationsCount"] = $user
+                ->reservations()
+                ->valid(approved: false)
+                ->count();
         }
 
         return array_merge(parent::share($request), [
