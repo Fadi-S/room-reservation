@@ -41,6 +41,7 @@ class HandleInertiaRequests extends Middleware
         if ($user) {
             $userArray = [
                 "name" => $user->name,
+                "email" => $user->email,
                 "username" => $user->username,
                 "imageUrl" => asset("/images/defaultPicture.png"),
                 "isAdmin" => $user->isAdmin(),
