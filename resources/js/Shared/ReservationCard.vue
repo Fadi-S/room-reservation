@@ -48,7 +48,7 @@
                         class="text-green-700 bg-green-100 rounded-lg py-1 px-3 flex space-x-reverse space-x-1"
                     >
                         <ArrowPathIcon class="w-6 h-6" />
-                        <span class="font-semibold">متكرر</span>
+                        <span class="font-semibold">كل اسبوع</span>
                     </div>
 
                     <div

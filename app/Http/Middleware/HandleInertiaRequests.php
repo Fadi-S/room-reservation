@@ -20,7 +20,7 @@ class HandleInertiaRequests extends Middleware
      * Determines the current asset version.
      *
      * @see https://inertiajs.com/asset-versioning
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return string|null
      */
     public function version(Request $request): ?string
@@ -32,12 +32,14 @@ class HandleInertiaRequests extends Middleware
      * Defines the props that are shared by default.
      *
      * @see https://inertiajs.com/shared-data
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return array
      */
     public function share(Request $request): array
     {
         $user = auth()->user();
+        $data = [];
+
         if ($user) {
             $userArray = [
                 "name" => $user->name,
@@ -46,16 +48,11 @@ class HandleInertiaRequests extends Middleware
                 "imageUrl" => asset("/images/defaultPicture.png"),
                 "isAdmin" => $user->isAdmin(),
             ];
-        }
+            $reservations = $user->isAdmin()
+                ? Reservation::query()
+                : $user->reservations();
 
-        $data = [];
-        if ($user && $user->isAdmin()) {
-            $data["pendingReservationsCount"] = Reservation::valid(
-                approved: false,
-            )->count();
-        } elseif ($user) {
-            $data["pendingReservationsCount"] = $user
-                ->reservations()
+            $data["pendingReservationsCount"] = $reservations
                 ->valid(approved: false)
                 ->count();
         }
