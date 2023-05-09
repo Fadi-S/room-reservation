@@ -8,11 +8,12 @@
             method="DELETE"
             color="red"
             outline
-            class="space-x-reverse"
             :href="deleteUrl"
         >
-            <TrashIcon class="w-6 h-6" />
-            <span>مسح</span>
+            <div class="flex items-center space-x-reverse space-x-1">
+                <XCircleIcon class="w-6 h-6" />
+                <span>إيقاف</span>
+            </div>
         </Link>
 
         <form @submit.prevent="submit" :action="url" method="POST">
@@ -158,7 +159,7 @@
 <script setup>
 import { useForm } from "@inertiajs/vue3";
 import Button from "@/Shared/Form/Button.vue";
-import { CheckCircleIcon, TrashIcon } from "@heroicons/vue/24/outline";
+import { CheckCircleIcon, XCircleIcon } from "@heroicons/vue/24/outline";
 import Input from "@/Shared/Form/Input.vue";
 import Select from "@/Shared/Form/Select.vue";
 import DatePicker from "@/Shared/Form/DatePicker.vue";

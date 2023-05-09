@@ -3,8 +3,8 @@
         :form="forForm ? forForm : null"
         :disabled="form && (form.processing || (!form.isDirty && autoDisable))"
         :type="type"
-        class="inline-flex flex justify-center text-center items-center border border-transparent text-base font-medium rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2"
-        :class="finalColor + ' ' + padding + ' ' + width"
+        class="inline-flex flex justify-center text-center items-center border border-transparent text-base font-medium focus:outline-none focus:ring-2 focus:ring-offset-2"
+        :class="finalColor + ' ' + padding + ' ' + width + ' ' + rounded"
     >
         <div v-if="form">
             <template v-if="!form.processing">
@@ -48,6 +48,10 @@ const props = defineProps({
     width: {
         type: String,
         default: "w-full xs:w-auto",
+    },
+    rounded: {
+        type: String,
+        default: "rounded-lg",
     },
     plain: {
         type: Boolean,

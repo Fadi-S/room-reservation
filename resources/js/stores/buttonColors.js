@@ -6,8 +6,13 @@ export const colors = {
     "primary-plain":
         "text-primary hover:text-primary-2 border-transparent focus:ring-primary disabled:text-primary/60 transition-colors",
 
+    "red-solid":
+        "text-red-50 bg-red-600 border-red-600 focus:ring-red-600 hover:border-red-800 hover:bg-red-700 " +
+        "hover:text-red-100 shadow-sm transition-colors",
     "red-outline":
         "text-red-600 border-red-600 focus:ring-red-600 hover:border-red-800 hover:bg-red-700/20 hover:text-red-800 shadow-sm transition-colors",
+    "red-plain":
+        "text-red-600 focus:ring-red-600 hover:border-red-800 hover:bg-red-700/20 hover:text-red-800 shadow-sm transition-colors",
 
     "green-solid":
         "text-green-50 bg-green-600 border-green-600 ring-green-600 hover:border-green-800 hover:bg-green-700" +

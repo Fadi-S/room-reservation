@@ -3,8 +3,8 @@
         :is="normal ? 'a' : 'InertiaLink'"
         :href="href"
         v-bind="$attrs"
-        class="inline-flex flex justify-center text-center items-center border font-medium text-base rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors duration-300"
-        :class="finalColor + ' ' + padding"
+        class="inline-flex flex justify-center text-center items-center border font-medium text-base focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors duration-300"
+        :class="finalColor + ' ' + padding + ' ' + rounded"
     >
         <slot />
     </component>
@@ -30,6 +30,10 @@ const props = defineProps({
         type: String,
         default: "px-4 py-2",
     },
+    rounded: {
+        type: String,
+        default: "rounded-lg",
+    },
     outline: {
         type: Boolean,
         default: false,
@@ -42,5 +46,6 @@ const props = defineProps({
 
 const suffix = props.outline ? "outline" : props.plain ? "plain" : "solid";
 
-let finalColor = colors[props.color + "-" + suffix] ?? colors["primary-" + suffix];
+let finalColor =
+    colors[props.color + "-" + suffix] ?? colors["primary-" + suffix];
 </script>

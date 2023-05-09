@@ -33,35 +33,109 @@
             :reservation="reservation"
         >
             <template v-slot:actions>
-                <div class="mt-2 flex items-center justify-between">
+                <div
+                    class="mt-2 flex items-center justify-center md:justify-start rtl:space-x-reverse space-x-6"
+                >
                     <Link
                         color="green"
                         as="button"
                         method="POST"
+                        padding="p-3"
+                        rounded="rounded-full"
                         :href="reservation.links.approve"
                     >
-                        موافقة
+                        <CheckIcon class="w-6 h-6" />
                     </Link>
 
                     <Link
                         color="blue"
                         outline
                         method="GET"
+                        padding="p-3"
+                        rounded="rounded-full"
                         :href="reservation.links.edit"
                     >
-                        تعديل
+                        <PencilSquareIcon class="w-6 h-6" />
                     </Link>
 
-                    <Link
-                        color="red"
-                        outline
-                        as="button"
-                        method="DELETE"
-                        :href="reservation.links.delete"
-                    >
-                        مسح
-                    </Link>
+                    <div>
+                        <Button
+                            color="red"
+                            outline
+                            padding="p-3"
+                            rounded="rounded-full"
+                            @click="deleteModal = true"
+                        >
+                            <TrashIcon class="w-6 h-6" />
+                        </Button>
+                    </div>
                 </div>
+
+                <Modal dir="rtl" :fixed="false" v-model="deleteModal">
+                    <div
+                        class="hidden sm:block absolute top-0 left-0 pt-4 pl-4"
+                    >
+                        <button
+                            type="button"
+                            class="bg-white rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                            @click="deleteModal = false"
+                        >
+                            <span class="sr-only">Close</span>
+                            <XMarkIcon class="h-6 w-6" aria-hidden="true" />
+                        </button>
+                    </div>
+
+                    <div class="sm:flex sm:items-start">
+                        <div
+                            class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10"
+                        >
+                            <TrashIcon
+                                class="h-6 w-6 text-red-600"
+                                aria-hidden="true"
+                            />
+                        </div>
+                        <div
+                            class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left"
+                        >
+                            <DialogTitle
+                                as="h3"
+                                class="text-lg rtl:md:text-right mr-2 leading-6 font-medium text-gray-900"
+                            >
+                                <span>مسح الحجز</span>
+                            </DialogTitle>
+                            <div class="mt-2">
+                                <p class="text-sm text-gray-500">
+                                    سيتم مسح الحجز من البرنامج
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <template #footer>
+                        <div
+                            class="flex items-center justify-between w-full sm:w-auto rtl:space-x-reverse space-x-4"
+                        >
+                            <Link
+                                normal
+                                color="red"
+                                as="button"
+                                method="DELETE"
+                                class="w-full"
+                                :href="reservation.links.delete"
+                            >
+                                مسح
+                            </Link>
+
+                            <Button
+                                @click="deleteModal = false"
+                                color="light-gray"
+                                width="w-full"
+                            >
+                                اغلاق
+                            </Button>
+                        </div>
+                    </template>
+                </Modal>
             </template>
         </ReservationCard>
     </div>
@@ -69,8 +143,19 @@
 
 <script setup>
 import Link from "@/Shared/Link.vue";
-import { ArrowPathIcon, ClockIcon } from "@heroicons/vue/24/outline";
+import {
+    TrashIcon,
+    PencilSquareIcon,
+    XMarkIcon,
+} from "@heroicons/vue/24/outline";
+import { CheckIcon } from "@heroicons/vue/24/solid";
 import ReservationCard from "@/Shared/ReservationCard.vue";
+import Modal from "@/Shared/Modal.vue";
+import Button from "@/Shared/Form/Button.vue";
+import { DialogTitle } from "@headlessui/vue";
+import { ref } from "vue";
+
+const deleteModal = ref(false);
 
 defineProps({
     reservations: Array,
