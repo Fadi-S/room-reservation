@@ -105,7 +105,7 @@
 
                             <MyRadioOption
                                 v-if="isInSummer"
-                                label="في الصيف"
+                                label="خلال الصيف"
                                 id="summer-only"
                                 value="summer"
                             />

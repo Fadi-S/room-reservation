@@ -53,7 +53,7 @@ class CreateReservationController extends Controller
             FlashMessageType::Warning,
         );
 
-        return redirect()->route("home");
+        return redirect()->route("reservations.personal");
     }
 
 }

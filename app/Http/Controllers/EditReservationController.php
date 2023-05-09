@@ -24,6 +24,11 @@ class EditReservationController extends Controller
 
         $user = Auth::user();
 
+        $repeating = $reservation->is_repeating;
+        if ($repeating && $reservation->stopped_at && now()->lt($reservation->stopped_at)) {
+            $repeating = "summer";
+        }
+
         return inertia("ReservationForm", [
             "services" => Auth::user()
                 ->allowedServices()
@@ -37,7 +42,7 @@ class EditReservationController extends Controller
                 "end" => $reservation->end,
                 "date" => $reservation->date?->format("Y-m-d"),
                 "day_of_week" => $reservation->day_of_week,
-                "is_repeating" => $reservation->is_repeating,
+                "is_repeating" => $repeating,
             ],
             "url" => route("reservation.update", $reservation),
             "deleteUrl" => $user->isAdmin() ? route("reservation.stop", $reservation) : null,
