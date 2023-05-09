@@ -44,6 +44,15 @@
                     </Link>
 
                     <Link
+                        color="blue"
+                        outline
+                        method="GET"
+                        :href="reservation.links.edit"
+                    >
+                        تعديل
+                    </Link>
+
+                    <Link
                         color="red"
                         outline
                         as="button"
