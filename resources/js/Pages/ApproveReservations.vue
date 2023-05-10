@@ -64,21 +64,25 @@
                             outline
                             padding="p-3"
                             rounded="rounded-full"
-                            @click="deleteModal = true"
+                            @click="deleteModals[reservation.id] = true"
                         >
                             <TrashIcon class="w-6 h-6" />
                         </Button>
                     </div>
                 </div>
 
-                <Modal :fixed="false" v-model="deleteModal">
+                <Modal
+                    :key="'modal-' + reservation.id"
+                    :fixed="false"
+                    v-model="deleteModals[reservation.id]"
+                >
                     <div
                         class="hidden sm:block absolute top-0 left-0 pt-4 pl-4"
                     >
                         <button
                             type="button"
                             class="bg-white rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                            @click="deleteModal = false"
+                            @click="deleteModals[reservation.id] = false"
                         >
                             <span class="sr-only">Close</span>
                             <XMarkIcon class="h-6 w-6" aria-hidden="true" />
@@ -105,7 +109,11 @@
                             </DialogTitle>
                             <div class="mt-2">
                                 <p class="text-sm text-gray-500">
-                                    سيتم مسح الحجز من البرنامج
+                                    سيتم مسح
+                                    <strong class="text-gray-600"
+                                        >({{ reservation.name }})</strong
+                                    >
+                                    من البرنامج
                                 </p>
                             </div>
                         </div>
@@ -127,7 +135,7 @@
                             </Link>
 
                             <Button
-                                @click="deleteModal = false"
+                                @click="deleteModals[reservation.id] = false"
                                 color="light-gray"
                                 width="w-full"
                             >
@@ -153,11 +161,14 @@ import ReservationCard from "@/Shared/ReservationCard.vue";
 import Modal from "@/Shared/Modal.vue";
 import Button from "@/Shared/Form/Button.vue";
 import { DialogTitle } from "@headlessui/vue";
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 
-const deleteModal = ref(false);
-
-defineProps({
+const props = defineProps({
     reservations: Array,
 });
+
+const deleteModals = ref({});
+for (let reservation of props.reservations) {
+    deleteModals.value[reservation.id] = false;
+}
 </script>
