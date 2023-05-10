@@ -71,7 +71,7 @@
                     </div>
                 </div>
 
-                <Modal dir="rtl" :fixed="false" v-model="deleteModal">
+                <Modal :fixed="false" v-model="deleteModal">
                     <div
                         class="hidden sm:block absolute top-0 left-0 pt-4 pl-4"
                     >

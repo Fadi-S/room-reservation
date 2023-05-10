@@ -150,7 +150,7 @@
                 <template #icon>
                     <CheckCircleIcon class="w-6 h-6 ml-2" />
                 </template>
-                احجز
+                تسجيل
             </Button>
         </form>
     </Card>
