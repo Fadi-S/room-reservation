@@ -3,7 +3,7 @@
         :form="forForm ? forForm : null"
         :disabled="form && (form.processing || (!form.isDirty && autoDisable))"
         :type="type"
-        class="inline-flex flex justify-center text-center items-center border border-transparent text-base font-medium focus:outline-none focus:ring-2 focus:ring-offset-2"
+        class="inline-flex flex justify-center text-center items-center border text-base font-medium focus:outline-none focus:ring-2 focus:ring-offset-2"
         :class="finalColor + ' ' + padding + ' ' + width + ' ' + rounded"
     >
         <div v-if="form">
