@@ -56,6 +56,15 @@ class User extends Authenticatable
         return $this->services()->toBase();
     }
 
+    public function hasAccessTo(Reservation $reservation): bool
+    {
+        return $reservation->user_id == $this->id ||
+            $this->isAdmin() ||
+            $this->services()
+                ->where("services.id", $reservation->service_id)
+                ->exists();
+    }
+
     public static function byKey($key): ?self
     {
         return self::where("email", "=", $key)

@@ -41,6 +41,7 @@ class ReservationResource extends JsonResource
             ),
             "created_at" => $this->created_at->translatedFormat("h:i a j F"),
             "stopped_at" => $this->stopped_at?->translatedFormat("F Y"),
+            "isApproved" => $this->isApproved(),
             "links" => [
                 "approve" => $this->when(
                     !$this->isApproved(),

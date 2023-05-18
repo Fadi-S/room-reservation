@@ -42,6 +42,7 @@ class HandleInertiaRequests extends Middleware
 
         if ($user) {
             $userArray = [
+                "id" => $user->id,
                 "name" => $user->name,
                 "email" => $user->email,
                 "username" => $user->username,

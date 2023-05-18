@@ -37,10 +37,7 @@ class ReservationPolicy
      */
     public function update(User $user, Reservation $reservation): Response
     {
-        if (
-            $user->is($reservation->reservedBy) &&
-            !$reservation->isApproved()
-        ) {
+        if ($user->hasAccessTo($reservation) && !$reservation->isApproved()) {
             return Response::allow();
         }
 
@@ -54,10 +51,7 @@ class ReservationPolicy
      */
     public function delete(User $user, Reservation $reservation): Response
     {
-        if (
-            $user->is($reservation->reservedBy) &&
-            !$reservation->isApproved()
-        ) {
+        if ($user->hasAccessTo($reservation)) {
             return Response::allow();
         }
 
@@ -81,10 +75,7 @@ class ReservationPolicy
      */
     public function forceDelete(User $user, Reservation $reservation): Response
     {
-        if (
-            $user->is($reservation->reservedBy) &&
-            !$reservation->isApproved()
-        ) {
+        if ($user->hasAccessTo($reservation) && !$reservation->isApproved()) {
             return Response::allow();
         }
 

@@ -1,6 +1,6 @@
 <template>
     <div
-        class="bg-white rounded-lg p-4 border-t-4 flex flex-col justify-between"
+        class="bg-white md:rounded-lg shadow p-4 border-t-4 flex flex-col justify-between"
         :style="{
             borderColor: reservation.service.color,
         }"
