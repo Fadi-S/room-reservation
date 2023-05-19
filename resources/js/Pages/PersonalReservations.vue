@@ -134,11 +134,11 @@
                                     class="flex items-center justify-between w-full sm:w-auto rtl:space-x-reverse space-x-4"
                                 >
                                     <Link
-                                        normal
                                         color="red"
                                         as="button"
                                         method="DELETE"
                                         class="w-full"
+                                        :preserve-state="false"
                                         :href="
                                             reservation.isApproved
                                                 ? reservation.links.stop
@@ -149,6 +149,7 @@
                                     </Link>
 
                                     <Button
+                                        type="button"
                                         @click="
                                             deleteModals[reservation.id] = false
                                         "

@@ -68,16 +68,10 @@ class EditReservationController extends Controller
     {
         $this->authorize("delete", $reservation);
 
-        $date = $reservation->nextOccurrence;
-
-        $reservation->stopped_at = now();
-
-        $reservation->save();
+        $reservation->update(["stopped_at" => now()->subMinute()]);
 
         $this->flash(__("ui.reservation_stopped"));
 
-        return redirect()->route("table", [
-            "day" => $date?->format("Y-m-d"),
-        ]);
+        return back();
     }
 }

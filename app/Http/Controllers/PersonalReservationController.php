@@ -30,10 +30,10 @@ class PersonalReservationController extends Controller
 
         return inertia("PersonalReservations", [
             "pendingReservations" => ReservationResource::collection(
-                $reservations[0]->sortByDesc("id"),
+                ($reservations[0] ?? collect())->sortByDesc("id"),
             ),
             "approvedReservations" => ReservationResource::collection(
-                $reservations[1],
+                $reservations[1] ?? [],
             ),
         ]);
     }

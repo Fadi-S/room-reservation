@@ -124,7 +124,6 @@
                             class="flex items-center justify-between w-full sm:w-auto rtl:space-x-reverse space-x-4"
                         >
                             <Link
-                                normal
                                 color="red"
                                 as="button"
                                 method="DELETE"
@@ -135,6 +134,7 @@
                             </Link>
 
                             <Button
+                                type="button"
                                 @click="deleteModals[reservation.id] = false"
                                 color="light-gray"
                                 width="w-full"
