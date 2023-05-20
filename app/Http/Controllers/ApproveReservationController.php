@@ -17,6 +17,7 @@ class ApproveReservationController extends Controller
             "reservations" => ReservationResource::collection(
                 Reservation::query()
                     ->orderBy("day_of_week")
+                    ->orderBy("room_id")
                     ->orderBy("start")
                     ->valid(approved: false)
                     ->with(["room.location", "service", "reservedBy"])
