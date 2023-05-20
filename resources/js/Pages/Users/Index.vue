@@ -10,6 +10,7 @@
                 <TH>الأيميل</TH>
                 <TH>أدمن</TH>
                 <TH>الخدمة</TH>
+                <TH>Login Link</TH>
                 <TH empty>تعديل</TH>
             </template>
 
@@ -30,6 +31,24 @@
                             {{ service.name }}
                         </li>
                     </ul>
+                </TD>
+                <TD>
+                    <div
+                        v-if="!user.isAdmin"
+                        class="flex items-center justify-center"
+                    >
+                        <Button
+                            color="red"
+                            outline
+                            padding="p-2"
+                            type="button"
+                            width="w-auto"
+                            rounded="rounded-full"
+                            @click="addLinkToClipboard(user)"
+                        >
+                            <LockClosedIcon class="w-6 h-6" />
+                        </Button>
+                    </div>
                 </TD>
                 <TD>
                     <Link
@@ -53,11 +72,26 @@ import Table from "@/Shared/Table/Table.vue";
 import TH from "@/Shared/Table/TH.vue";
 import TD from "@/Shared/Table/TD.vue";
 import Link from "@/Shared/Link.vue";
-import { CheckCircleIcon, PencilIcon } from "@heroicons/vue/24/solid";
+import {
+    CheckCircleIcon,
+    PencilIcon,
+    LockClosedIcon,
+} from "@heroicons/vue/24/solid";
+import Button from "@/Shared/Form/Button.vue";
+import flash from "@/Composables/useFlash.js";
 
 defineProps({
     users: Object,
 });
 
 const search = ref("");
+
+async function addLinkToClipboard(user) {
+    let data = await fetch("/users/" + user.key + "/link");
+    let link = (await data.json())["link"];
+
+    await navigator.clipboard.writeText(link);
+
+    flash.clipboard("Clipboard", "تم نسخ رابط " + user.name + " بنجاح");
+}
 </script>

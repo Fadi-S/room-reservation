@@ -4,6 +4,7 @@ use App\Http\Controllers\ApproveReservationController;
 use App\Http\Controllers\CreateReservationController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EditReservationController;
+use App\Http\Controllers\GenerateLoginLinkController;
 use App\Http\Controllers\PasswordlessSignInController;
 use App\Http\Controllers\PersonalReservationController;
 use App\Http\Controllers\ReservationsTableController;
@@ -78,4 +79,8 @@ Route::middleware("auth")->group(function () {
     ])->name("reservation.update");
 
     Route::resource("/users", UserController::class);
+
+    Route::get("users/{user}/link", GenerateLoginLinkController::class)->name(
+        "users.link",
+    );
 });

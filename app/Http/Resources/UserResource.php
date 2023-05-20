@@ -12,6 +12,7 @@ class UserResource extends JsonResource
         /* @var User $this */
 
         return [
+            "key" => $this->username,
             "id" => $this->id,
             "isAdmin" => $this->isAdmin(),
             "name" => $this->name,
