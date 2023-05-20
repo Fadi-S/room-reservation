@@ -16,7 +16,8 @@ class ApproveReservationController extends Controller
         return inertia("ApproveReservations", [
             "reservations" => ReservationResource::collection(
                 Reservation::query()
-                    ->latest("id")
+                    ->orderBy("day_of_week")
+                    ->orderBy("start")
                     ->valid(approved: false)
                     ->with(["room.location", "service", "reservedBy"])
                     ->get(),
