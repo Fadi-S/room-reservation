@@ -87,7 +87,8 @@ class MakeReservation
     {
         $dayOfWeek = $data["dayOfWeek"] ?? null;
         if (isset($data["date"])) {
-            $dayOfWeek ??= Carbon::parse($data["date"])->dayOfWeek;
+            $data["dayOfWeek"] = $dayOfWeek ??= Carbon::parse($data["date"])
+                ->dayOfWeek;
         }
 
         Validator::validate($data, [
@@ -100,7 +101,7 @@ class MakeReservation
                 "date",
                 "after_or_equal:" . now()->format("Y-m-d h:i a"),
             ],
-            "dayOfWeek" => ["required_if:isRepeating,true", "between:0,6"],
+            "dayOfWeek" => ["required", "between:0,6"],
             "isRepeating" => ["in:0,1,false,true,,summer"],
             "start" => [
                 "required",
