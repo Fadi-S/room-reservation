@@ -11,7 +11,7 @@ export default ({ mode }) => {
 
     return defineConfig({
         plugins: [
-            laravel(["resources/js/app.js"]),
+            laravel(["resources/js/app.js", "resources/css/app.css"]),
             vue({
                 template: {
                     transformAssetUrls: {
