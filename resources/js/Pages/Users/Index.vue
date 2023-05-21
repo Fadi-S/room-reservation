@@ -90,8 +90,19 @@ async function addLinkToClipboard(user) {
     let data = await fetch("/users/" + user.key + "/link");
     let link = (await data.json())["link"];
 
-    await navigator.clipboard.writeText(link);
+    navigator.permissions
+        .query({ name: "clipboard-write" })
+        .then(async (result) => {
+            if (result.state === "granted" || result.state === "prompt") {
+                await navigator.clipboard.writeText(link);
 
-    flash.clipboard("Clipboard", "تم نسخ رابط " + user.name + " بنجاح");
+                flash.clipboard(
+                    "Clipboard",
+                    "تم نسخ رابط " + user.name + " بنجاح"
+                );
+            } else {
+                flash.error("Error", "Copy permission denied");
+            }
+        });
 }
 </script>
