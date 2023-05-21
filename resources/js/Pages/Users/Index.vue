@@ -87,14 +87,32 @@ defineProps({
 const search = ref("");
 
 async function addLinkToClipboard(user) {
-    let data = await fetch("/users/" + user.key + "/link");
-    let link = (await data.json())["link"];
+    // let data = await fetch("/users/" + user.key + "/link");
+    // let link = (await data.json())["link"];
 
     navigator.permissions
         .query({ name: "clipboard-write" })
         .then(async (result) => {
             if (result.state === "granted" || result.state === "prompt") {
-                await navigator.clipboard.writeText(link).then(
+                const clipboardItem = new ClipboardItem({
+                    "text/plain": (async () => {
+                        let data = await fetch("/users/" + user.key + "/link");
+                        return (await data.json())["link"];
+                    }).then((result) => {
+                        if (!result) {
+                            return new Promise(async (resolve) => {
+                                resolve(new Blob[``]());
+                            });
+                        }
+
+                        const copyText = result;
+                        return new Promise(async (resolve) => {
+                            resolve(new Blob([copyText]));
+                        });
+                    }),
+                });
+
+                await navigator.clipboard.write([clipboardItem]).then(
                     function () {
                         flash.clipboard(
                             "Clipboard",
