@@ -54,7 +54,7 @@
                     <Link
                         color="blue"
                         padding="p-2"
-                        class="rounded-full"
+                        rounded="rounded-full"
                         outline
                         :href="user.links.edit"
                     >
@@ -94,11 +94,17 @@ async function addLinkToClipboard(user) {
         .query({ name: "clipboard-write" })
         .then(async (result) => {
             if (result.state === "granted" || result.state === "prompt") {
-                await navigator.clipboard.writeText(link);
-
-                flash.clipboard(
-                    "Clipboard",
-                    "تم نسخ رابط " + user.name + " بنجاح"
+                await navigator.clipboard.writeText(link).then(
+                    function () {
+                        flash.clipboard(
+                            "Clipboard",
+                            "تم نسخ رابط " + user.name + " بنجاح"
+                        );
+                    },
+                    function (err) {
+                        console.error("Async: Could not copy text: ", err);
+                        flash.error("Error", "Copy permission denied");
+                    }
                 );
             } else {
                 flash.error("Error", "Copy permission denied");
