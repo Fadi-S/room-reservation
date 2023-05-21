@@ -99,22 +99,7 @@ async function addLinkToClipboard(user) {
         .query({ name: "clipboard-write" })
         .then(async (result) => {
             if (result.state === "granted" || result.state === "prompt") {
-                const clipboardItem = new ClipboardItem({
-                    "text/plain": getLink(user).then((result) => {
-                        if (!result) {
-                            return new Promise(async (resolve) => {
-                                resolve(new Blob[``]());
-                            });
-                        }
-
-                        const copyText = result;
-                        return new Promise(async (resolve) => {
-                            resolve(new Blob([copyText]));
-                        });
-                    }),
-                });
-
-                await navigator.clipboard.write([clipboardItem]).then(
+                await navigator.clipboard.writeText(await getLink(user)).then(
                     function () {
                         flash.clipboard(
                             "Clipboard",
