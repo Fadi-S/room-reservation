@@ -86,6 +86,11 @@ defineProps({
 
 const search = ref("");
 
+async function getLink(user) {
+    let data = await fetch("/users/" + user.key + "/link");
+    return (await data.json())["link"];
+}
+
 async function addLinkToClipboard(user) {
     // let data = await fetch("/users/" + user.key + "/link");
     // let link = (await data.json())["link"];
@@ -95,10 +100,7 @@ async function addLinkToClipboard(user) {
         .then(async (result) => {
             if (result.state === "granted" || result.state === "prompt") {
                 const clipboardItem = new ClipboardItem({
-                    "text/plain": (async () => {
-                        let data = await fetch("/users/" + user.key + "/link");
-                        return (await data.json())["link"];
-                    }).then((result) => {
+                    "text/plain": getLink(user).then((result) => {
                         if (!result) {
                             return new Promise(async (resolve) => {
                                 resolve(new Blob[``]());
