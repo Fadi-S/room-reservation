@@ -32,6 +32,10 @@ class MakeReservation
             );
         }
 
+        if ($data->get("date")) {
+            $data["date"] = Carbon::parse($data->get("date"));
+        }
+
         if (!$data->get("isRepeating")) {
             $data["date"] = Carbon::parse($data->get("date"))->setTimeFrom(
                 Carbon::parse($data->get("start")),

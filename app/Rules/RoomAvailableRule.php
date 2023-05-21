@@ -20,12 +20,16 @@ class RoomAvailableRule implements ValidationRule
      */
     public function __construct(
         protected $roomId,
-        protected ?Carbon $date,
+        protected Carbon|string|null $date,
         protected $dayOfWeek,
         $start,
         $end,
         protected $ignore = null
     ) {
+        if ($this->date) {
+            $this->date = Carbon::parse($this->date);
+        }
+
         $this->dayOfWeek ??= $this->date?->dayOfWeek;
 
         $this->start = Carbon::parse($start)->format("H:i:s");
