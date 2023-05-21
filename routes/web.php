@@ -8,6 +8,7 @@ use App\Http\Controllers\GenerateLoginLinkController;
 use App\Http\Controllers\PasswordlessSignInController;
 use App\Http\Controllers\PersonalReservationController;
 use App\Http\Controllers\ReservationsTableController;
+use App\Http\Controllers\ReservationsTVController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -29,6 +30,7 @@ Route::middleware("guest")->post("login-by-email", [
 ]);
 
 Route::get("/table", ReservationsTableController::class)->name("table");
+Route::get("/tv", ReservationsTVController::class)->name("tv");
 
 Route::middleware("auth")->group(function () {
     Route::get("/", DashboardController::class)->name("home");
