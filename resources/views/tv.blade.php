@@ -5,17 +5,19 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
     @vite('resources/css/app.css')
-    <title>Table - StgSporting Rooms</title>
+    <title>Table - StGeorge Rooms</title>
 </head>
 <body>
-<body dir="rtl" class="h-full font-vazirmatn">
+<body dir="rtl" class="h-full font-noto">
+<div class="bg-gray-200 text-xl text-center p-1">
+    {{ $date->translatedFormat("l j F Y") }}
+</div>
 <div class="overflow-x-auto bg-white">
-    <div class="bg-gray-200 text-2xl text-center p-3">
-        {{ $date->translatedFormat("l j F Y") }}
-    </div>
-
-    <table id="table" class="mt-4">
+    <table id="table" class="mt-3">
         <colgroup span="2"></colgroup>
         <colgroup span="2"></colgroup>
         <tr>
@@ -24,15 +26,13 @@
                 <th
                     class="border border-gray-500 p-2"
                 >
-                    <div class="flex items-center justify-center space-x-0.5">
+                    <div class="flex items-center justify-center">
                         <div>
                             <time datetime="{{ $date->format("Y-m-d") . ' ' . $time["time"]->format("H:i:s") }}">
                                 {{ $time["time"]->translatedFormat("h:i") }}
                             </time>
                         </div>
-
-                        <span> &nbsp;- </span>
-
+                        <span>-</span>
                         <div>
                             <time datetime="{{ $date->format("Y-m-d") . ' ' . $time["nextTime"]->format("H:i:s") }}">
                                 {{ $time["nextTime"]->translatedFormat("h:i") }}
@@ -49,52 +49,60 @@
                     <th
                         rowspan="{{ $room->location->rooms->count() }}"
                         colspan="{{ $room->location->rooms->count() > 1 ? 1 : 2 }}"
-                        class="border border-gray-500 p-2"
+                        class="border border-gray-500 p-2s sticky"
                     >
                         {{ $room->location->name }}
                     </th>
                 @endif
                 @if($room->location->rooms->count() > 1)
                     <th
-                        class="border border-gray-500 p-2"
+                        class="border border-gray-500 p-2 whitespace-nowrap sticky"
                     >
-                        {{ $room->name }} {{ $room->description }}
+                        <div class="flex flex-col">
+                            <span class="font-semibold font-sans text-gray-800">{{ $room->name }}</span>
+                            <span class="text-gray-600 text-sm">{{ $room->description }}</span>
+                        </div>
                     </th>
                 @endif
 
                 @foreach($reservations[$room->id] as $reservation)
                     <td
-                        class="border border-gray-500 p-2 text-gray-700"
+                        class="border border-gray-500 p-1 text-gray-700"
                         colspan="{{ $reservation['numberOfTimeSlots'] ?? 1 }}"
                         @style([
                             isset($reservation['color']) ? ('background-color: ' . $reservation['color']['bg']) : '',
                         ])
                     >
                         @if($reservation && !$reservation['empty'])
-                            <div class="flex flex-col space-y-2">
-                            <span
-                                @style([
-                                    'color: ' . $reservation['color']['text'],
-                                ])
-                            >
-                                {{ $reservation['displayName'] }}
-                                {{ $reservation['service'] }}
-                            </span>
-
+                            <div class="flex flex-col space-y-1 text-lg text-center">
                                 <span
-                                    class="text-sm font-semibold opacity-60"
+                                    class="font-semibold"
                                     @style([
                                         'color: ' . $reservation['color']['text'],
                                     ])
                                 >
-                                {{ $reservation['room'] }}
-                            </span>
-                                <div class="text-sm font-semibold opacity-80">
+                                    {{ $reservation['displayName'] }}
+                                    {{ $reservation['service'] }}
+                                </span>
+
+                                <span
+                                    class="text-sm opacity-80 font-sans"
+                                    @style([
+                                        'color: ' . $reservation['color']['text'],
+                                    ])
+                                >
+                                    {{ $reservation['room'] }}
+                                </span>
+                                <div class="text-sm font-normal mt-2">
                                     <div
-                                        class="flex flex-col items-start justify-center"
+                                        class="flex flex-col items-center justify-center"
                                     >
                                         <div class="flex items-center">
-                                            <span class="text-gray-800">
+                                            <span
+                                                @style([
+                                                    'color: ' . $reservation['color']['text'],
+                                                ])
+                                            >
                                             <time
                                                 datetime="{{ $date->format("Y-m-d") . "" . $reservation['start']['time'] }}">
                                                 {{ $reservation['start']['formatted'] }}

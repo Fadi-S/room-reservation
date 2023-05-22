@@ -10,6 +10,7 @@ module.exports = {
         extend: {
             fontFamily: {
                 vazirmatn: ["Vazirmatn", "sans-serif"],
+                noto: ["Noto Naskh Arabic", "sans-serif"],
             },
         },
     },
