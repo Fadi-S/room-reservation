@@ -1,5 +1,5 @@
 <template>
-    <div class="max-w-xs mx-auto md:mx-0 mb-4">
+    <div class="max-w-xs mx-auto md:mx-0">
         <DatePicker
             v-bind="$attrs"
             :config="{

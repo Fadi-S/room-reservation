@@ -24,6 +24,7 @@
         "@vuepic/vue-datepicker": "^3.5.2",
         "date-fns": "^2.29.3",
         "laravel-echo": "^1.14.0",
+        "puppeteer": "^20.5.0",
         "pusher-js": "^7.4.0",
         "vue": "^3.2.41",
         "vue-flatpickr-component": "^9.0.8"

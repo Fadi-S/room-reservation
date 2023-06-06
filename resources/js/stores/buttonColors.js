@@ -19,6 +19,8 @@ export const colors = {
         " hover:text-green-100 shadow-sm transition-colors",
     "green-outline":
         "text-green-600 border-green-600 focus:ring-green-600 hover:border-green-800 hover:bg-green-700/20 hover:text-green-800 shadow-sm transition-colors",
+    "green-plain":
+        "text-green-600 border-none focus:ring-green-600 hover:border-green-800 hover:bg-green-700/20 hover:text-green-800 transition-colors",
     "light-green-solid":
         "text-white bg-green-600 hover:bg-green-700 focus:ring-green-600 shadow-sm transition-colors",
     "light-gray-solid":

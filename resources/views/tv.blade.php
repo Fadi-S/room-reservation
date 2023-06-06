@@ -26,14 +26,13 @@
                 <th
                     class="border border-gray-500 p-2"
                 >
-                    <div class="flex items-center justify-center">
+                    <div class="flex flex-col items-center justify-center">
                         <div>
                             <time datetime="{{ $date->format("Y-m-d") . ' ' . $time["time"]->format("H:i:s") }}">
                                 {{ $time["time"]->translatedFormat("h:i") }}
                             </time>
                         </div>
-                        <span>-</span>
-                        <div>
+                        <div class="font-normal">
                             <time datetime="{{ $date->format("Y-m-d") . ' ' . $time["nextTime"]->format("H:i:s") }}">
                                 {{ $time["nextTime"]->translatedFormat("h:i") }}
                             </time>
@@ -44,6 +43,10 @@
         </tr>
 
         @foreach($rooms as $room)
+            @if($location_id !== $room->location_id && $location_id !== null)
+                @continue
+            @endif
+
             <tr class="border border-gray-500 p-2">
                 @if($room->location->rooms[0]?->id === $room->id)
                     <th
@@ -91,7 +94,7 @@
                                         'color: ' . $reservation['color']['text'],
                                     ])
                                 >
-                                    {{ $reservation['room'] }}
+                                    {{ $room->location->rooms->count() > 1 ? $reservation['room'] : $room->location->name }}
                                 </span>
                                 <div class="text-sm font-normal mt-2">
                                     <div

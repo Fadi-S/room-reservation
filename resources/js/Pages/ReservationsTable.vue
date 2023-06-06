@@ -1,10 +1,29 @@
 <template>
     <Head title="جدول حجز الغرف" />
 
-    <Tabs v-model="day" :tabs="nextWeekDays" />
+    <div
+        class="flex flex-col-reverse md:flex-row items-center justify-start space-x-reverse space-y-reverse space-y-6 sm:space-y-0 sm:space-x-2"
+    >
+        <Tabs v-model="day" />
 
-    <div class="overflow-x-auto bg-white mt-3">
-        <table id="table" class="scale-[0.4] sm:scale-[0.8] origin-top-right">
+        <div class="w-full md:w-auto pr-2 pl-2">
+            <Link
+                normal
+                color="green"
+                class="w-full"
+                outline
+                :href="`/table/print?date=${day}`"
+            >
+                <span>طباعة</span>
+            </Link>
+        </div>
+    </div>
+
+    <div class="overflow-x-auto mt-3">
+        <table
+            id="table"
+            class="bg-white scale-[0.4] lg:scale-[0.9] sm:scale-100 print:block origin-top-right"
+        >
             <colgroup span="2"></colgroup>
             <colgroup span="2"></colgroup>
             <tr>
@@ -13,15 +32,14 @@
                     class="border border-gray-500 p-2"
                     v-for="(time, index) in timeSteps.slice(0, -1)"
                 >
-                    <div class="flex items-center justify-center space-x-0.5">
-                        <div>
+                    <div
+                        class="flex flex-col font-normal items-center justify-center"
+                    >
+                        <div class="font-semibold">
                             <time :datetime="day + ' ' + time.id">
                                 {{ time.name }}
                             </time>
                         </div>
-
-                        <span> &nbsp;- </span>
-
                         <div>
                             <time
                                 :datetime="day + ' ' + timeSteps[index + 1].id"
@@ -40,17 +58,38 @@
                     :colspan="room.location.rooms.length > 1 ? 1 : 2"
                     class="border border-gray-500 p-2"
                 >
-                    {{ room.location.name }}
+                    <div class="flex flex-col space-y-1 items-center">
+                        <span v-text="room.location.name" />
+                        <Link
+                            padding="p-2"
+                            rounded="rounded"
+                            normal
+                            color="green"
+                            plain
+                            :href="`/table/print/${room.location.id}?date=${day}`"
+                        >
+                            <PrinterIcon class="w-6 h-6" />
+                        </Link>
+                    </div>
                 </th>
                 <th
                     v-if="room.location.rooms.length > 1"
-                    class="border border-gray-500 p-2"
+                    class="border border-gray-500 p-2 whitespace-nowrap sticky"
                 >
-                    {{ room.name }} {{ room.description }}
+                    <div class="flex flex-col">
+                        <span
+                            class="font-semibold font-sans text-gray-800"
+                            v-text="room.name"
+                        />
+                        <span
+                            class="text-gray-600 text-sm"
+                            v-text="room.description"
+                        />
+                    </div>
                 </th>
 
                 <td
-                    class="border border-gray-500 p-2 text-gray-700"
+                    class="relative border border-gray-500 p-2 text-gray-700"
                     v-for="reservation in reservationsInTime[room.id]"
                     :colspan="reservation.numberOfTimeSlots ?? 1"
                     :style="{
@@ -58,7 +97,9 @@
                     }"
                 >
                     <template v-if="reservation && !reservation.empty">
-                        <div class="flex flex-col space-y-2">
+                        <div
+                            class="flex flex-col space-y-1 text-lg text-center"
+                        >
                             <span
                                 :style="{
                                     color: reservation.color.text,
@@ -69,38 +110,26 @@
                             </span>
 
                             <span
-                                class="text-sm font-semibold opacity-60"
+                                class="text-sm opacity-80 font-sans"
                                 :style="{
                                     color: reservation.color.text,
                                 }"
                             >
-                                {{ reservation.room }}
+                                {{
+                                    room.location.rooms.length > 1
+                                        ? reservation.room
+                                        : room.location.name
+                                }}
                             </span>
-                            <div class="text-sm font-semibold opacity-80">
+                            <div class="text-sm font-normal mt-2">
                                 <div
-                                    class="flex flex-col items-start justify-center"
+                                    class="flex flex-col items-center justify-center"
                                 >
+                                    <StatusPill
+                                        light
+                                        :reservation="reservation"
+                                    />
                                     <div class="flex items-center">
-                                        <div
-                                            v-if="reservation.isRepeating"
-                                            class="rounded-full"
-                                            :style="{
-                                                color: reservation.color.text,
-                                            }"
-                                        >
-                                            <ArrowPathIcon class="w-6 h-6" />
-                                        </div>
-
-                                        <div
-                                            v-else
-                                            class="rounded-full"
-                                            :style="{
-                                                color: reservation.color.text,
-                                            }"
-                                        >
-                                            <ClockIcon class="w-6 h-6" />
-                                        </div>
-
                                         <span class="text-gray-800">
                                             <time
                                                 :datetime="
@@ -127,7 +156,7 @@
                                     </div>
 
                                     <InertiaLink
-                                        class="mt-2 text-gray-800/60 bg-gray-100/50 p-1 border-gray-800 rounded-full"
+                                        class="print:hidden absolute text-gray-800/80 bg-gray-100/50 p-2 border-gray-800 rounded-full bottom-0 right-0 m-2"
                                         v-if="user?.isAdmin"
                                         :href="reservation.edit"
                                     >
@@ -147,13 +176,13 @@
 import { computed, onMounted, ref, watch } from "vue";
 import useQueryStringToJSON from "@/Composables/useQueryStringToJSON.js";
 import Tabs from "@/Shared/Tabs.vue";
-import {
-    ArrowPathIcon,
-    ClockIcon,
-    PencilSquareIcon,
-} from "@heroicons/vue/20/solid";
+import { PencilSquareIcon } from "@heroicons/vue/20/solid";
+import { PrinterIcon } from "@heroicons/vue/24/outline";
 import useUser from "@/Composables/useUser.js";
 import { router } from "@inertiajs/vue3";
+import StatusPill from "@/Shared/StatusPill.vue";
+import Button from "@/Shared/Form/Button.vue";
+import Link from "@/Shared/Link.vue";
 
 const props = defineProps({
     reservations: Object,
@@ -275,17 +304,10 @@ const pinchZoom = (element) => {
             // element.style.zIndex = "9999";
         }
     });
-
-    // element.addEventListener("touchend", (event) => {
-    //     // console.log('touchend', event);
-    //     // Reset image to its original format
-    //     element.style.transform = "";
-    //     element.style.WebkitTransform = "";
-    //     element.style.zIndex = "";
-    // });
 };
 
 onMounted(() => {
-    pinchZoom(document.getElementById("table"));
+    const table = document.getElementById("table");
+    pinchZoom(table);
 });
 </script>

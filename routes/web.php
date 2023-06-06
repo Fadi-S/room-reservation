@@ -7,6 +7,7 @@ use App\Http\Controllers\EditReservationController;
 use App\Http\Controllers\GenerateLoginLinkController;
 use App\Http\Controllers\PasswordlessSignInController;
 use App\Http\Controllers\PersonalReservationController;
+use App\Http\Controllers\PrintReservationsController;
 use App\Http\Controllers\ReservationsTableController;
 use App\Http\Controllers\ReservationsTVController;
 use App\Http\Controllers\UserController;
@@ -30,6 +31,16 @@ Route::middleware("guest")->post("login-by-email", [
 ]);
 
 Route::get("/table", ReservationsTableController::class)->name("table");
+
+Route::get("/table/print/{location}", [
+    PrintReservationsController::class,
+    "show",
+])->name("table.print.location");
+
+Route::get("/table/print", [PrintReservationsController::class, "index"])->name(
+    "table.print",
+);
+
 Route::get("/tv", ReservationsTVController::class)->name("tv");
 
 Route::middleware("auth")->group(function () {

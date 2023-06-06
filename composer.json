@@ -18,8 +18,10 @@
         "laravel/sanctum": "^3.2",
         "laravel/telescope": "^4.9",
         "laravel/tinker": "^2.7",
+        "maatwebsite/excel": "^3.1",
         "predis/predis": "^2.0",
-        "pusher/pusher-php-server": "^7.2"
+        "pusher/pusher-php-server": "^7.2",
+        "spatie/browsershot": "^3.57"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.7",
