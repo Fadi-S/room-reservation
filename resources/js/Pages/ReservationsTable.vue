@@ -1,12 +1,14 @@
 <template>
     <Head title="جدول حجز الغرف" />
 
-    <Tabs class="mx-2" v-model="day" />
+    <div class="p-2">
+        <Tabs v-model="day" />
+    </div>
 
-    <div class="overflow-x-auto mt-3">
+    <div class="overflow-x-auto mt-1">
         <table
             id="table"
-            class="bg-white scale-[0.5] lg:scale-[0.9] sm:scale-100 print:block origin-top-right"
+            class="bg-white scale-[0.5] lg:scale-100 sm:scale-100 print:block origin-top-right"
         >
             <colgroup span="2"></colgroup>
             <colgroup span="2"></colgroup>
@@ -84,7 +86,7 @@
                 </th>
 
                 <td
-                    class="relative border border-gray-500 p-2 text-gray-700"
+                    class="relative border border-gray-500 text-gray-700"
                     v-for="reservation in reservationsInTime[room.id]"
                     :colspan="reservation.numberOfTimeSlots ?? 1"
                     :style="{
@@ -93,12 +95,13 @@
                 >
                     <template v-if="reservation && !reservation.empty">
                         <div
-                            class="flex flex-col space-y-1 text-lg text-center"
+                            class="flex flex-col space-y-1 text-lg py-0.5 text-center"
                         >
                             <span
                                 :style="{
                                     color: reservation.color.text,
                                 }"
+                                class="whitespace-nowrap mx-2"
                             >
                                 {{ reservation.displayName }}
                                 {{ reservation.service }}
@@ -122,6 +125,7 @@
                                 >
                                     <StatusPill
                                         light
+                                        small
                                         :reservation="reservation"
                                     />
                                     <div class="flex items-center">
@@ -151,7 +155,7 @@
                                     </div>
 
                                     <InertiaLink
-                                        class="print:hidden absolute text-gray-800/80 bg-gray-100/50 p-2 border-gray-800 rounded-full bottom-0 right-0 m-2"
+                                        class="print:hidden absolute bg-white/50 text-gray-500 p-0.5 border-gray-800 rounded-tl-sm bottom-0 right-0"
                                         v-if="user?.isAdmin"
                                         :href="reservation.edit"
                                     >
@@ -171,12 +175,10 @@
 import { computed, onMounted, ref, watch } from "vue";
 import useQueryStringToJSON from "@/Composables/useQueryStringToJSON.js";
 import Tabs from "@/Shared/Tabs.vue";
-import { PencilSquareIcon } from "@heroicons/vue/20/solid";
-import { PrinterIcon } from "@heroicons/vue/24/outline";
+import { PrinterIcon, PencilSquareIcon } from "@heroicons/vue/24/solid";
 import useUser from "@/Composables/useUser.js";
 import { router } from "@inertiajs/vue3";
 import StatusPill from "@/Shared/StatusPill.vue";
-import Button from "@/Shared/Form/Button.vue";
 import Link from "@/Shared/Link.vue";
 
 const props = defineProps({

@@ -1,5 +1,5 @@
 <template>
-    <div class="flex items-center space-x-2 space-x-reverse">
+    <div class="flex items-center whitespace-nowrap space-x-2 space-x-reverse">
         <div
             v-if="reservation.isRepeating"
             class="rounded-lg py-1 px-3 flex space-x-reverse space-x-1"
@@ -8,8 +8,18 @@
                 'text-gray-800': light,
             }"
         >
-            <ArrowPathIcon class="w-6 h-6" />
-            <span class="font-semibold">كل اسبوع</span>
+            <ArrowPathIcon
+                :class="{
+                    'w-6 h-6': !small,
+                    'w-5 h-5': small,
+                }"
+            />
+            <span
+                :class="{
+                    'font-semibold': !small,
+                }"
+                >كل اسبوع</span
+            >
         </div>
 
         <div
@@ -20,8 +30,18 @@
                 'text-gray-800': light,
             }"
         >
-            <ClockIcon class="w-6 h-6" />
-            <span class="font-semibold">مرة واحدة</span>
+            <ClockIcon
+                :class="{
+                    'w-6 h-6': !small,
+                    'w-5 h-5': small,
+                }"
+            />
+            <span
+                :class="{
+                    'font-semibold': !small,
+                }"
+                >مرة واحدة</span
+            >
         </div>
 
         <div
@@ -34,10 +54,14 @@
 </template>
 
 <script setup>
-import { ArrowPathIcon, ClockIcon } from "@heroicons/vue/24/outline/index.js";
+import { ArrowPathIcon, ClockIcon } from "@heroicons/vue/24/solid";
 
 defineProps({
     light: {
+        type: Boolean,
+        default: false,
+    },
+    small: {
         type: Boolean,
         default: false,
     },
