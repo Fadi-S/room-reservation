@@ -1,33 +1,28 @@
 <template>
     <Head title="جدول حجز الغرف" />
 
-    <div
-        class="flex flex-col-reverse md:flex-row items-center justify-start space-x-reverse space-y-reverse space-y-6 sm:space-y-0 sm:space-x-2"
-    >
-        <Tabs v-model="day" />
-
-        <div class="w-full md:w-auto pr-2 pl-2">
-            <Link
-                normal
-                color="green"
-                class="w-full"
-                outline
-                :href="`/table/print?date=${day}`"
-            >
-                <span>طباعة</span>
-            </Link>
-        </div>
-    </div>
+    <Tabs class="mx-2" v-model="day" />
 
     <div class="overflow-x-auto mt-3">
         <table
             id="table"
-            class="bg-white scale-[0.4] lg:scale-[0.9] sm:scale-100 print:block origin-top-right"
+            class="bg-white scale-[0.5] lg:scale-[0.9] sm:scale-100 print:block origin-top-right"
         >
             <colgroup span="2"></colgroup>
             <colgroup span="2"></colgroup>
             <tr>
-                <td class="border border-gray-500 p-2" colspan="2"></td>
+                <td class="border border-gray-500 p-2" colspan="2">
+                    <Link
+                        normal
+                        color="green"
+                        class="w-full space-x-2 space-x-reverse"
+                        plain
+                        :href="`/table/print?date=${day}`"
+                    >
+                        <PrinterIcon class="w-6 h-6" />
+                        <span>طباعة</span>
+                    </Link>
+                </td>
                 <th
                     class="border border-gray-500 p-2"
                     v-for="(time, index) in timeSteps.slice(0, -1)"

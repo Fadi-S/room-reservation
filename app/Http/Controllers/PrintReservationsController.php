@@ -10,8 +10,13 @@ use Spatie\Image\Manipulations;
 
 class PrintReservationsController extends Controller
 {
-    private function download($html, $width, $height, $scale)
-    {
+    private function download(
+        $html,
+        $width,
+        $height,
+        $scale,
+        $filename = "table.pdf"
+    ) {
         return response()->streamDownload(
             function () use ($html, $width, $height, $scale) {
                 echo Browsershot::html($html)
@@ -24,7 +29,7 @@ class PrintReservationsController extends Controller
             },
             headers: [
                 "Content-Type" => "application/pdf",
-                "Content-Disposition" => "attachment; filename=table.pdf",
+                "Content-Disposition" => "attachment; filename=$filename",
             ],
         );
     }
@@ -39,15 +44,31 @@ class PrintReservationsController extends Controller
             ->view()
             ->toHtml();
 
-        return $this->download($html, 2200, 1080, 0.45);
+        return $this->download(
+            $html,
+            2200,
+            1080,
+            0.45,
+            "table " . $date->format("Y-m-d") . ".pdf",
+        );
     }
 
     public function show(Request $request, Location $location)
     {
-        $html = RenderTable::for($request->date("date"), $location->id)
+        $date = $request->date("date");
+        $date ??= now();
+        $date->setHour(9);
+
+        $html = RenderTable::for($date, $location->id)
             ->view()
             ->toHtml();
 
-        return $this->download($html, 1920, 1080, 0.5);
+        return $this->download(
+            $html,
+            1920,
+            1080,
+            0.5,
+            "table $location->name " . $date->format("Y-m-d") . ".pdf",
+        );
     }
 }
