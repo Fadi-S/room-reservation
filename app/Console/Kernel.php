@@ -17,6 +17,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command("telescope:prune --hours=168")->daily();
         $schedule->command("cache:prune-stale-tags")->hourly();
+        $schedule->command("reservations:approve")->everyFiveMinutes();
     }
 
     /**

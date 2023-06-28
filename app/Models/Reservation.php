@@ -103,7 +103,7 @@ class Reservation extends Model
         }
 
         $this->approved_at = now();
-        $this->approved_by_id = Auth::id();
+        $this->approved_by_id = Auth::check() ? Auth::id() : 1;
 
         $saved = $this->save();
 
