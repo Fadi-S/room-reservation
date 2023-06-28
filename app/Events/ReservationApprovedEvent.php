@@ -32,7 +32,8 @@ class ReservationApprovedEvent implements ShouldBroadcast
 
     public function broadcastAs()
     {
-        return "reservations.approved";
+        return "reservations.approved." .
+            $this->reservationModel->nextOccurrence->format("Y-m-d");
     }
 
     /**

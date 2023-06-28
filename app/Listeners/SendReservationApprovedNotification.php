@@ -7,6 +7,7 @@ use App\Mail\SendReservationApprovedMail;
 use App\Mail\SendReservationMadeMail;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 
 class SendReservationApprovedNotification
@@ -29,6 +30,10 @@ class SendReservationApprovedNotification
      */
     public function handle(ReservationApprovedEvent $event)
     {
+        if ($event->reservationModel->user_id === Auth::id()) {
+            return;
+        }
+
         Mail::to($event->reservationModel->reservedBy->email)->send(
             new SendReservationApprovedMail($event->reservationModel),
         );

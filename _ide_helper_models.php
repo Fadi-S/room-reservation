@@ -16,9 +16,9 @@ namespace App\Models{
  *
  * @property int $id
  * @property string $name
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Reservation[] $reservations
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Reservation> $reservations
  * @property-read int|null $reservations_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Room[] $rooms
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Room> $rooms
  * @property-read int|null $rooms_count
  * @method static \Illuminate\Database\Eloquent\Builder|Location newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Location newQuery()
@@ -39,8 +39,8 @@ namespace App\Models{
  * @property int $user_id
  * @property string|null $description
  * @property int|null $approved_by_id
- * @property \Illuminate\Support\Carbon $start
- * @property \Illuminate\Support\Carbon $end
+ * @property string $start
+ * @property string $end
  * @property \Illuminate\Support\Carbon|null $date
  * @property int $day_of_week
  * @property bool $is_repeating
@@ -54,6 +54,7 @@ namespace App\Models{
  * @property-read \App\Models\Service $service
  * @method static \App\Queries\ReservationQuery|Reservation approved(bool $approved = true)
  * @method static \App\Queries\ReservationQuery|Reservation date(\Carbon\Carbon $date)
+ * @method static \Database\Factories\ReservationFactory factory($count = null, $state = [])
  * @method static \App\Queries\ReservationQuery|Reservation forDay($day)
  * @method static \App\Queries\ReservationQuery|Reservation forRoom($room)
  * @method static \App\Queries\ReservationQuery|Reservation newModelQuery()
@@ -92,7 +93,7 @@ namespace App\Models{
  * @property string|null $description
  * @property int $location_id
  * @property-read \App\Models\Location $location
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Reservation[] $reservations
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Reservation> $reservations
  * @property-read int|null $reservations_count
  * @method static \Illuminate\Database\Eloquent\Builder|Room newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Room newQuery()
@@ -144,14 +145,16 @@ namespace App\Models{
  * @property string|null $remember_token
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \Illuminate\Notifications\DatabaseNotificationCollection|\Illuminate\Notifications\DatabaseNotification[] $notifications
+ * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Service[] $services
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Reservation> $reservations
+ * @property-read int|null $reservations_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Service> $services
  * @property-read int|null $services_count
- * @property-read \Illuminate\Database\Eloquent\Collection|\Laravel\Sanctum\PersonalAccessToken[] $tokens
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \Laravel\Sanctum\PersonalAccessToken> $tokens
  * @property-read int|null $tokens_count
  * @method static \App\Queries\UserQuery|User active($isActive = true)
- * @method static \Database\Factories\UserFactory factory(...$parameters)
+ * @method static \Database\Factories\UserFactory factory($count = null, $state = [])
  * @method static \App\Queries\UserQuery|User newModelQuery()
  * @method static \App\Queries\UserQuery|User newQuery()
  * @method static \App\Queries\UserQuery|User query()

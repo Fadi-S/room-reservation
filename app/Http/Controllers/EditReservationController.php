@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Actions\MakeReservation;
+use App\Events\ReservationApprovedEvent;
 use App\Http\Resources\LocationResource;
 use App\Models\Location;
 use App\Models\Reservation;

@@ -126,7 +126,14 @@
 </template>
 
 <script setup>
-import { computed, ref, watch } from "vue";
+import {
+    computed,
+    onBeforeUpdate,
+    onMounted,
+    onUpdated,
+    ref,
+    watch,
+} from "vue";
 import {
     PlusIcon,
     CalendarDaysIcon,
@@ -136,6 +143,7 @@ import Tabs from "@/Shared/Tabs.vue";
 import useQueryStringToJSON from "@/Composables/useQueryStringToJSON.js";
 import useUser from "@/Composables/useUser.js";
 import { router } from "@inertiajs/vue3";
+import { list } from "postcss";
 
 const props = defineProps({
     reservations: Object,
@@ -153,6 +161,16 @@ function setupStateFromURL() {
 }
 
 setupStateFromURL();
+
+const listener = () => {
+    Echo.private("reservations-changed").listen(
+        ".reservations.approved." + day.value,
+        (_) => router.reload()
+    );
+};
+
+onBeforeUpdate(listener);
+onMounted(listener);
 
 watch(day, () => {
     const params = new URLSearchParams(window.location.search);
