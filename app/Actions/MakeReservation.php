@@ -99,7 +99,10 @@ class MakeReservation
                 "nullable",
                 "required_if:isRepeating,false",
                 "date",
-                "after_or_equal:" . now()->format("Y-m-d h:i a"),
+                "after_or_equal:" .
+                now()
+                    ->startOfDay()
+                    ->format("Y-m-d h:i a"),
             ],
             "dayOfWeek" => ["required", "between:0,6"],
             "isRepeating" => ["in:0,1,false,true,,summer"],
