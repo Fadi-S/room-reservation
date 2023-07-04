@@ -4,6 +4,7 @@ namespace App\Events;
 
 use App\Http\Resources\ReservationForTableResource;
 use App\Models\Reservation;
+use Carbon\Carbon;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -16,24 +17,18 @@ class ReservationUpdatedEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $reservation;
-
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(public Reservation $reservationModel)
+    public function __construct(protected Reservation $reservationModel)
     {
-        $this->reservation = ReservationForTableResource::make(
-            $this->reservationModel,
-        )->resolve();
     }
 
     public function broadcastAs()
     {
-        return "reservations.changed." .
-            $this->reservationModel->nextOccurrence->format("Y-m-d");
+        return "reservations.changed." . $this->reservationModel->day_of_week;
     }
 
     /**

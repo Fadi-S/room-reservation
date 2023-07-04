@@ -27,7 +27,6 @@ class EventServiceProvider extends ServiceProvider
         ],
 
         ReservationApprovedEvent::class => [
-            ReservationUpdatedEvent::class,
             SendReservationApprovedNotification::class,
         ],
     ];

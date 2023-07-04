@@ -89,8 +89,9 @@ class ReservationQuery extends Builder
 
     public function date(Carbon $date): static
     {
-        return $this->validBetween($date, $date->copy()->addDay())->forDay(
-            $date->dayOfWeek,
-        );
+        return $this->validBetween(
+            $date->copy()->startOfDay(),
+            $date->copy()->endOfDay(),
+        )->forDay($date->dayOfWeek);
     }
 }

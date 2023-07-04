@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Actions\MakeReservation;
 use App\Events\ReservationApprovedEvent;
+use App\Events\ReservationUpdatedEvent;
 use App\Http\Resources\LocationResource;
 use App\Models\Location;
 use App\Models\Reservation;
@@ -69,10 +70,12 @@ class EditReservationController extends Controller
     {
         $this->authorize("delete", $reservation);
 
-        $reservation->update(["stopped_at" => now()->subMinute()]);
+        $reservation->update(["stopped_at" => now()->subDay()]);
+
+        ReservationUpdatedEvent::dispatch($reservation);
 
         $this->flash(__("ui.reservation_stopped"));
 
-        return back();
+        return redirect()->route("home");
     }
 }

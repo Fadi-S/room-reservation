@@ -2,21 +2,15 @@
 
 namespace App\Events;
 
-use App\Http\Resources\ReservationForTableResource;
 use App\Models\Reservation;
-use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Broadcasting\PresenceChannel;
 use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
 class ReservationApprovedEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
-
-    public $reservation;
 
     /**
      * Create a new event instance.
@@ -25,9 +19,7 @@ class ReservationApprovedEvent
      */
     public function __construct(public Reservation $reservationModel)
     {
-        $this->reservation = ReservationForTableResource::make(
-            $this->reservationModel,
-        )->resolve();
+        ReservationUpdatedEvent::dispatch($this->reservationModel);
     }
 
     /**

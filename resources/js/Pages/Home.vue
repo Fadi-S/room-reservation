@@ -164,7 +164,7 @@ setupStateFromURL();
 
 const listener = () => {
     Echo.private("reservations-changed").listen(
-        ".reservations.changed." + day.value,
+        ".reservations.changed." + new Date(day.value).getDay(),
         (_) => router.reload()
     );
 };

@@ -30,6 +30,10 @@ class SendReservationCreatedNotification
      */
     public function handle(MakeReservationEvent $event)
     {
+        if (!$event->reservationModel->is_repeating) {
+            return;
+        }
+
         $emails = User::whereIsAdmin(true)->pluck("email");
 
         foreach ($emails as $email) {
