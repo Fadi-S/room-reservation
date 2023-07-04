@@ -12,7 +12,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class ReservationApprovedEvent
+class ReservationUpdatedEvent implements ShouldBroadcast
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
@@ -28,6 +28,12 @@ class ReservationApprovedEvent
         $this->reservation = ReservationForTableResource::make(
             $this->reservationModel,
         )->resolve();
+    }
+
+    public function broadcastAs()
+    {
+        return "reservations.changed." .
+            $this->reservationModel->nextOccurrence->format("Y-m-d");
     }
 
     /**

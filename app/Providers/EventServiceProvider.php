@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Events\MakeReservationEvent;
 use App\Events\ReservationApprovedEvent;
+use App\Events\ReservationUpdatedEvent;
 use App\Listeners\SendReservationApprovedNotification;
 use App\Listeners\SendReservationCreatedNotification;
 use Illuminate\Auth\Events\Registered;
@@ -26,6 +27,7 @@ class EventServiceProvider extends ServiceProvider
         ],
 
         ReservationApprovedEvent::class => [
+            ReservationUpdatedEvent::class,
             SendReservationApprovedNotification::class,
         ],
     ];

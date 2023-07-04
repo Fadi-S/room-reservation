@@ -64,9 +64,9 @@ class HandleInertiaRequests extends Middleware
             ],
             "data" => $data,
             "flash" => [
-                "message" => session("message") ?? session("success"),
-                "type" => session("type", "success"),
-                "important" => session("important", false),
+                "message" => fn() => session("message") ?? session("success"),
+                "type" => fn() => session("type", "success"),
+                "important" => fn() => session("important", false),
             ],
         ]);
     }

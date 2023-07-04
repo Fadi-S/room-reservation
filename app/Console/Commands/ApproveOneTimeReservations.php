@@ -34,6 +34,13 @@ class ApproveOneTimeReservations extends Command
         $count = $reservations->count();
 
         $this->info("Approved {$count} " . str("reservation")->plural($count));
-        $reservations->each->approve();
+        $reservations->each(function ($reservation) {
+            if ($reservation->room_id == 17) {
+                // El kenissa
+                return;
+            }
+
+            $reservation->approve();
+        });
     }
 }

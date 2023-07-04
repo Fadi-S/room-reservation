@@ -2,6 +2,7 @@
 
 namespace App\Actions;
 
+use App\Events\ReservationUpdatedEvent;
 use App\Models\Reservation;
 use App\Rules\RoomAvailableRule;
 use Carbon\Carbon;
@@ -66,6 +67,8 @@ class MakeReservation
         $this->validate($data->all(), $reservation->id);
 
         $reservation->update($this->getReservationArray($data));
+
+        ReservationUpdatedEvent::dispatch($reservation);
 
         return $reservation;
     }
