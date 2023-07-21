@@ -47,6 +47,11 @@ class User extends Authenticatable
         return $this->belongsToMany(Service::class);
     }
 
+    public function pauses(): HasMany
+    {
+        return $this->hasMany(Pause::class, "paused_by_id");
+    }
+
     public function allowedServices(): Builder
     {
         if ($this->isAdmin()) {
@@ -58,11 +63,11 @@ class User extends Authenticatable
 
     public function hasAccessTo(Reservation $reservation): bool
     {
+        $this->load("services");
+
         return $reservation->user_id == $this->id ||
             $this->isAdmin() ||
-            $this->services()
-                ->where("services.id", $reservation->service_id)
-                ->exists();
+            $this->services->where("id", $reservation->service_id)->count() > 0;
     }
 
     public static function byKey($key): ?self

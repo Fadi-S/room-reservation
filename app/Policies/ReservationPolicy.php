@@ -70,6 +70,15 @@ class ReservationPolicy
             : Response::deny("You are not allowed to edit reservations.");
     }
 
+    public function pause(User $user, Reservation $reservation): Response
+    {
+        if ($user->hasAccessTo($reservation)) {
+            return Response::allow();
+        }
+
+        return Response::deny("You are not allowed to pause this reservation.");
+    }
+
     /**
      * Determine whether the user can permanently delete the model.
      */

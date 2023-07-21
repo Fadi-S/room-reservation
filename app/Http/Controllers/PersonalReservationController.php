@@ -17,7 +17,7 @@ class PersonalReservationController extends Controller
 
         $reservations = Reservation::query()
             ->whereIn("service_id", $user->services()->pluck("services.id"))
-            ->with("room.location", "service", "reservedBy")
+            ->with("room.location", "service", "reservedBy", "pauses.pausedBy")
             ->notStopped(now())
             ->orderBy("day_of_week")
             ->orderBy("start")

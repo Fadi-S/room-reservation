@@ -61,6 +61,99 @@
                                 <PencilSquareIcon class="w-6 h-6" />
                             </Link>
 
+                            <div v-if="reservation.isApproved">
+                                <Button
+                                    color="blue"
+                                    outline
+                                    padding="p-3"
+                                    rounded="rounded-full"
+                                    @click="pauseModals[reservation.id] = true"
+                                >
+                                    <PauseIcon class="w-6 h-6" />
+                                </Button>
+
+                                <Modal
+                                    :key="'pause-modal-' + reservation.id"
+                                    :fixed="false"
+                                    v-model="pauseModals[reservation.id]"
+                                >
+                                    <div class="sm:flex sm:items-start">
+                                        <div
+                                            class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-blue-100 sm:mx-0 sm:h-10 sm:w-10"
+                                        >
+                                            <PauseIcon
+                                                class="h-6 w-6 text-blue-600"
+                                                aria-hidden="true"
+                                            />
+                                        </div>
+                                        <div
+                                            class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left"
+                                        >
+                                            <DialogTitle
+                                                as="h3"
+                                                class="text-lg rtl:md:text-right mr-2 leading-6 font-medium text-gray-900"
+                                            >
+                                                <span
+                                                    >ايقاف
+                                                    {{ reservation.name }}
+                                                    مؤقتا</span
+                                                >
+                                            </DialogTitle>
+                                        </div>
+                                    </div>
+                                    <form
+                                        class="mt-4"
+                                        method="POST"
+                                        @submit.prevent="
+                                            pause(
+                                                reservation.links.pause,
+                                                reservation.id
+                                            )
+                                        "
+                                        :id="'pause-form-' + reservation.id"
+                                    >
+                                        <DatePicker
+                                            v-model="form.date"
+                                            required
+                                            label="التاريخ"
+                                            :time="false"
+                                            :errors="form.errors.date"
+                                        />
+                                    </form>
+
+                                    <template #footer>
+                                        <div
+                                            class="flex items-center justify-between w-full rtl:space-x-reverse space-x-4"
+                                        >
+                                            <Button
+                                                :form="form"
+                                                :for-form="
+                                                    'pause-form-' +
+                                                    reservation.id
+                                                "
+                                                color="green"
+                                                class="w-full"
+                                            >
+                                                ايقاف مؤقت
+                                            </Button>
+
+                                            <Button
+                                                type="button"
+                                                @click="
+                                                    pauseModals[
+                                                        reservation.id
+                                                    ] = false
+                                                "
+                                                color="light-gray"
+                                                width="w-full"
+                                            >
+                                                اغلاق
+                                            </Button>
+                                        </div>
+                                    </template>
+                                </Modal>
+                            </div>
+
                             <div>
                                 <Button
                                     color="red"
@@ -170,24 +263,38 @@
 
 <script setup>
 import Link from "@/Shared/Link.vue";
-import { ArrowPathIcon, ClockIcon } from "@heroicons/vue/24/outline";
 import ReservationCard from "@/Shared/ReservationCard.vue";
-import { CheckIcon } from "@heroicons/vue/24/solid/index.js";
 import Button from "@/Shared/Form/Button.vue";
 import Modal from "@/Shared/Modal.vue";
 import {
     PencilSquareIcon,
     TrashIcon,
     XMarkIcon,
-} from "@heroicons/vue/24/outline/index.js";
+    PauseIcon,
+} from "@heroicons/vue/24/outline";
 import { DialogTitle } from "@headlessui/vue";
 import { ref } from "vue";
 import useUser from "@/Composables/useUser.js";
+import DatePicker from "@/Shared/Form/DatePicker.vue";
+import { useForm } from "@inertiajs/vue3";
 
 const props = defineProps({
     pendingReservations: Array,
     approvedReservations: Array,
 });
+
+let form = useForm({
+    date: null,
+});
+
+function pause(url, id) {
+    form.post(url, {
+        preserveScroll: true,
+        onSuccess: () => {
+            pauseModals.value[id] = false;
+        },
+    });
+}
 
 const user = useUser();
 
@@ -196,11 +303,14 @@ let finalReservations = [
     [1, props.approvedReservations],
 ];
 
+const pauseModals = ref({});
 const deleteModals = ref({});
 for (let reservation of props.pendingReservations) {
     deleteModals.value[reservation.id] = false;
+    pauseModals.value[reservation.id] = false;
 }
 for (let reservation of props.approvedReservations) {
     deleteModals.value[reservation.id] = false;
+    pauseModals.value[reservation.id] = false;
 }
 </script>

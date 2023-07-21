@@ -8,7 +8,7 @@ return [
     "reservation_deleted" => "Reservation deleted",
     "reservation_edited" => "Reservation edited",
     "reservation_stopped" => "Reservation stopped",
-
+    "reservation_paused" => "Reservation pause for :date",
     "user_created" => "User created successfully",
     "user_edited" => "User edited successfully",
 ];

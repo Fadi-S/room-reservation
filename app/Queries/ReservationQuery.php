@@ -16,13 +16,18 @@ class ReservationQuery extends Builder
     {
         $date ??= now();
 
-        return $this->where(function (self $q) use ($date) {
-            $q->where(
-                "stopped_at",
-                ">=",
-                $date->format("Y-m-d H:i:s"),
-            )->orWhereNull("stopped_at");
-        });
+        return $this->where(
+            fn(self $q) => $q
+                ->where("stopped_at", ">=", $date->format("Y-m-d H:i:s"))
+                ->orWhereNull("stopped_at")
+                ->whereNotIn(
+                    "reservations.id",
+                    fn($query) => $query
+                        ->select("reservation_id")
+                        ->from("pauses")
+                        ->where("date", "=", $date->format("Y-m-d")),
+                ),
+        );
     }
 
     public function forRoom($room): static

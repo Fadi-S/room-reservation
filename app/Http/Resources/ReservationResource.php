@@ -27,6 +27,10 @@ class ReservationResource extends JsonResource
             ),
             "dayName" => $this->dayOfWeekName,
             "isRepeating" => (bool) $this->is_repeating,
+            "pauses" => $this->when(
+                $this->relationLoaded("pauses"),
+                fn() => PauseResource::collection($this->pauses),
+            ),
             "room" => $this->when(
                 $this->relationLoaded("room"),
                 fn() => RoomResource::make($this->room),
@@ -50,6 +54,7 @@ class ReservationResource extends JsonResource
                 "delete" => route("reservation.delete", $this),
                 "stop" => route("reservation.stop", $this),
                 "edit" => route("reservations.edit", $this),
+                "pause" => route("reservations.pause", $this),
             ],
         ];
     }

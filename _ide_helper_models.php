@@ -31,6 +31,19 @@ namespace App\Models{
 
 namespace App\Models{
 /**
+ * App\Models\Pause
+ *
+ * @property-read \App\Models\User|null $pausedBy
+ * @property-read \App\Models\Reservation|null $reservation
+ * @method static \Illuminate\Database\Eloquent\Builder|Pause newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Pause newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Pause query()
+ */
+	class Pause extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
  * App\Models\Reservation
  *
  * @property int $id
@@ -49,6 +62,8 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\User|null $approvedBy
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Pause> $pauses
+ * @property-read int|null $pauses_count
  * @property-read \App\Models\User $reservedBy
  * @property-read \App\Models\Room $room
  * @property-read \App\Models\Service $service
@@ -147,6 +162,8 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Notifications\DatabaseNotificationCollection<int, \Illuminate\Notifications\DatabaseNotification> $notifications
  * @property-read int|null $notifications_count
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Pause> $pauses
+ * @property-read int|null $pauses_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Reservation> $reservations
  * @property-read int|null $reservations_count
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Service> $services

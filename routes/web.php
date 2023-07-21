@@ -6,6 +6,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EditReservationController;
 use App\Http\Controllers\GenerateLoginLinkController;
 use App\Http\Controllers\PasswordlessSignInController;
+use App\Http\Controllers\PauseController;
 use App\Http\Controllers\PersonalReservationController;
 use App\Http\Controllers\PrintReservationsController;
 use App\Http\Controllers\ReservationsTableController;
@@ -45,6 +46,12 @@ Route::get("/tv", ReservationsTVController::class)->name("tv");
 
 Route::middleware("auth")->group(function () {
     Route::get("/", DashboardController::class)->name("home");
+
+    Route::post("/pauses/{reservation}", [
+        PauseController::class,
+        "store",
+    ])->name("reservations.pause");
+    Route::delete("/pauses/{pause}", [PauseController::class, "destroy"]);
 
     Route::get("/reserve", [
         CreateReservationController::class,

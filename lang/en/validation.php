@@ -164,6 +164,8 @@ return [
     "url" => "The :attribute must be a valid URL.",
     "uuid" => "The :attribute must be a valid UUID.",
 
+    "day_of_week" => "Day does not match",
+
     /*
     |--------------------------------------------------------------------------
     | Custom Validation Language Lines

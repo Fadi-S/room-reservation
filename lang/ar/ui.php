@@ -10,4 +10,5 @@ return [
     "reservation_stopped" => "تم أيقاف الحجز",
     "user_created" => "تم إنشاء المستخدم بنجاح",
     "user_edited" => "تم تعديل المستخدم بنجاح",
+    "reservation_paused" => "تم ايقاف الحجز مؤقتا يوم :date",
 ];

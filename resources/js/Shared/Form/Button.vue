@@ -57,9 +57,10 @@ const props = defineProps({
         type: Boolean,
         default: false,
     },
+    forForm: String,
 });
 
-let forForm = typeof props.form === "string" ? props.form : false;
+let forForm = typeof props.form === "string" ? props.form : props.forForm;
 let form = typeof props.form === "object" ? props.form : null;
 
 const suffix = props.outline ? "outline" : props.plain ? "plain" : "solid";
