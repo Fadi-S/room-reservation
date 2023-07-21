@@ -19,14 +19,20 @@ class ReservationQuery extends Builder
         return $this->where(
             fn(self $q) => $q
                 ->where("stopped_at", ">=", $date->format("Y-m-d H:i:s"))
-                ->orWhereNull("stopped_at")
-                ->whereNotIn(
-                    "reservations.id",
-                    fn($query) => $query
-                        ->select("reservation_id")
-                        ->from("pauses")
-                        ->where("date", "=", $date->format("Y-m-d")),
-                ),
+                ->orWhereNull("stopped_at"),
+        );
+    }
+
+    public function notPaused($date = null): static
+    {
+        $date ??= now();
+
+        return $this->whereNotIn(
+            "reservations.id",
+            fn($query) => $query
+                ->select("reservation_id")
+                ->from("pauses")
+                ->where("date", "=", $date->format("Y-m-d")),
         );
     }
 
@@ -74,7 +80,9 @@ class ReservationQuery extends Builder
 
     public function valid($date = null, $approved = true): static
     {
-        return $this->approved($approved)->notStopped($date);
+        return $this->approved($approved)
+            ->notStopped($date)
+            ->notPaused($date);
     }
 
     public function validBetween($start, $end): static

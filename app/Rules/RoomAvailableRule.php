@@ -70,6 +70,7 @@ class RoomAvailableRule implements ValidationRule
                 $this->ignore,
                 fn($query) => $query->where("id", "<>", $this->ignore),
             )
+            ->when(!$this->date, fn($query) => $query->notPaused($this->date))
             ->validBetween($start, $end)
             ->overlapping($this->start, $this->end)
             ->forRoom($this->roomId)
