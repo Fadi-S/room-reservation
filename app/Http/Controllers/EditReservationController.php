@@ -36,6 +36,8 @@ class EditReservationController extends Controller
                 ->allowedServices()
                 ->pluck("services.name", "services.id"),
             "reservation" => [
+                "name" => $reservation->description,
+                "pause" => route("reservations.pause", $reservation),
                 "description" => $reservation->description,
                 "service_id" => $reservation->service_id,
                 "room_id" => $reservation->room_id,

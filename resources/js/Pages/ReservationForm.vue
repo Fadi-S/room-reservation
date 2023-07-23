@@ -2,19 +2,103 @@
     <Head title="Make Reservation" />
 
     <Card>
-        <Link
-            v-if="deleteUrl"
-            as="button"
-            method="DELETE"
-            color="red"
-            outline
-            :href="deleteUrl"
-        >
-            <div class="flex items-center space-x-reverse space-x-1">
-                <XCircleIcon class="w-6 h-6" />
-                <span>إيقاف</span>
+        <div class="flex items-center space-x-2 space-x-reverse">
+            <Link
+                v-if="deleteUrl"
+                as="button"
+                method="DELETE"
+                color="red"
+                outline
+                :href="deleteUrl"
+            >
+                <div class="flex items-center space-x-reverse space-x-1">
+                    <XCircleIcon class="w-6 h-6" />
+                    <span>إيقاف</span>
+                </div>
+            </Link>
+
+            <div v-if="reservation.pause" class="flex items-center">
+                <Button
+                    color="blue"
+                    outline
+                    @click="pauseModal = true"
+                    type="button"
+                >
+                    <div class="flex items-center space-x-reverse space-x-1">
+                        <PauseIcon class="w-6 h-6" />
+                        <span>إيقاف مؤقت</span>
+                    </div>
+                </Button>
             </div>
-        </Link>
+        </div>
+
+        <Modal
+            v-if="reservation.pause"
+            key="pause-modal"
+            :fixed="false"
+            v-model="pauseModal"
+        >
+            <div class="sm:flex sm:items-start">
+                <div
+                    class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-blue-100 sm:mx-0 sm:h-10 sm:w-10"
+                >
+                    <PauseIcon
+                        class="h-6 w-6 text-blue-600"
+                        aria-hidden="true"
+                    />
+                </div>
+                <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                    <DialogTitle
+                        as="h3"
+                        class="text-lg rtl:md:text-right mr-2 leading-6 font-medium text-gray-900"
+                    >
+                        <span
+                            >ايقاف
+                            {{ reservation.name }}
+                            مؤقتا</span
+                        >
+                    </DialogTitle>
+                </div>
+            </div>
+            <form
+                class="mt-4"
+                method="POST"
+                @submit.prevent="pause"
+                id="pause-form"
+            >
+                <DatePicker
+                    v-model="pauseForm.date"
+                    required
+                    label="التاريخ"
+                    :time="false"
+                    :errors="pauseForm.errors.date"
+                />
+            </form>
+
+            <template #footer>
+                <div
+                    class="flex items-center justify-between w-full rtl:space-x-reverse space-x-4"
+                >
+                    <Button
+                        :form="pauseForm"
+                        for-form="pause-form"
+                        color="green"
+                        class="w-full"
+                    >
+                        ايقاف مؤقت
+                    </Button>
+
+                    <Button
+                        type="button"
+                        @click="pauseModal = false"
+                        color="light-gray"
+                        width="w-full"
+                    >
+                        اغلاق
+                    </Button>
+                </div>
+            </template>
+        </Modal>
 
         <form @submit.prevent="submit" :action="url" method="POST">
             <div class="grid gap-8 grid-cols-2 md:gap-6 mt-4">
@@ -164,11 +248,13 @@ import Input from "@/Shared/Form/Input.vue";
 import Select from "@/Shared/Form/Select.vue";
 import DatePicker from "@/Shared/Form/DatePicker.vue";
 import { computed, ref, watch } from "vue";
-import { RadioGroup, RadioGroupLabel } from "@headlessui/vue";
+import { DialogTitle, RadioGroup, RadioGroupLabel } from "@headlessui/vue";
 import MyRadioOption from "@/Pages/MyRadioOption.vue";
 import TimePicker from "@/Shared/Form/TimePicker.vue";
 import Card from "@/Shared/Card.vue";
 import Link from "@/Shared/Link.vue";
+import Modal from "@/Shared/Modal.vue";
+import { PauseIcon } from "@heroicons/vue/24/outline/index.js";
 
 const props = defineProps({
     locations: Array,
@@ -178,6 +264,19 @@ const props = defineProps({
     deleteUrl: String,
     isInSummer: Boolean,
 });
+
+let pauseModal = ref(false);
+let pauseForm = useForm({
+    date: null,
+});
+
+function pause() {
+    pauseForm.post(props.reservation.pause, {
+        onSuccess: () => {
+            pauseModal.value = false;
+        },
+    });
+}
 
 let isCreate = props.reservation == null;
 
