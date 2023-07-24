@@ -17,7 +17,7 @@
                 </div>
             </Link>
 
-            <div v-if="reservation.pause" class="flex items-center">
+            <div v-if="reservation?.pause" class="flex items-center">
                 <Button
                     color="blue"
                     outline
@@ -33,7 +33,7 @@
         </div>
 
         <Modal
-            v-if="reservation.pause"
+            v-if="reservation?.pause"
             key="pause-modal"
             :fixed="false"
             v-model="pauseModal"
@@ -271,11 +271,12 @@ let pauseForm = useForm({
 });
 
 function pause() {
-    pauseForm.post(props.reservation.pause, {
-        onSuccess: () => {
-            pauseModal.value = false;
-        },
-    });
+    if (props.reservation?.pause)
+        pauseForm.post(props.reservation.pause, {
+            onSuccess: () => {
+                pauseModal.value = false;
+            },
+        });
 }
 
 let isCreate = props.reservation == null;
