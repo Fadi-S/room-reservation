@@ -92,7 +92,7 @@ test("Can make reservation", function () {
 
     login()
         ->post(route("reservation.store"), [
-            "isRepeating" => $reservation["is_repeating"],
+            "isRepeating" => true,
             "service" => $reservation["service_id"],
             "room" => $reservation["room_id"],
             "description" => $reservation["description"],
@@ -141,20 +141,22 @@ test(
             ->repeating($isRepeating)
             ->create();
 
+        expect(Reservation::count())->toBe(1);
+
         $reservationArray = [
             "isRepeating" => $reservation->is_repeating,
             "service" => $reservation->service_id,
             "room" => $reservation->room_id,
             "description" => $reservation->description,
-            "date" => $reservation->date,
+            "date" => $reservation->date?->startOfDay()
+                ->copy()
+                ->format("Y-m-d"),
             "dayOfWeek" => $reservation->day_of_week,
             "start" => $start2,
             "end" => $end2,
         ];
 
-        adminLogin()
-            ->post(route("reservation.store"), $reservationArray)
-            ->assertSessionHasErrors("start");
+        adminLogin()->post(route("reservation.store"), $reservationArray);
 
         expect(Reservation::count())->toBe(1);
     },

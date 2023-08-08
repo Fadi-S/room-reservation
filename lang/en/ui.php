@@ -11,4 +11,6 @@ return [
     "reservation_paused" => "Reservation pause for :date",
     "user_created" => "User created successfully",
     "user_edited" => "User edited successfully",
+    "reservation_absence" => "Absence recorded for :reservation",
+    "reservation_absence_cancel" => "Absence canceled for :reservation",
 ];

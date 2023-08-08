@@ -53,7 +53,7 @@
                                         v-for="reservation in reservationsForDay[
                                             room.id
                                         ]"
-                                        class="flex items-center justify-between"
+                                        class="flex items-center justify-between w-full px-2"
                                     >
                                         <div
                                             class="flex flex-col space-y-0.5 px-3"
@@ -105,15 +105,60 @@
                                             </div>
                                         </div>
 
-                                        <InertiaLink
-                                            class="text-gray-600 bg-gray-100 border-gray-800 rounded-full"
-                                            v-if="user?.isAdmin"
-                                            :href="reservation.edit"
+                                        <div
+                                            class="flex items-center space-x-reverse space-x-2"
                                         >
-                                            <PencilSquareIcon class="w-6 h-6" />
-                                        </InertiaLink>
+                                            <template v-if="user?.isAdmin">
+                                                <Link
+                                                    :key="
+                                                        'reservation-' +
+                                                        reservation.id +
+                                                        '-' +
+                                                        reservation.isAbsent
+                                                    "
+                                                    :href="
+                                                        reservation.absence +
+                                                        '?date=' +
+                                                        day
+                                                    "
+                                                    :method="
+                                                        reservation.isAbsent
+                                                            ? 'DELETE'
+                                                            : 'POST'
+                                                    "
+                                                    as="button"
+                                                    :color="
+                                                        reservation.isAbsent
+                                                            ? 'red'
+                                                            : 'green'
+                                                    "
+                                                    padding="p-1"
+                                                    rounded="rounded-full"
+                                                >
+                                                    <XCircleIcon
+                                                        v-if="
+                                                            reservation.isAbsent
+                                                        "
+                                                        class="w-6 h-6"
+                                                    />
+                                                    <CheckCircleIcon
+                                                        v-else
+                                                        class="w-6 h-6"
+                                                    />
+                                                </Link>
 
-                                        <hr />
+                                                <Link
+                                                    :href="reservation.edit"
+                                                    color="light-gray"
+                                                    padding="p-1"
+                                                    rounded="rounded-full"
+                                                >
+                                                    <PencilSquareIcon
+                                                        class="w-6 h-6"
+                                                    />
+                                                </Link>
+                                            </template>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -139,11 +184,13 @@ import {
     CalendarDaysIcon,
     PencilSquareIcon,
 } from "@heroicons/vue/24/solid";
+import { XCircleIcon, CheckCircleIcon } from "@heroicons/vue/24/outline";
 import Tabs from "@/Shared/Tabs.vue";
 import useQueryStringToJSON from "@/Composables/useQueryStringToJSON.js";
 import useUser from "@/Composables/useUser.js";
 import { router } from "@inertiajs/vue3";
 import { list } from "postcss";
+import Link from "@/Shared/Link.vue";
 
 const props = defineProps({
     reservations: Object,

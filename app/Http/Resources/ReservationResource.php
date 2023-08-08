@@ -25,7 +25,7 @@ class ReservationResource extends JsonResource
                 !$this->is_repeating,
                 fn() => $this->date->translatedFormat("d F"),
             ),
-            "dayName" => $this->dayOfWeekName,
+            "dayName" => $this->day_of_week_name,
             "isRepeating" => (bool) $this->is_repeating,
             "pauses" => $this->when(
                 $this->relationLoaded("pauses"),

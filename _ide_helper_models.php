@@ -12,6 +12,19 @@
 
 namespace App\Models{
 /**
+ * App\Models\Absence
+ *
+ * @property-read \App\Models\Reservation|null $reservation
+ * @property-read \App\Models\User|null $user
+ * @method static \Illuminate\Database\Eloquent\Builder|Absence newModelQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Absence newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Absence query()
+ */
+	class Absence extends \Eloquent {}
+}
+
+namespace App\Models{
+/**
  * App\Models\Location
  *
  * @property int $id
@@ -33,11 +46,23 @@ namespace App\Models{
 /**
  * App\Models\Pause
  *
- * @property-read \App\Models\User|null $pausedBy
- * @property-read \App\Models\Reservation|null $reservation
+ * @property int $id
+ * @property int $reservation_id
+ * @property int $paused_by_id
+ * @property \Illuminate\Support\Carbon $date
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\User $pausedBy
+ * @property-read \App\Models\Reservation $reservation
  * @method static \Illuminate\Database\Eloquent\Builder|Pause newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Pause newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Pause query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Pause whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Pause whereDate($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Pause whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Pause wherePausedById($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Pause whereReservationId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Pause whereUpdatedAt($value)
  */
 	class Pause extends \Eloquent {}
 }
@@ -61,6 +86,8 @@ namespace App\Models{
  * @property \Illuminate\Support\Carbon|null $approved_at
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Absence> $absences
+ * @property-read int|null $absences_count
  * @property-read \App\Models\User|null $approvedBy
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\Pause> $pauses
  * @property-read int|null $pauses_count
@@ -74,6 +101,7 @@ namespace App\Models{
  * @method static \App\Queries\ReservationQuery|Reservation forRoom($room)
  * @method static \App\Queries\ReservationQuery|Reservation newModelQuery()
  * @method static \App\Queries\ReservationQuery|Reservation newQuery()
+ * @method static \App\Queries\ReservationQuery|Reservation notPaused($date = null)
  * @method static \App\Queries\ReservationQuery|Reservation notStopped($date = null)
  * @method static \App\Queries\ReservationQuery|Reservation overlapping($start, $end)
  * @method static \App\Queries\ReservationQuery|Reservation query()

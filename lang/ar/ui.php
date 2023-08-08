@@ -11,4 +11,6 @@ return [
     "user_created" => "تم إنشاء المستخدم بنجاح",
     "user_edited" => "تم تعديل المستخدم بنجاح",
     "reservation_paused" => "تم ايقاف الحجز مؤقتا يوم :date",
+    "reservation_absence" => "تم تسجيل غياب :reservation",
+    "reservation_absence_cancel" => "تم الغاء غياب :reservation",
 ];

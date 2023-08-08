@@ -26,11 +26,20 @@ class DashboardController extends Controller
             "reservations" => fn() => collect(
                 ReservationForTableResource::collection(
                     Reservation::query()
+                        ->with([
+                            "absences" => fn($query) => $query->where(
+                                "date",
+                                "=",
+                                $date,
+                            ),
+                        ])
                         ->orderBy("start")
                         ->date($date)
                         ->with(["room.location", "service:id,name,color"])
                         ->get(),
-                )->resolve(),
+                )
+                    ->additional(["date" => $date])
+                    ->resolve(),
             )->groupBy("roomId"),
 
             "locations" => fn() => LocationResource::collection(

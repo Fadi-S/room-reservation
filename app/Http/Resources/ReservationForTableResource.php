@@ -43,6 +43,11 @@ class ReservationForTableResource extends JsonResource
             ],
             "dayOfWeek" => $this->day_of_week,
             "edit" => route("reservations.edit", $this),
+            "absence" => route("reservation.absence", $this),
+            "isAbsent" => $this->when(
+                $this->relationLoaded("absences"),
+                fn() => $this->absences->isNotEmpty(),
+            ),
         ];
     }
 }

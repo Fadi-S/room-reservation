@@ -341,6 +341,13 @@ const rooms = computed(() => {
 });
 
 watch(location, () => {
+    const count = location.value?.rooms.filter(
+        (room) => form.room == room.id
+    ).length;
+
+    if (count > 0) {
+        return;
+    }
     form.room =
         props.reservation?.room_id ?? location.value?.rooms[0]?.id?.toString();
 });

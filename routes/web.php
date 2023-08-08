@@ -9,6 +9,7 @@ use App\Http\Controllers\PasswordlessSignInController;
 use App\Http\Controllers\PauseController;
 use App\Http\Controllers\PersonalReservationController;
 use App\Http\Controllers\PrintReservationsController;
+use App\Http\Controllers\ReservationAbsenceController;
 use App\Http\Controllers\ReservationsTableController;
 use App\Http\Controllers\ReservationsTVController;
 use App\Http\Controllers\UserController;
@@ -67,6 +68,15 @@ Route::middleware("auth")->group(function () {
         ApproveReservationController::class,
         "approve",
     ])->name("reservation.approve");
+
+    Route::post("/absence/{reservation}", [
+        ReservationAbsenceController::class,
+        "store",
+    ])->name("reservation.absence");
+    Route::delete("/absence/{reservation}", [
+        ReservationAbsenceController::class,
+        "delete",
+    ])->name("reservation.absence.delete");
 
     Route::delete("/delete/{reservation}", [
         ApproveReservationController::class,

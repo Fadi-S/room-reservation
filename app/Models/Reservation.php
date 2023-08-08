@@ -21,7 +21,7 @@ class Reservation extends Model
 
     protected $casts = [
         "is_repeating" => "boolean",
-        "date" => "datetime",
+        "date" => "date",
         "approved_at" => "datetime",
         "stopped_at" => "datetime",
     ];
@@ -78,6 +78,11 @@ class Reservation extends Model
         $diff = (new \DateTime($this->end))->diff(new \DateTime($this->start));
 
         return ($diff->h * 60 + $diff->i) / $interval->minutes;
+    }
+
+    public function absences(): HasMany
+    {
+        return $this->hasMany(Absence::class);
     }
 
     public function nextOccurrence(): Attribute

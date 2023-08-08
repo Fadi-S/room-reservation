@@ -41,8 +41,8 @@ class CreateReservationController extends Controller
 
             $this->flash(__("ui.reserved"));
 
-            return redirect()->route("home", [
-                "day" => $reservation->nextOccurrence?->format("Y-m-d"),
+            return redirect()->route("table", [
+                "day" => $reservation->next_occurrence?->format("Y-m-d") ?? now()->format("Y-m-d"),
             ]);
         }
 
