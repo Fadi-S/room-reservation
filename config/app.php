@@ -57,6 +57,11 @@ return [
 
     "asset_url" => env("ASSET_URL"),
 
+    "allow_auto_approve_for_one_time_reservations" => env(
+        "ALLOW_AUTO_APPROVE_FOR_ONE_TIME_RESERVATIONS",
+        true,
+    ),
+
     /*
     |--------------------------------------------------------------------------
     | Application Timezone

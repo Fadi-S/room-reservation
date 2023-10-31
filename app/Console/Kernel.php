@@ -17,7 +17,10 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command("telescope:prune --hours=168")->daily();
         $schedule->command("cache:prune-stale-tags")->hourly();
-        $schedule->command("reservations:approve")->everyFiveMinutes();
+
+        if (config("app.allow_auto_approve_for_one_time_reservations")) {
+            $schedule->command("reservations:approve")->everyFiveMinutes();
+        }
     }
 
     /**

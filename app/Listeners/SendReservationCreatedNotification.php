@@ -30,7 +30,10 @@ class SendReservationCreatedNotification
      */
     public function handle(MakeReservationEvent $event)
     {
-        if (!$event->reservationModel->is_repeating) {
+        if (
+            !$event->reservationModel->is_repeating &&
+            config("app.allow_auto_approve_for_one_time_reservations")
+        ) {
             return;
         }
 
