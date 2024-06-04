@@ -93,7 +93,7 @@ class ReservationQuery extends Builder
         ) {
             $query
                 ->whereNull("date")
-                ->orWhere("date", [
+                ->orWhereBetween("date", [
                     $start->format("Y-m-d"),
                     $end->format("Y-m-d"),
                 ]);

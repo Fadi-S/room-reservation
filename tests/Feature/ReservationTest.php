@@ -148,13 +148,13 @@ test(
             "service" => $reservation->service_id,
             "room" => $reservation->room_id,
             "description" => $reservation->description,
-            "date" => $reservation->date?->startOfDay()
-                ->copy()
-                ->format("Y-m-d"),
+            "date" => $reservation->date?->format("Y-m-d"),
             "dayOfWeek" => $reservation->day_of_week,
             "start" => $start2,
             "end" => $end2,
         ];
+
+        dump($reservationArray, $reservation->toArray());
 
         adminLogin()->post(route("reservation.store"), $reservationArray);
 
