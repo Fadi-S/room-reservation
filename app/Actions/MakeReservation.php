@@ -141,6 +141,7 @@ class MakeReservation
             $reservation["stopped_at"] = null;
         } elseif ($data->get("isRepeating") === "summer" && $this->isSummer()) {
             $reservation["stopped_at"] = now()
+                ->startOfMonth()
                 ->month(9)
                 ->endOfMonth();
         } else {

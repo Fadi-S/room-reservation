@@ -91,12 +91,16 @@ class ReservationQuery extends Builder
             $start,
             $end
         ) {
-            $query
-                ->whereNull("date")
-                ->orWhereBetween("date", [
-                    $start->format("Y-m-d"),
-                    $end->format("Y-m-d"),
-                ]);
+            $query->whereNull("date")->orWhereBetween("date", [
+                $start
+                    ->copy()
+                    ->startOfDay()
+                    ->format("Y-m-d H:i:s"),
+                $end
+                    ->copy()
+                    ->endOfDay()
+                    ->format("Y-m-d H:i:s"),
+            ]);
         });
     }
 

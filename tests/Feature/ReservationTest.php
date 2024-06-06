@@ -143,6 +143,8 @@ test(
 
         expect(Reservation::count())->toBe(1);
 
+        $reservation->refresh();
+
         $reservationArray = [
             "isRepeating" => $reservation->is_repeating,
             "service" => $reservation->service_id,
@@ -153,8 +155,6 @@ test(
             "start" => $start2,
             "end" => $end2,
         ];
-
-        dump($reservationArray, $reservation->toArray());
 
         adminLogin()->post(route("reservation.store"), $reservationArray);
 
