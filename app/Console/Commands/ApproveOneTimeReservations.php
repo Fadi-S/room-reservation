@@ -2,7 +2,9 @@
 
 namespace App\Console\Commands;
 
+use App\Enums\FlashMessageType;
 use App\Models\Reservation;
+use App\Rules\RoomAvailableRule;
 use Illuminate\Console\Command;
 
 class ApproveOneTimeReservations extends Command
@@ -34,9 +36,17 @@ class ApproveOneTimeReservations extends Command
         $count = $reservations->count();
 
         $this->info("Approved {$count} " . str("reservation")->plural($count));
-        $reservations->each(function ($reservation) {
+        $reservations->each(function (Reservation $reservation) {
             if ($reservation->room_id == 17) {
                 // El kenissa
+                return;
+            }
+
+            $roomAvailability = RoomAvailableRule::fromReservation(
+                $reservation,
+            );
+
+            if (!$roomAvailability->isAvailable()) {
                 return;
             }
 
