@@ -173,7 +173,7 @@ test(
     "One time clash #5" => ["10:00", "14:00", "11:00", "12:00", false],
 ]);
 
-test("Can't reserve after 10pm", function () {
+test("Can't reserve before 8am or after 10pm", function () {
     $reservation = Reservation::factory()
         ->state([
             "end" => "22:20",
@@ -190,6 +190,13 @@ test("Can't reserve after 10pm", function () {
         "start" => $reservation->start,
         "end" => $reservation->end,
     ];
+
+    adminLogin()->post(route("reservation.store"), $reservationArray);
+
+    expect(Reservation::count())->toBe(0);
+
+    $reservationArray["start"] = "07:59";
+    $reservationArray["end"] = "10:00";
 
     adminLogin()->post(route("reservation.store"), $reservationArray);
 

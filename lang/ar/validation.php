@@ -15,16 +15,12 @@ return [
     "accepted" => "The :attribute must be accepted.",
     "accepted_if" => "The :attribute must be accepted when :other is :value.",
     "active_url" => "The :attribute is not a valid URL.",
-    "after" => "يجب أن يكون :attribute بعد :date.",
-    "after_or_equal" => ":attribute يجب أن يكون بعد أو يساوي :date.",
     "alpha" => "The :attribute must only contain letters.",
     "alpha_dash" =>
         "The :attribute must only contain letters, numbers, dashes and underscores.",
     "alpha_num" => "The :attribute must only contain letters and numbers.",
     "array" => "The :attribute must be an array.",
     "before" => "The :attribute must be a date before :date.",
-    "before_or_equal" =>
-        "The :attribute must be a date before or equal to :date.",
     "between" => [
         "array" => "The :attribute must have between :min and :max items.",
         "file" => "The :attribute must be between :min and :max kilobytes.",
@@ -205,4 +201,8 @@ return [
     ],
 
     "conflict" => "يوجد :reservation في نفس المكان",
+
+    "before_or_equal" => ":attribute يجب ان يكون قبل أو يساوي :date.",
+    "after" => "يجب أن يكون :attribute بعد :date.",
+    "after_or_equal" => ":attribute يجب أن يكون بعد أو يساوي :date.",
 ];

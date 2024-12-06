@@ -120,6 +120,7 @@ class MakeReservation
                     $data["end"] ?? null,
                     $ignore,
                 ),
+                "after_or_equal:08:00",
             ],
             "end" => [
                 "required",
