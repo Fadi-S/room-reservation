@@ -62,6 +62,14 @@ return [
         true,
     ),
 
+    "rooms_that_must_be_approved_manually" => [
+        17, // Church
+    ],
+
+    "locations_that_must_be_approved_manually" => [
+        3, // Dor el rabe3
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Application Timezone

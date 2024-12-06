@@ -28,7 +28,6 @@ class ReservationFactory extends Factory
                 "18:00",
                 "19:00",
                 "20:00",
-                "21:00",
             ])),
             "end" => ($end = Carbon::parse($start)
                 ->addHours(2)

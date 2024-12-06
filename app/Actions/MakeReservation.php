@@ -121,7 +121,12 @@ class MakeReservation
                     $ignore,
                 ),
             ],
-            "end" => ["required", "date_format:H:i", "after:start"],
+            "end" => [
+                "required",
+                "date_format:H:i",
+                "after:start",
+                "before_or_equal:22:00",
+            ],
         ]);
     }
 

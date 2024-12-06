@@ -36,17 +36,22 @@ class ApproveOneTimeReservations extends Command
         $count = $reservations->count();
 
         $this->info("Approved {$count} " . str("reservation")->plural($count));
-        $reservations->each(function (Reservation $reservation) {
-            if ($reservation->room_id == 17) {
-                // El kenissa
-                return;
-            }
-
-            $roomAvailability = RoomAvailableRule::fromReservation(
-                $reservation,
-            );
-
-            if (!$roomAvailability->isAvailable()) {
+        $notAllowedRooms = config(
+            "app.rooms_that_must_be_approved_manually",
+            [],
+        );
+        $notAllowedLocations = config(
+            "app.locations_that_must_be_approved_manually",
+            [],
+        );
+        $reservations->each(function (Reservation $reservation) use (
+            $notAllowedRooms,
+            $notAllowedLocations
+        ) {
+            if (
+                in_array($reservation->room_id, $notAllowedRooms) ||
+                in_array($reservation->room->location_id, $notAllowedLocations)
+            ) {
                 return;
             }
 

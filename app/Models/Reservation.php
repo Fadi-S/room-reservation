@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Events\ReservationApprovedEvent;
 use App\Queries\ReservationQuery;
+use App\Rules\RoomAvailableRule;
 use Carbon\Carbon;
 use Carbon\CarbonInterval;
 use Carbon\CarbonPeriod;
@@ -108,6 +109,12 @@ class Reservation extends Model
             return false;
         }
 
+        $roomAvailability = RoomAvailableRule::fromReservation($this);
+
+        if (!$roomAvailability->isAvailable()) {
+            return false;
+        }
+
         $this->approved_at = now();
         $this->approved_by_id = Auth::check() ? Auth::id() : 1;
 
@@ -118,6 +125,24 @@ class Reservation extends Model
         }
 
         return $saved;
+    }
+
+    public function isEligibleForAutoApprove(): bool
+    {
+        if (!$this->relationLoaded("room")) {
+            $this->load("room");
+        }
+
+        return $this->is_repeating &&
+            config("app.allow_auto_approve_for_one_time_reservations") &&
+            !in_array(
+                $this->room_id,
+                config("app.rooms_that_must_be_approved_manually", []),
+            ) &&
+            !in_array(
+                $this->room->location_id,
+                config("app.locations_that_must_be_approved_manually", []),
+            );
     }
 
     public function pauses(): HasMany

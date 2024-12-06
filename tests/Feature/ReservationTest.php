@@ -104,9 +104,9 @@ test("Can make reservation", function () {
         ->assertSessionDoesntHaveErrors()
         ->assertSessionHas("message");
 
-    Mail::assertSent(SendReservationMadeMail::class);
-
     expect(Reservation::count())->toBe(1);
+
+    Mail::assertSent(SendReservationMadeMail::class);
 });
 
 test("Can't make reservation with end time before start time", function () {
@@ -172,6 +172,29 @@ test(
     "One time clash #4" => ["10:00", "12:00", "10:00", "12:00", false],
     "One time clash #5" => ["10:00", "14:00", "11:00", "12:00", false],
 ]);
+
+test("Can't reserve after 10pm", function () {
+    $reservation = Reservation::factory()
+        ->state([
+            "end" => "22:20",
+        ])
+        ->make();
+
+    $reservationArray = [
+        "isRepeating" => $reservation->is_repeating,
+        "service" => $reservation->service_id,
+        "room" => $reservation->room_id,
+        "description" => $reservation->description,
+        "date" => $reservation->date?->format("Y-m-d"),
+        "dayOfWeek" => $reservation->day_of_week,
+        "start" => $reservation->start,
+        "end" => $reservation->end,
+    ];
+
+    adminLogin()->post(route("reservation.store"), $reservationArray);
+
+    expect(Reservation::count())->toBe(0);
+});
 
 test("Can reserve at consecutive times", function (
     $start1,
