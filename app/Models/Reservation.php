@@ -133,7 +133,7 @@ class Reservation extends Model
             $this->load("room");
         }
 
-        return $this->is_repeating &&
+        return !$this->is_repeating &&
             config("app.allow_auto_approve_for_one_time_reservations") &&
             !in_array(
                 $this->room_id,
