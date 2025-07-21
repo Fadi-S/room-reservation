@@ -169,7 +169,8 @@
                             <InertiaLink
                                 v-for="item in userNavigation"
                                 :key="item.name"
-                                :as="item.method === 'POST' ? 'Button' : null"
+                                as="button"
+                                @click="close"
                                 :method="item.method"
                                 :href="item.href"
                                 class="block w-full rounded-md px-3 py-2 text-start font-medium text-gray-400 hover:bg-gray-700 hover:text-white"
