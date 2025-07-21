@@ -10,6 +10,7 @@ use App\Http\Controllers\PasswordlessSignInController;
 use App\Http\Controllers\PauseController;
 use App\Http\Controllers\PersonalReservationController;
 use App\Http\Controllers\PrintReservationsController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReservationAbsenceController;
 use App\Http\Controllers\ReservationsTableController;
 use App\Http\Controllers\ReservationsTVController;
@@ -120,6 +121,12 @@ Route::middleware("auth")->group(function () {
     ])->name("reservation.update");
 
     Route::resource("/users", UserController::class);
+
+    Route::get("/profile", [ProfileController::class, "show"])->name("profile");
+    Route::post("/change-password", [
+        ProfileController::class,
+        "changePassword",
+    ])->name("profile.change-password");
 
     Route::get("users/{user}/link", GenerateLoginLinkController::class)->name(
         "users.link",

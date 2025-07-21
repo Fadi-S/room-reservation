@@ -14,7 +14,8 @@ return [
 
     "failed" => "هذه البيانات خاطئة",
     "success" => "تم تسجيل الدخول بنجاح.",
-    "password" => "The provided password is incorrect.",
+    "password" => "كلمة المرور المقدمة غير صحيحة.",
+    "password_changed" => "تم تغيير كلمة المرور بنجاح.",
     "throttle" =>
         "Too many login attempts. Please try again in :seconds seconds.",
 ];

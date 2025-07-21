@@ -78,7 +78,7 @@
                                         >
                                             <InertiaLink
                                                 as="button"
-                                                method="POST"
+                                                :method="item.method"
                                                 :href="item.href"
                                                 :class="[
                                                     active ? 'bg-gray-100' : '',
@@ -249,6 +249,7 @@ if (user) {
 }
 
 const userNavigation = [
+    { name: "حسابي", href: "/profile", method: "GET" },
     { name: "تسجيل خروج", href: "/logout", method: "POST" },
 ];
 </script>
