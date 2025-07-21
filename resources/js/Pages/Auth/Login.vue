@@ -27,6 +27,18 @@
                             required
                         />
 
+                        <Input
+                            v-if="loginType === 'email-password'"
+                            id="password"
+                            name="password"
+                            width="w-full"
+                            label="كلمة المرور"
+                            v-model="form.password"
+                            :errors="form.errors.password"
+                            type="password"
+                            required
+                        />
+
                         <Button type="submit" color="green">
                             <div class="flex items-center">
                                 <Spinner
@@ -37,6 +49,23 @@
                                 <span>تسجيل دخول</span>
                             </div>
                         </Button>
+
+                        <div class="pt-6">
+                            <button
+                                class="text-blue-600 underline"
+                                @click="toggleLoginType"
+                                type="button"
+                            >
+                                <template v-if="loginType === 'email-password'">
+                                    تسجيل الدخول باستخدام البريد الإلكتروني فقط
+                                </template>
+
+                                <template v-if="loginType === 'email-only'">
+                                    تسجيل الدخول باستخدام البريد الإلكتروني
+                                    وكلمة المرور
+                                </template>
+                            </button>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -52,18 +81,37 @@ import Button from "@/Shared/Form/Button.vue";
 import { useForm } from "@inertiajs/vue3";
 import { LockClosedIcon } from "@heroicons/vue/24/solid";
 import Spinner from "@/Shared/Spinner.vue";
+import { computed, ref } from "vue";
 
 export default {
     layout: AuthLayout,
     components: { Spinner, Logo, Input, Button, LockClosedIcon },
     setup() {
+        let loginType = ref("email-password");
+        const otherType = computed(
+            () =>
+                ({
+                    "email-password": "email-only",
+                    "email-only": "email-password",
+                }[loginType.value])
+        );
+
+        const url = computed(
+            () =>
+                ({
+                    "email-password": "/login",
+                    "email-only": "/login-by-email",
+                }[loginType.value])
+        );
+
         let form = useForm({
             email: "",
+            password: "",
             remember: true,
         });
 
         const submit = () =>
-            form.post("/login-by-email", {
+            form.post(url.value, {
                 onSuccess: () => {
                     form.reset();
                 },
@@ -72,7 +120,14 @@ export default {
         return {
             form,
             submit,
+            loginType,
+            otherType,
         };
+    },
+    methods: {
+        toggleLoginType() {
+            this.loginType = this.otherType;
+        },
     },
 };
 </script>

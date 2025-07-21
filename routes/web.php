@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ApproveReservationController;
+use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\CreateReservationController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EditReservationController;
@@ -52,6 +53,8 @@ Route::get("/passwordless-login/{user}", [
 ])
     ->middleware(["web", HandleAuthenticatedUsers::class])
     ->name("passwordless.login");
+
+Route::post("/login", AuthenticationController::class)->name("login");
 
 Route::middleware("auth")->group(function () {
     Route::get("/", DashboardController::class)->name("home");

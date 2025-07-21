@@ -90,7 +90,7 @@ class Reservation extends Model
     {
         return Attribute::make(
             get: function () {
-                if (now()->gte($this->stopped_at)) {
+                if (now()->gte($this->stopped_at ?? "")) {
                     return null;
                 }
 
