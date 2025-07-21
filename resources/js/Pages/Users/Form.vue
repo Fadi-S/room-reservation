@@ -5,6 +5,7 @@
         <form :action="url" method="POST" @submit.prevent="submit">
             <div class="grid gap-8 grid-cols-2 md:gap-6">
                 <Input
+                    label="الاسم"
                     dir="rtl"
                     type="text"
                     width="w-full col-span-2"
@@ -18,10 +19,11 @@
                 />
 
                 <Input
-                    dir="rtl"
+                    label="اسم المستخدم"
+                    dir="ltr"
                     type="text"
                     width="w-full col-span-2"
-                    placeholder="اسم المستخدم"
+                    placeholder="testuser"
                     v-model="form.username"
                     :errors="form.errors.username"
                     id="username"
@@ -32,9 +34,10 @@
 
                 <Input
                     dir="ltr"
+                    label="البريد الالكتروني"
                     type="email"
                     width="w-full col-span-2"
-                    placeholder="البريد الالكتروني"
+                    placeholder="test@example.com"
                     v-model="form.email"
                     :errors="form.errors.email"
                     id="email"
@@ -42,6 +45,32 @@
                     autocomplete="email"
                     required
                 />
+
+                <div
+                    class="flex items-end rtl:flex-row-reverse space-x-2 col-span-2"
+                >
+                    <Button
+                        type="button"
+                        @click="generatePassword"
+                        width="w-auto"
+                        color="blue"
+                    >
+                        <ArrowPathIcon class="w-5 h-5" />
+                    </Button>
+
+                    <Input
+                        label="كلمة المرور"
+                        dir="ltr"
+                        type="text"
+                        width="w-full col-span-2"
+                        placeholder="********"
+                        v-model="form.password"
+                        :errors="form.errors.password"
+                        id="password"
+                        name="password"
+                        :required="create"
+                    />
+                </div>
 
                 <MultiSelect
                     class="col-span-2"
@@ -55,7 +84,7 @@
             <div>
                 <Button
                     class="mt-4"
-                    width="flex items-center md:w-auto w-full"
+                    width="flex items-center w-full"
                     type="submit"
                     color="green"
                     :form="form"
@@ -75,6 +104,7 @@ import Card from "@/Shared/Card.vue";
 import Input from "@/Shared/Form/Input.vue";
 import Checkbox from "@/Shared/Form/Checkbox.vue";
 import MultiSelect from "@/Shared/Form/MultiSelect.vue";
+import { ArrowPathIcon } from "@heroicons/vue/24/outline";
 
 const props = defineProps({
     user: Object,
@@ -94,6 +124,12 @@ const form = useForm({
 const url = computed(() => {
     return props.create ? "/users" : `/users/${props.user.username}`;
 });
+
+function generatePassword() {
+    form.password = (Math.random() * 15).toString().substring(3, 11);
+
+    navigator.clipboard.writeText(form.password);
+}
 
 function submit() {
     if (props.create) {

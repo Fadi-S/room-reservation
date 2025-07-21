@@ -52,6 +52,7 @@ class UserController extends Controller
                 "max:255",
                 "unique:users",
             ],
+            "password" => ["required", "string", "min:8", "max:255"],
             "services" => ["nullable", "array"],
             "services.*" => ["exists:services,id"],
             "is_admin" => ["required", "boolean"],
@@ -60,6 +61,7 @@ class UserController extends Controller
         $user = User::query()->create([
             "name" => $request->get("name"),
             "username" => $request->get("username"),
+            "password" => bcrypt($request->get("password")),
             "email" => $request->get("email"),
             "is_admin" => $request->boolean("is_admin"),
         ]);
@@ -112,17 +114,24 @@ class UserController extends Controller
                 "max:255",
                 Rule::unique("users")->ignore($user->id),
             ],
+            "password" => ["nullable", "string", "min:8", "max:255"],
             "services" => ["nullable", "array"],
             "services.*" => ["exists:services,id"],
             "is_admin" => ["required", "boolean"],
         ]);
 
-        $user->update([
+        $data = [
             "name" => $request->get("name"),
             "username" => $request->get("username"),
             "email" => $request->get("email"),
             "is_admin" => $request->boolean("is_admin"),
-        ]);
+        ];
+
+        if ($request->filled("password")) {
+            $data["password"] = bcrypt($request->get("password"));
+        }
+
+        $user->update($data);
 
         $user->services()->sync($request->get("services", []));
 

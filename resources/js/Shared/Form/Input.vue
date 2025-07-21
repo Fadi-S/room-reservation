@@ -5,7 +5,7 @@
             :for="id"
             class="block text-sm font-medium text-gray-700"
         >
-            {{ label }}
+            {{ label }} {{ required ? "*" : "" }}
         </label>
         <div class="mt-1 relative rounded-md shadow-sm">
             <input
