@@ -13,6 +13,7 @@ use App\Http\Controllers\ReservationAbsenceController;
 use App\Http\Controllers\ReservationsTableController;
 use App\Http\Controllers\ReservationsTVController;
 use App\Http\Controllers\UserController;
+use App\Http\Middleware\HandleAuthenticatedUsers;
 use Illuminate\Support\Facades\Route;
 
 if (app()->environment("local")) {
@@ -44,6 +45,13 @@ Route::get("/table/print", [PrintReservationsController::class, "index"])->name(
 );
 
 Route::get("/tv", ReservationsTVController::class)->name("tv");
+
+Route::get("/passwordless-login/{user}", [
+    PasswordlessSignInController::class,
+    "authenticate",
+])
+    ->middleware(["web", HandleAuthenticatedUsers::class])
+    ->name("passwordless.login");
 
 Route::middleware("auth")->group(function () {
     Route::get("/", DashboardController::class)->name("home");

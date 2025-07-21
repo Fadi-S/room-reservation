@@ -2,6 +2,9 @@
 
 return [
     "email_sent" => "A sign in request has been sent to :email",
+    "invalid_link" =>
+        "The link is invalid or has expired - please request a new link",
+    "welcome_back" => "Welcome back :name",
     "reserved" => "Reserved Successfully",
     "waiting_for_approval" => "Reservation saved, waiting for approval",
     "approved" => "Reservation approved successfully",

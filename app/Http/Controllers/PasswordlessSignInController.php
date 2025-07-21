@@ -3,15 +3,19 @@
 namespace App\Http\Controllers;
 
 use App\Enums\FlashMessageType;
+use App\Helpers\PasswordlessLogin;
 use App\Mail\SendPasswordlessLoginLink;
 use App\Models\User;
 use Carbon\CarbonInterval;
-use Grosv\LaravelPasswordlessLogin\PasswordlessLogin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
 class PasswordlessSignInController extends Controller
 {
+    public function __construct(private readonly PasswordlessLogin $passwordlessLogin)
+    {
+    }
+
     public function sendLink(Request $request)
     {
         $request->validate([
@@ -26,7 +30,7 @@ class PasswordlessSignInController extends Controller
             return back()->withErrors(["email" => __("auth.failed")]);
         }
 
-        $url = PasswordlessLogin::forUser($user)->generate();
+        $url = $this->passwordlessLogin->forUser($user);
 
         Mail::to($user)->send(new SendPasswordlessLoginLink($url));
 
@@ -37,5 +41,30 @@ class PasswordlessSignInController extends Controller
         );
 
         return redirect()->route("login");
+    }
+
+    public function authenticate(Request $request, User $user)
+    {
+        if (!$this->passwordlessLogin->check($request)) {
+            $this->flash(
+                __("ui.invalid_link"),
+                FlashMessageType::Info,
+                CarbonInterval::seconds(35),
+            );
+
+            return redirect()
+                ->route("login")
+                ->withErrors(["token" => __("auth.invalid_token")]);
+        }
+
+        auth()->login($user);
+
+        $this->flash(
+            __("ui.welcome_back", ["name" => $user->name]),
+            FlashMessageType::Success,
+            CarbonInterval::seconds(5),
+        );
+
+        return redirect()->intended(route("home"));
     }
 }
