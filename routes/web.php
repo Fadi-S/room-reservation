@@ -55,7 +55,7 @@ Route::get("/passwordless-login/{user}", [
     ->middleware(["web", HandleAuthenticatedUsers::class])
     ->name("passwordless.login");
 
-Route::post("/login", AuthenticationController::class)->name("login");
+Route::post("/login", AuthenticationController::class)->name("login.post");
 
 Route::middleware("auth")->group(function () {
     Route::get("/", DashboardController::class)->name("home");
