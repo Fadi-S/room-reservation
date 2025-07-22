@@ -17,7 +17,7 @@ class AuthenticationController extends Controller
         $user = User::byKey($credentials["email"]);
 
         if ($user && Hash::check($credentials["password"], $user->password)) {
-            auth()->login($user);
+            auth()->login($user, true);
 
             $this->flash(
                 __("auth.success"),

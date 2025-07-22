@@ -57,7 +57,7 @@ class PasswordlessSignInController extends Controller
                 ->withErrors(["token" => __("auth.invalid_token")]);
         }
 
-        auth()->login($user);
+        auth()->login($user, true);
 
         $this->flash(
             __("ui.welcome_back", ["name" => $user->name]),
