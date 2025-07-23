@@ -63,12 +63,8 @@ class Reservation extends Model
         return new Attribute(
             get: fn() => collect(
                 CarbonPeriod::between(
-                    now()
-                        ->startOfWeek()
-                        ->subDay(),
-                    now()
-                        ->endOfWeek()
-                        ->subDay(),
+                    now()->previous(0),
+                    now()->next(6),
                 )->toArray(),
             )->map->translatedFormat("l")[$this->day_of_week],
         );
