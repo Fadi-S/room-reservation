@@ -92,14 +92,13 @@ async function getLink(user) {
 }
 
 async function addLinkToClipboard(user) {
-    // let data = await fetch("/users/" + user.key + "/link");
-    // let link = (await data.json())["link"];
+    const link = await getLink(user);
 
     navigator.permissions
         .query({ name: "clipboard-write" })
         .then(async (result) => {
             if (result.state === "granted" || result.state === "prompt") {
-                await navigator.clipboard.writeText(await getLink(user)).then(
+                navigator.clipboard.writeText(link).then(
                     function () {
                         flash.clipboard(
                             "Clipboard",
