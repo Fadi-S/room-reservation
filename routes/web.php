@@ -31,7 +31,7 @@ Route::inertia("/login", "Auth/Login")
     ->middleware("guest")
     ->name("login");
 
-Route::middleware(["guest", "throttle:3,10"])->post("login-by-email", [
+Route::middleware(["guest", "throttle:5,10"])->post("login-by-email", [
     PasswordlessSignInController::class,
     "sendLink",
 ]);
