@@ -5,6 +5,7 @@ namespace App\Listeners;
 use App\Events\ReservationApprovedEvent;
 use App\Mail\SendReservationApprovedMail;
 use App\Mail\SendReservationMadeMail;
+use App\Models\BlockedEmail;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Auth;
@@ -34,8 +35,12 @@ class SendReservationApprovedNotification
             return;
         }
 
-        Mail::to($event->reservationModel->reservedBy->email)->send(
-            new SendReservationApprovedMail($event->reservationModel),
-        );
+        $email = $event->reservationModel->reservedBy->email;
+
+        if (!BlockedEmail::isBlocked($email)) {
+            Mail::to($email)->send(
+                new SendReservationApprovedMail($event->reservationModel),
+            );
+        }
     }
 }

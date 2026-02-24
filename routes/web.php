@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ApproveReservationController;
+use App\Http\Controllers\SesBounceWebhookController;
 use App\Http\Controllers\AuthenticationController;
 use App\Http\Controllers\CreateReservationController;
 use App\Http\Controllers\DashboardController;
@@ -30,7 +31,7 @@ Route::inertia("/login", "Auth/Login")
     ->middleware("guest")
     ->name("login");
 
-Route::middleware("guest")->post("login-by-email", [
+Route::middleware(["guest", "throttle:3,10"])->post("login-by-email", [
     PasswordlessSignInController::class,
     "sendLink",
 ]);
@@ -56,6 +57,8 @@ Route::get("/passwordless-login/{user}", [
     ->name("passwordless.login");
 
 Route::post("/login", AuthenticationController::class)->name("login.post");
+
+Route::post("/webhooks/ses/bounce", SesBounceWebhookController::class);
 
 Route::middleware("auth")->group(function () {
     Route::get("/", DashboardController::class)->name("home");

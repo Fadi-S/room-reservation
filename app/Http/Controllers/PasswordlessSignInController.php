@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\FlashMessageType;
 use App\Helpers\PasswordlessLogin;
 use App\Mail\SendPasswordlessLoginLink;
+use App\Models\BlockedEmail;
 use App\Models\User;
 use Carbon\CarbonInterval;
 use Illuminate\Http\Request;
@@ -32,7 +33,9 @@ class PasswordlessSignInController extends Controller
 
         $url = $this->passwordlessLogin->forUser($user);
 
-        Mail::to($user)->send(new SendPasswordlessLoginLink($url));
+        if (!BlockedEmail::isBlocked($user->email)) {
+            Mail::to($user)->send(new SendPasswordlessLoginLink($url));
+        }
 
         $this->flash(
             __("ui.email_sent", ["email" => $user->email]),

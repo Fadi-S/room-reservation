@@ -4,6 +4,7 @@ namespace App\Listeners;
 
 use App\Events\MakeReservationEvent;
 use App\Mail\SendReservationMadeMail;
+use App\Models\BlockedEmail;
 use App\Models\User;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -37,6 +38,10 @@ class SendReservationCreatedNotification
         $emails = User::whereIsAdmin(true)->pluck("email");
 
         foreach ($emails as $email) {
+            if (BlockedEmail::isBlocked($email)) {
+                continue;
+            }
+
             Mail::to($email)->send(
                 new SendReservationMadeMail($event->reservationModel),
             );
