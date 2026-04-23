@@ -66,7 +66,7 @@ class Reservation extends Model
                     now()->previous(0),
                     now()->next(6),
                 )->toArray(),
-            )->map->translatedFormat("l")[$this->day_of_week],
+            )->map->translatedFormat("l")[$this->day_of_week] ?? "",
         );
     }
 
